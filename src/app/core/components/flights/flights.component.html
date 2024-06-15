@@ -1,0 +1,74 @@
+<form class="search">
+  <select>
+    <option disabled selected>Where from?</option>
+    <option>Earth</option>
+    <option>Saturn</option>
+  </select>
+  <span class="gap search__arrows">
+    <span class="arrows__piece">
+      <svg class="arrows__svg" width="24" height="24" viewBox="0 0 24 24" focusable="false"><path d="M17 4l-1.41 1.41L18.17 8H11v2h7.17l-2.58 2.59L17 14l5-5-5-5zM7 20l1.41-1.41L5.83 16H13v-2H5.83l2.58-2.59L7 10l-5 5 5 5z"></path></svg></span>
+    </span>
+  <select>
+    <option disabled selected>Where to?</option>
+    <option>Earth</option>
+    <option>Saturn</option>
+  </select>
+  <span class="gap"></span>
+  <button class="search__submit" type="submit">
+    Explore
+  </button>
+</form>
+<select>
+  <option disabled selected>Company</option>
+  <option>SpaceX</option>
+  <option>Space Odyssey</option>
+</select>
+<div class="flights">
+  <h3>Departing flights</h3>
+  <div class="flights__table">
+    <div class="table__headers">
+      <button class="sort_button departure" type="button">Departure</button>
+      <button class="sort_button time" type="button">Time</button>
+      <button class="sort_button stops" type="button">Stops</button>
+      <button class="sort_button distance" type="button">Distance</button>
+      <button class="sort_button price" type="button">Price</button>
+    </div>
+    <ul class="table__content">
+
+      <li class="table__content__row">
+        <div class="company_logo column">
+          <img class="company_logo__img" src="">
+        </div>
+        <div class="time_company column">
+          <div class="column__row semibold">9:40 PM - 7:00 PM</div>
+          <div class="column__subrow">Space X</div>
+        </div>
+        <div class="duration_route column">
+          <div>22hr 20 min</div>
+          <div class="column__subrow">TLL-BER</div>
+        </div>
+        <div class="stops column">1 stop</div>
+        <div class="distance column">2563km</div>
+        <div class="price column semibold">€140</div>
+      </li>
+
+      <li class="table__content__row">
+        <div class="company_logo column">
+          <img class="company_logo__img" src="">
+        </div>
+        <div class="time_company column">
+          <div class="column__row semibold">9:40 PM - 7:00 PM</div>
+          <div class="column__subrow">Space X</div>
+        </div>
+        <div class="duration_route column">
+          <div>10d 22hr 20 min</div>
+          <div class="column__subrow">TLL-BER</div>
+        </div>
+        <div class="stops column">No stops</div>
+        <div class="distance column">2263km</div>
+        <div class="price column semibold">€140</div>
+      </li>
+
+    </ul>
+  </div>
+</div>

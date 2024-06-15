@@ -1,0 +1,149 @@
+.search {
+    padding: 15px 0;
+    display: flex;
+    align-items: center;
+
+    .gap {
+        width: 10px;
+    }
+
+    &__arrows {
+        position: relative;
+        left: -12px;
+        top: 2px;
+
+        .arrows__svg {
+            padding: 4px;
+            background-color: white;
+            border-radius: 50%;
+            border: 1px solid hsl(0, 0%, 80%);
+            fill: hsl(0,0%,70%);
+       }
+    }
+
+    &__submit {
+        background-color: hsl(0, 0%, 94%);
+        padding: 15px 25px;
+        font-size: 1rem;
+        border: 1px solid hsl(0,0%,80%);
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 50ms;
+    }
+
+    &__submit:hover {
+        background-color: hsl(0, 0%, 90%);
+        transition: background-color 50ms;
+    }
+}
+
+select {
+    padding: 15px 25px;
+    font-size: 1rem;
+    line-height: 50px;
+    border-color: hsl(0,0%,80%);
+    border-radius: 5px;
+    background-color: white;
+}
+
+h3 {
+    font-weight: 600;
+}
+
+.flights__table {
+    .table__headers {
+        display: flex;
+        gap: 5px 25px;
+        padding: 5px 25px;
+        margin-left: 60px;
+
+        .sort_button {
+            padding-top: 5px;
+            padding-bottom: 8px;
+            font-weight: 600;
+            background: transparent;
+            border: 1px solid transparent;
+            text-align: left;
+            font-size: 13px;
+            cursor: pointer;
+            color: hsl(0, 0%, 43%);
+
+            &:hover {
+                border-bottom: 1px solid hsl(0, 0%, 70%);
+            }
+        }
+
+        .departure {
+            flex: 1 0 25%;
+            min-width: 150px;
+        }
+        .time {
+            flex: 1 0 15%
+        }
+        .stops {
+            flex: 1 0 15%;
+        }
+        .distance {
+            flex: 1 0 10%;
+        }
+    }
+
+    .table__content {
+        border: 1px solid hsl(0,0%,80%);
+        border-radius: 5px;
+        background-color: white;
+    }
+
+    .table__content__row {
+        display: flex;
+        align-items: start;
+        flex-wrap: wrap;
+        gap: 5px 25px;
+        border-bottom: 1px solid hsl(0,0%,80%);
+        padding: 20px 25px;
+
+        &:last-child {
+            border: none;
+        }
+
+        .column {
+            font-size: 16px;
+
+            &__row-bold {
+                font-weight: 600;
+            }
+            
+            &__subrow {
+                color: hsl(0,0%, 46%);
+                font-size: 12px;
+            }
+        }
+
+        .company_logo {
+            align-self: center;
+
+            &__img {
+                height: 35px;
+                width: 35px;
+            }
+        }
+
+        .time_company {
+            flex: 1 0 25%;
+            min-width: 150px;
+        }
+        .duration_route {
+            flex: 1 0 15%
+        }
+        .stops {
+            flex: 1 0 15%;
+        }
+        .distance {
+            flex: 1 0 10%;
+        }
+    }
+}
+
+.semibold {
+    font-weight: 600;
+}
