@@ -1,3 +1,4 @@
+<app-booking-dialogue [isOpen]="isBookingDialogueOpen" (openChangeEvent)="closeBookingDialogue()"/>
 <form class="search">
   <select>
     <option disabled selected>Where from?</option>
@@ -32,6 +33,7 @@
       <button class="sort_button stops" type="button">Stops</button>
       <button class="sort_button distance" type="button">Distance</button>
       <button class="sort_button price" type="button">Price</button>
+      <span class="gap"></span>
     </div>
     <ul class="table__content">
 
@@ -49,7 +51,16 @@
         </div>
         <div class="stops column">1 stop</div>
         <div class="distance column">2563km</div>
-        <div class="price column semibold">€140</div>
+        <div class="price column semibold">€2359682.61</div>
+        <button class="button_open column"
+                [class.open]="isBookingRowOpen"
+                type="button" 
+                (click)="setBookingRowOpen()">
+        &triangledown;
+      </button>
+        <div class="booking_row" [class.open]="isBookingRowOpen">
+          <button type="button" class="booking_row__book" (click)="openBookingDialogue()">Select flight</button>
+        </div>
       </li>
 
       <li class="table__content__row">
@@ -61,12 +72,21 @@
           <div class="column__subrow">Space X</div>
         </div>
         <div class="duration_route column">
-          <div>10d 22hr 20 min</div>
+          <div>22hr 20 min</div>
           <div class="column__subrow">TLL-BER</div>
         </div>
-        <div class="stops column">No stops</div>
-        <div class="distance column">2263km</div>
-        <div class="price column semibold">€140</div>
+        <div class="stops column">1 stop</div>
+        <div class="distance column">2563km</div>
+        <div class="price column semibold">€2359682.61</div>
+        <button class="button_open column"
+                [class.open]="isBookingRowOpen"
+                type="button" 
+                (click)="setBookingRowOpen()">
+        &triangledown;
+      </button>
+        <div class="booking_row" [class.open]="isBookingRowOpen">
+          <button type="button" class="booking_row__book" (click)="openBookingDialogue()">Select flight</button>
+        </div>
       </li>
 
     </ul>

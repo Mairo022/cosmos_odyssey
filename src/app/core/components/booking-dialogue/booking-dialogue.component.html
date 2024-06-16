@@ -1,0 +1,12 @@
+<dialog [open]="isOpen">
+  <form method="dialog">
+    <input type="text" placeholder="First name">
+    <input type="text" placeholder="Last name">
+    <button class="routes" type="button">Routes &triangledown;</button>
+    <div class="details">€2359682.61</div>
+    <div class="details">10d 22h 20min</div>
+    <div class="details">Space X</div>
+    <button class="submit" type="submit">Book</button>
+    <button class="cancel" type="button" (click)="closeDialogue()">Cancel</button>
+  </form>
+</dialog>
