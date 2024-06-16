@@ -1,7 +1,7 @@
 <app-booking-dialogue [isOpen]="isBookingDialogueOpen" (openChangeEvent)="closeBookingDialogue()"/>
-<form class="search">
-  <select>
-    <option disabled selected>Where from?</option>
+<form class="search" [formGroup]="routeForm" (ngSubmit)="onSubmit()">
+  <select formControlName="from">
+    <option disabled [ngValue]="null">Where from?</option>
     <option>Earth</option>
     <option>Saturn</option>
   </select>
@@ -9,8 +9,8 @@
     <span class="arrows__piece">
       <svg class="arrows__svg" width="24" height="24" viewBox="0 0 24 24" focusable="false"><path d="M17 4l-1.41 1.41L18.17 8H11v2h7.17l-2.58 2.59L17 14l5-5-5-5zM7 20l1.41-1.41L5.83 16H13v-2H5.83l2.58-2.59L7 10l-5 5 5 5z"></path></svg></span>
     </span>
-  <select>
-    <option disabled selected>Where to?</option>
+  <select formControlName="to">
+    <option disabled [ngValue]="null">Where to?</option>
     <option>Earth</option>
     <option>Saturn</option>
   </select>
