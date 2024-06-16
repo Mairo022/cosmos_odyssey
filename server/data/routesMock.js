@@ -1,4 +1,4 @@
-module.exports = {
+export const routesMock = {
     "id": "ab8c7309-3c54-4c5c-b472-9d635f3d29e7",
     "validUntil": "2024-06-10T11:36:44.5157573Z",
     "legs": [

@@ -1,28 +1,25 @@
-const routesFull = require("./routesFull")
-const routes = routesFull.legs
+import { routesMock } from "../data/routesMock.js"
 
-const DESTINATION_PLANET = "Venus"
-const START_PLANET = "Saturn"
+const routes = routesMock.legs
 
-function getRoutes(planet, currentRoute = null, recursivePlanetHistory = [], recursiveRouteHistory = []) {
+export function findRoutes(planet, destinationPlanet, currentRoute = null, recursivePlanetHistory = [], recursiveRouteHistory = []) {
     const history = []
     const routeHistory = currentRoute ? recursiveRouteHistory.concat(currentRoute) : []
     const planetHistory = recursivePlanetHistory.concat(planet)
     
     const nextRoutes = routes.filter(route => route.routeInfo.from.name == planet)
 
-    for (route of nextRoutes) {
+    for (const route of nextRoutes) {
         const nextPlanet = route.routeInfo.to.name
 
-        if (DESTINATION_PLANET == nextPlanet) {
+        if (destinationPlanet == nextPlanet) {
             routeHistory.push(route)
             history.push(routeHistory)
             continue
         }
         if (planetHistory.includes(nextPlanet)) continue
-        history.push(...getRoutes(nextPlanet, route, planetHistory, routeHistory))
+        history.push(...findRoutes(nextPlanet, destinationPlanet, route, planetHistory, routeHistory))
     }
 
     return history;
 }
-
