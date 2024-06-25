@@ -1,26 +1,27 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { BookingDialogueComponent } from '../booking-dialogue/booking-dialogue.component';
 import { RoutesService } from '../../services/routes.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { Fetch } from '../../services/fetch';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-flights',
   standalone: true,
-  imports: [BookingDialogueComponent, ReactiveFormsModule],
+  imports: [BookingDialogueComponent, ReactiveFormsModule, CommonModule],
   templateUrl: './flights.component.html',
   styleUrl: './flights.component.scss'
 })
 export class FlightsComponent {
-  routes: any[] = []
+  private readonly routesService = inject(RoutesService)
+  planets = new Fetch<string[]>(this.routesService.getPlanets())
 
-  isDataLoaded = false
   isBookingDialogueOpen: boolean = false;
   isBookingRowOpen: boolean = false
 
   routeForm: FormGroup
-  
 
-  constructor(private routesService: RoutesService, private fb: FormBuilder) {
+  constructor(private fb: FormBuilder) {
     this.routeForm = this.fb.group({
       from: null,
       to: null
@@ -34,28 +35,14 @@ export class FlightsComponent {
     if (!from || !to) {
       return
     }
-
-    this.getRoutes(from, to)
   }
 
-  private getRoutes(from: string, to: string) {
-    this.routesService
-      .getRoutes(from, to)
-      .subscribe({
-        next: (routes) => {
-          this.routes = routes
-          this.setLoaded()
-        },
-        error: (e) => {
-          console.log(e);
-          this.setLoaded()
-        }
-      })
+  isSelectedPlanet(planet: string, source: "from" | "to"): boolean {
+    if (source === "from" && planet === this.routeForm.value.to) return true
+    if (source === "to" && planet === this.routeForm.value.from) return true
+    return false
   }
 
-  setLoaded() {
-    this.isDataLoaded = true
-  }
   setBookingRowOpen() {
     this.isBookingRowOpen = !this.isBookingRowOpen
   }

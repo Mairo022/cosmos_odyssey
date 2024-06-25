@@ -2,8 +2,9 @@
 <form class="search" [formGroup]="routeForm" (ngSubmit)="onSubmit()">
   <select formControlName="from">
     <option disabled [ngValue]="null">Where from?</option>
-    <option>Earth</option>
-    <option>Saturn</option>
+    @for (planet of planets.action$ | async; track planet) {
+      <option [disabled]="isSelectedPlanet(planet, 'from')">{{planet}}</option>
+    }
   </select>
   <span class="gap search__arrows">
     <span class="arrows__piece">
@@ -11,8 +12,9 @@
     </span>
   <select formControlName="to">
     <option disabled [ngValue]="null">Where to?</option>
-    <option>Earth</option>
-    <option>Saturn</option>
+    @for (planet of planets.action$ | async; track planet) {
+      <option [disabled]="isSelectedPlanet(planet, 'to')">{{planet}}</option>
+    }
   </select>
   <span class="gap"></span>
   <button class="search__submit" type="submit">

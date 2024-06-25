@@ -1,5 +1,5 @@
 import express from "express";
-import {getRoutes} from './controller/routesController.js'
+import {getRoutes, getPlanets} from './controller/routesController.js'
 
 export const app = express()
 
@@ -10,5 +10,6 @@ app.use((req, res, next) => {
     next()
 })
 app.get("/api/routes", getRoutes)
+app.get("/api/routes/planets", getPlanets)
 
 app.listen(4400)

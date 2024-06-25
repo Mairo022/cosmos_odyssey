@@ -1,4 +1,5 @@
 import { routesMock } from "../data/routesMock.js"
+import planets from "../data/planetsMock.js"
 
 const routes = routesMock.legs
 
@@ -22,4 +23,8 @@ export function findRoutes(planet, destinationPlanet, currentRoute = null, recur
     }
 
     return history;
+}
+
+export function findPlanets() {
+    return planets
 }
