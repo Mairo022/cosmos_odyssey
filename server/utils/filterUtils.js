@@ -21,7 +21,7 @@ function findRoutes(routes, planet, destinationPlanet, currentRoute = null, recu
             continue
         }
         if (planetHistory.includes(nextPlanet)) continue
-        history.push(...findRoutes(nextPlanet, destinationPlanet, route, planetHistory, routeHistory))
+        history.push(...findRoutes(routes, nextPlanet, destinationPlanet, route, planetHistory, routeHistory))
     }
 
     return history;
