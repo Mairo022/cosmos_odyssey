@@ -33,64 +33,37 @@
       <button class="sort_button departure" type="button">Departure</button>
       <button class="sort_button time" type="button">Time</button>
       <button class="sort_button stops" type="button">Stops</button>
-      <button class="sort_button distance" type="button">Distance</button>
       <button class="sort_button price" type="button">Price</button>
       <span class="gap"></span>
     </div>
     <ul class="table__content">
-
-      <li class="table__content__row">
-        <div class="company_logo column">
-          <img class="company_logo__img" src="">
-        </div>
-        <div class="time_company column">
-          <div class="column__row semibold">9:40 PM - 7:00 PM</div>
-          <div class="column__subrow">Space X</div>
-        </div>
-        <div class="duration_route column">
-          <div>22hr 20 min</div>
-          <div class="column__subrow">TLL-BER</div>
-        </div>
-        <div class="stops column">1 stop</div>
-        <div class="distance column">2563km</div>
-        <div class="price column semibold">€2359682.61</div>
-        <button class="button_open column"
-                [class.open]="isBookingRowOpen"
-                type="button" 
-                (click)="setBookingRowOpen()">
-        &triangledown;
-      </button>
-        <div class="booking_row" [class.open]="isBookingRowOpen">
-          <button type="button" class="booking_row__book" (click)="openBookingDialogue()">Select flight</button>
-        </div>
-      </li>
-
-      <li class="table__content__row">
-        <div class="company_logo column">
-          <img class="company_logo__img" src="">
-        </div>
-        <div class="time_company column">
-          <div class="column__row semibold">9:40 PM - 7:00 PM</div>
-          <div class="column__subrow">Space X</div>
-        </div>
-        <div class="duration_route column">
-          <div>22hr 20 min</div>
-          <div class="column__subrow">TLL-BER</div>
-        </div>
-        <div class="stops column">1 stop</div>
-        <div class="distance column">2563km</div>
-        <div class="price column semibold">€2359682.61</div>
-        <button class="button_open column"
-                [class.open]="isBookingRowOpen"
-                type="button" 
-                (click)="setBookingRowOpen()">
-        &triangledown;
-      </button>
-        <div class="booking_row" [class.open]="isBookingRowOpen">
-          <button type="button" class="booking_row__book" (click)="openBookingDialogue()">Select flight</button>
-        </div>
-      </li>
-
+      @for (offer of routesOffers; track offer.uuid) {
+        <li class="table__content__row">
+          <div class="company_logo column">
+            <img class="company_logo__img" src="">
+          </div>
+          <div class="time_company column">
+            <div class="column__row semibold">{{offer.timeStr}}</div>
+            <div class="column__subrow">{{offer.company}}</div>
+          </div>
+          <div class="duration_route column">
+            <div>{{offer.durationStr}}</div>
+            <div class="column__subrow">{{offer.from}}-{{offer.to}}</div>
+          </div>
+          <div class="stops column">{{offer.stopsStr}}</div>
+          <div class="price column semibold">€{{offer.price}}</div>
+          <button class="button_open column"
+                  [class.open]="isBookingRowOpen"
+                  type="button" 
+                  (click)="setBookingRowOpen()"
+          >
+          &triangledown;
+        </button>
+          <div class="booking_row" [class.open]="isBookingRowOpen">
+            <button type="button" class="booking_row__book" (click)="openBookingDialogue()">Select flight</button>
+          </div>
+        </li>
+      }
     </ul>
   </div>
 </div>
