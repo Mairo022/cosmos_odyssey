@@ -30,10 +30,10 @@
   <h3>Departing flights</h3>
   <div class="flights__table">
     <div class="table__headers">
-      <button class="sort_button departure" type="button">Departure</button>
-      <button class="sort_button time" type="button">Time</button>
-      <button class="sort_button stops" type="button">Stops</button>
-      <button class="sort_button price" type="button">Price</button>
+      <button class="sort_button departure" type="button" (click)="sortRouteOffers('startDT')">Departure</button>
+      <button class="sort_button time" type="button" (click)="sortRouteOffers('duration')">Time</button>
+      <button class="sort_button stops" type="button" (click)="sortRouteOffers('stops')">Stops</button>
+      <button class="sort_button price" type="button" (click)="sortRouteOffers('price')">Price</button>
       <span class="gap"></span>
     </div>
     <ul class="table__content">

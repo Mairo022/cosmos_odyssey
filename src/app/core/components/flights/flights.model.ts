@@ -23,4 +23,13 @@ export interface RoutesRendered {
     from: string
     to: string
     uuid: string
+    open: boolean
+}
+
+export type RouteOffersSortProperty = "startDT" | "duration" | "stops" | "price"
+export type SortDirection = "asc" | "desc"
+
+export interface RouteOffersSort {
+    property: RouteOffersSortProperty
+    direction: SortDirection
 }

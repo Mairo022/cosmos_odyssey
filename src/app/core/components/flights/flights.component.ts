@@ -4,7 +4,7 @@ import { RoutesService } from '../../services/routes.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Fetch } from '../../services/fetch';
 import { CommonModule } from '@angular/common';
-import { RouteProvider, RoutesRendered } from './flights.model'
+import { RouteOffersSort, RouteOffersSortProperty, RouteProvider, RoutesRendered } from './flights.model'
 import { v4 as uuidv4 } from 'uuid';
 
 @Component({
@@ -22,6 +22,12 @@ export class FlightsComponent {
 
   isBookingDialogueOpen: boolean = false;
   isBookingRowOpen: boolean = false
+
+  private readonly defaultRouteOffersSort: RouteOffersSort = {
+    property: "startDT",
+    direction: "asc"
+  }
+  private routesOffersSort = {...this.defaultRouteOffersSort}
 
   routeForm: FormGroup
 
@@ -76,7 +82,37 @@ export class FlightsComponent {
       })
     }
 
-    return offers
+    const sortedOffers = this.getSortedRouteOffers(offers, this.defaultRouteOffersSort)
+    return sortedOffers
+  }
+
+  getSortedRouteOffers(offers: RoutesRendered[], sort: RouteOffersSort): Array<RoutesRendered> {
+    const offersCopy = offers.slice()
+    const property = sort.property
+    const direction = sort.direction
+
+    this.routesOffersSort.property = property
+    this.routesOffersSort.direction = direction
+
+    if (direction == "asc") offersCopy.sort((a,b) => (a[property] as number) - (b[property] as number))
+    if (direction == "desc") offersCopy.sort((a,b) => (b[property] as number) - (a[property] as number))
+    
+    return offersCopy
+  }
+
+  sortRouteOffers(property: RouteOffersSortProperty): void {
+    const sort: RouteOffersSort = {
+      property: property,
+      direction: "asc"
+    }
+    
+    if (this.routesOffersSort.property == property) {
+      sort.direction = this.routesOffersSort.direction == "asc" ? "desc" : "asc"
+    } else {
+      sort.direction = "desc"
+    }
+
+    this.routesOffers = this.getSortedRouteOffers(this.routesOffers, sort)
   }
 
   formatTime(timeMinutes: number): string {
