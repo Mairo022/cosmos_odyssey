@@ -53,13 +53,13 @@
           <div class="stops column">{{offer.stopsStr}}</div>
           <div class="price column semibold">€{{offer.price}}</div>
           <button class="button_open column"
-                  [class.open]="isBookingRowOpen"
+                  [class.open]="offer.open"
                   type="button" 
-                  (click)="setBookingRowOpen()"
+                  (click)="setBookingRowOpen($index)"
           >
           &triangledown;
         </button>
-          <div class="booking_row" [class.open]="isBookingRowOpen">
+          <div class="booking_row" [class.open]="offer.open">
             <button type="button" class="booking_row__book" (click)="openBookingDialogue()">Select flight</button>
           </div>
         </li>

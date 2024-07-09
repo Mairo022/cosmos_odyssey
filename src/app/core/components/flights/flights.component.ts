@@ -18,7 +18,7 @@ export class FlightsComponent {
   private readonly routesService = inject(RoutesService)
   planets = new Fetch<string[]>(this.routesService.getPlanets())
   routes = new Fetch<Array<RouteProvider[]>>
-  routesOffers = new Array<RoutesRendered>
+  routesOffers = new Array<RoutesRendered> 
 
   isBookingDialogueOpen: boolean = false;
   isBookingRowOpen: boolean = false
@@ -69,8 +69,11 @@ export class FlightsComponent {
       const durationStr = this.formatTime(duration)
       const offerIDs = paths.map(path => path.id)
       let price = paths.reduce((total, offer) => total + offer.price * 1000, 0) / 1000
+      const open = false;
       
-      offers.push({ company, offerIDs, stops, stopsStr, startDT, endDT, timeStr, duration, durationStr, price, from, to, uuid })
+      offers.push({ 
+        company, offerIDs, stops, stopsStr, startDT, endDT, timeStr, duration, durationStr, price, from, to, uuid, open
+      })
     }
 
     return offers
@@ -118,8 +121,8 @@ export class FlightsComponent {
     return false
   }
 
-  setBookingRowOpen() {
-    this.isBookingRowOpen = !this.isBookingRowOpen
+  setBookingRowOpen(index: number) {
+    this.routesOffers[index].open = !this.routesOffers[index].open
   }
   openBookingDialogue() {
     this.isBookingDialogueOpen = true
