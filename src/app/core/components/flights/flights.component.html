@@ -2,7 +2,7 @@
 <form class="search" [formGroup]="routeForm" (ngSubmit)="onSubmit()">
   <select formControlName="from">
     <option disabled [ngValue]="null">Where from?</option>
-    @for (planet of planets.action$ | async; track planet) {
+    @for (planet of planets.data | async; track planet) {
       <option [disabled]="isSelectedPlanet(planet, 'from')">{{planet}}</option>
     }
   </select>
@@ -12,7 +12,7 @@
     </span>
   <select formControlName="to">
     <option disabled [ngValue]="null">Where to?</option>
-    @for (planet of planets.action$ | async; track planet) {
+    @for (planet of planets.data | async; track planet) {
       <option [disabled]="isSelectedPlanet(planet, 'to')">{{planet}}</option>
     }
   </select>
