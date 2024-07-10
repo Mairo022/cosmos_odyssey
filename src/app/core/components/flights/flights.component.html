@@ -21,10 +21,15 @@
     Explore
   </button>
 </form>
-<select>
-  <option disabled selected>Company</option>
-  <option>SpaceX</option>
-  <option>Space Odyssey</option>
+<select #option (click)="filterRouteOffersByCompany(option.value)">
+  <option value="all">
+    All Companies
+  </option>
+  @for (company of companies.data | async; track company) {
+    <option>
+      {{company}}
+    </option>
+  }
 </select>
 <div class="flights">
   <h3>Departing flights</h3>
@@ -38,31 +43,33 @@
     </div>
     <ul class="table__content">
       @for (offer of routesOffers; track offer.uuid) {
-        <li class="table__content__row">
-          <div class="company_logo column">
-            <img class="company_logo__img" src="">
-          </div>
-          <div class="time_company column">
-            <div class="column__row semibold">{{offer.timeStr}}</div>
-            <div class="column__subrow">{{offer.company}}</div>
-          </div>
-          <div class="duration_route column">
-            <div>{{offer.durationStr}}</div>
-            <div class="column__subrow">{{offer.from}}-{{offer.to}}</div>
-          </div>
-          <div class="stops column">{{offer.stopsStr}}</div>
-          <div class="price column semibold">€{{offer.price}}</div>
-          <button class="button_open column"
-                  [class.open]="offer.open"
-                  type="button" 
-                  (click)="setBookingRowOpen($index)"
-          >
-          &triangledown;
-        </button>
-          <div class="booking_row" [class.open]="offer.open">
-            <button type="button" class="booking_row__book" (click)="openBookingDialogue()">Select flight</button>
-          </div>
-        </li>
+        @if (offer.visible == true) {
+          <li class="table__content__row">
+            <div class="company_logo column">
+              <img class="company_logo__img" src="">
+            </div>
+            <div class="time_company column">
+              <div class="column__row semibold">{{offer.timeStr}}</div>
+              <div class="column__subrow">{{offer.company}}</div>
+            </div>
+            <div class="duration_route column">
+              <div>{{offer.durationStr}}</div>
+              <div class="column__subrow">{{offer.from}}-{{offer.to}}</div>
+            </div>
+            <div class="stops column">{{offer.stopsStr}}</div>
+            <div class="price column semibold">€{{offer.price}}</div>
+            <button class="button_open column"
+                    [class.open]="offer.open"
+                    type="button" 
+                    (click)="setBookingRowOpen($index)"
+            >
+            &triangledown;
+          </button>
+            <div class="booking_row" [class.open]="offer.open">
+              <button type="button" class="booking_row__book" (click)="openBookingDialogue()">Select flight</button>
+            </div>
+          </li>
+        }
       }
     </ul>
   </div>

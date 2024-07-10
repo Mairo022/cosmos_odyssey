@@ -1,4 +1,4 @@
-import { findRoutes, findPlanets } from "../services/routesService.js"
+import { findRoutes, findPlanets, findCompanies } from "../services/routesService.js"
 
 export function getRoutes(req, res) {
     const from = req.query.from
@@ -16,6 +16,11 @@ export function getRoutes(req, res) {
 export function getPlanets(_, res) {
     const planets = findPlanets()
     return res.status(200).json(planets)
+}
+
+export function getCompanies(_, res) {
+    const companies = findCompanies()
+    return res.status(200).json(companies)
 }
 
 function validateInput(inputs) {

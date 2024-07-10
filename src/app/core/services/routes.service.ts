@@ -22,4 +22,12 @@ export class RoutesService {
         map((planets: string[]) => planets.sort())
       )
   }
+
+  getCompanies(): Observable<string[]> {
+    const url = this.API_URL + "/companies"
+    return this.httpClient.get<string[]>(url)
+      .pipe(
+        map((companies: string[]) => companies.sort())
+      )
+  }
 }

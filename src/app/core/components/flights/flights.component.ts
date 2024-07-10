@@ -18,6 +18,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class FlightsComponent {
   private readonly routesService = inject(RoutesService)
   planets = new Fetch<string[]>(this.routesService.getPlanets())
+  companies = new Fetch<string[]>(this.routesService.getCompanies())
   routes = new Fetch<Array<RouteProvider[]>>
   routesOffers = new Array<RoutesRendered> 
 
@@ -94,11 +95,12 @@ export class FlightsComponent {
       const duration = (endDT.getTime() - startDT.getTime()) / (1000 * 60)
       const durationStr = this.formatTime(duration)
       const offerIDs = paths.map(path => path.id)
+      const visible = true 
       let price = paths.reduce((total, offer) => total + offer.price * 1000, 0) / 1000
       const open = false;
       
       offers.push({ 
-        company, offerIDs, stops, stopsStr, startDT, endDT, timeStr, duration, durationStr, price, from, to, uuid, open
+        company, offerIDs, stops, stopsStr, startDT, endDT, timeStr, duration, durationStr, price, from, to, uuid, open, visible
       })
     }
 
@@ -133,6 +135,15 @@ export class FlightsComponent {
     }
 
     this.routesOffers = this.getSortedRouteOffers(this.routesOffers, sort)
+  }
+
+  filterRouteOffersByCompany(company: string): void {
+    this.routesOffers.forEach(offer => {
+      if (company === "all")
+        offer.visible = true
+      else if (offer.company !== company)
+        offer.visible = false
+    })
   }
 
   formatTime(timeMinutes: number): string {

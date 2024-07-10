@@ -24,6 +24,7 @@ export interface RoutesRendered {
     to: string
     uuid: string
     open: boolean
+    visible: boolean
 }
 
 export type RouteOffersSortProperty = "startDT" | "duration" | "stops" | "price"
