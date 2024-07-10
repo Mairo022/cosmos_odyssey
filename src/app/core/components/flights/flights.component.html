@@ -3,7 +3,7 @@
   <select formControlName="from">
     <option disabled [ngValue]="null">Where from?</option>
     @for (planet of planets.data | async; track planet) {
-      <option [disabled]="isSelectedPlanet(planet, 'from')">{{planet}}</option>
+      <option [selected]="isActivePath(planet, 'from')" [disabled]="isSelectedPlanet(planet, 'from')">{{planet}}</option>
     }
   </select>
   <span class="gap search__arrows">
@@ -13,7 +13,7 @@
   <select formControlName="to">
     <option disabled [ngValue]="null">Where to?</option>
     @for (planet of planets.data | async; track planet) {
-      <option [disabled]="isSelectedPlanet(planet, 'to')">{{planet}}</option>
+      <option [selected]="isActivePath(planet, 'to')" [disabled]="isSelectedPlanet(planet, 'to')">{{planet}}</option>
     }
   </select>
   <span class="gap"></span>

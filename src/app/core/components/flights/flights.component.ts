@@ -6,6 +6,7 @@ import { Fetch } from '../../services/fetch';
 import { CommonModule } from '@angular/common';
 import { RouteOffersSort, RouteOffersSortProperty, RouteProvider, RoutesRendered } from './flights.model'
 import { v4 as uuidv4 } from 'uuid';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-flights',
@@ -31,13 +32,16 @@ export class FlightsComponent {
 
   routeForm: FormGroup
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private router: Router, private route: ActivatedRoute) {
     this.routeForm = this.fb.group({
       from: null,
       to: null
     })
   }
+
   ngOnInit() {
+    this.initLoadByQueryParams()
+
     this.routes.data.subscribe(routeProvidersList => {
       const from = this.routeForm.value.from
       const to = this.routeForm.value.to
@@ -50,6 +54,19 @@ export class FlightsComponent {
     this.routes.data.unsubscribe()
   }
 
+  initLoadByQueryParams() {
+    this.route.queryParams.subscribe(params => {
+      const from: string | undefined = params['from']
+      const to: string | undefined = params['to']
+
+      if (!from || !to) return
+      if (this.routeForm.value.from !== from) this.routeForm.patchValue({ from })
+      if (this.routeForm.value.to !== to) this.routeForm.patchValue({ to })
+
+      this.routes.load(this.routesService.getRoutes(from, to))
+    })
+  }
+
   onSubmit(): void {
     const from = this.routeForm.value.from
     const to = this.routeForm.value.to
@@ -57,7 +74,10 @@ export class FlightsComponent {
     if (!from || !to) {
       return
     }
-    this.routes.load(this.routesService.getRoutes(from, to))
+
+    this.router.navigate(['.'], {
+      queryParams: {from, to}
+    })
   }
 
   getRenderableOffers(routes: Array<RouteProvider[]>, from: string, to: string): RoutesRendered[] {
@@ -149,6 +169,12 @@ export class FlightsComponent {
       hour12: false,
     };
     return date.toLocaleString('en-US', options);
+  }
+
+  isActivePath(planet: string, source: "from" | "to"): boolean {
+    if (source === "to") return this.routeForm.value.to === planet
+    if (source === "from") return this.routeForm.value.from === planet
+    return false
   }
 
   isSelectedPlanet(planet: string, source: "from" | "to"): boolean {
