@@ -23,7 +23,7 @@ export class FlightsComponent {
   routesOffers = new Array<RoutesRendered> 
 
   isBookingDialogueOpen: boolean = false;
-  isBookingRowOpen: boolean = false
+  bookingDialogueData: RoutesRendered | undefined = undefined
 
   private readonly defaultRouteOffersSort: RouteOffersSort = {
     property: "startDT",
@@ -197,10 +197,12 @@ export class FlightsComponent {
   setBookingRowOpen(index: number) {
     this.routesOffers[index].open = !this.routesOffers[index].open
   }
-  openBookingDialogue() {
+  openBookingDialogue(offer: RoutesRendered) {
+    this.bookingDialogueData = offer
     this.isBookingDialogueOpen = true
   }
   closeBookingDialogue() {
+    this.bookingDialogueData = undefined
     this.isBookingDialogueOpen = false
   }
 }

@@ -1,12 +1,19 @@
 <dialog [open]="isOpen">
-  <form method="dialog">
-    <input type="text" placeholder="First name">
-    <input type="text" placeholder="Last name">
-    <button class="routes" type="button">Routes &triangledown;</button>
-    <div class="details">€2359682.61</div>
-    <div class="details">10d 22h 20min</div>
-    <div class="details">Space X</div>
-    <button class="submit" type="submit">Book</button>
+  <form [formGroup]="bookingForm" (ngSubmit)="onSubmit()">
+    @if (offer) {
+      <input formControlName="firstname" type="text" placeholder="First name">
+      <input formControlName="lastname" type="text" placeholder="Last name">
+      <div class="details">€{{offer.price}}</div>
+      <div class="details">{{offer.durationStr}}</div>
+      <div class="details">{{offer.company}}</div>
+      <button class="submit" type="submit">Book</button>
+    } @else {
+      <div>Error loading flight</div>
+    }
     <button class="cancel" type="button" (click)="closeDialogue()">Cancel</button>
+
+    @if((booking.action$ | async)?.ok) {
+      <div class="success">Booking successfully done</div>
+    }
   </form>
 </dialog>

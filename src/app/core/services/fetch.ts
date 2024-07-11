@@ -1,8 +1,8 @@
 import { EMPTY, Observable, Subject, Subscription, catchError, finalize, map, of, tap, throwError } from "rxjs"
 
 export class Fetch<TData> {
-  private _isLoading = false
-  private _hasError = false
+  private _isLoading = new Subject<boolean>
+  private _hasError = new Subject<boolean>
   private _data = new Subject<TData>
   private _action$: Observable<TData> = EMPTY
   private _actionSubscription: Subscription | null = null
@@ -15,25 +15,36 @@ export class Fetch<TData> {
 
   load(action$: Observable<TData>): void {
     if (this._actionSubscription) {
-      this._actionSubscription.unsubscribe();
+      this._actionSubscription.unsubscribe()
     }
-
-    this._isLoading = true
+    
+    this._isLoading.next(true)
     this._action$ = action$.pipe(
       tap((d) => {
         this._data.next(d)
-        this._hasError = false
+        this._hasError.next(false)
       }),
       catchError(() => {
-        this._hasError = true
+        this._hasError.next(true)
         return throwError(() => new Error("Fetch error"))
       }),
       finalize(() => {
-        this._isLoading = false
+        this._isLoading.next(false)
       })
     )
 
     this._actionSubscription = this._action$.subscribe()
+  }
+
+  reset(): void {
+    this._isLoading.next(false)
+    this._hasError.next(false)
+    this._data = new Subject<TData>
+    this._action$ = EMPTY
+
+    if (this._actionSubscription) {
+      this._actionSubscription.unsubscribe()
+    }
   }
 
   get data(): Subject<TData> {
@@ -44,11 +55,11 @@ export class Fetch<TData> {
     return this._action$
   }
 
-  get isLoading(): boolean {
+  get isLoading(): Subject<boolean> {
     return this._isLoading
   }
 
-  get hasError(): boolean {
+  get hasError(): Subject<boolean> {
     return this._hasError
   }
 }

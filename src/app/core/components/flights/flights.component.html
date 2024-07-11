@@ -1,4 +1,4 @@
-<app-booking-dialogue [isOpen]="isBookingDialogueOpen" (openChangeEvent)="closeBookingDialogue()"/>
+<app-booking-dialogue [offer]="bookingDialogueData" [isOpen]="isBookingDialogueOpen" (openChangeEvent)="closeBookingDialogue()"/>
 <form class="search" [formGroup]="routeForm" (ngSubmit)="onSubmit()">
   <select formControlName="from">
     <option disabled [ngValue]="null">Where from?</option>
@@ -66,7 +66,7 @@
             &triangledown;
           </button>
             <div class="booking_row" [class.open]="offer.open">
-              <button type="button" class="booking_row__book" (click)="openBookingDialogue()">Select flight</button>
+              <button type="button" class="booking_row__book" (click)="openBookingDialogue(offer)">Select flight</button>
             </div>
           </li>
         }
