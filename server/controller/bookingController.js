@@ -16,5 +16,5 @@ export function addBooking(req, res) {
     const booking = req.body
     createBooking(booking)
 
-    return res.status(201)
+    return res.status(201).json()
 }
