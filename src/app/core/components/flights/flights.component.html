@@ -46,7 +46,7 @@
         @if (offer.visible == true) {
           <li class="table__content__row">
             <div class="company_logo column">
-              <img class="company_logo__img" src="">
+              <app-company-logo [company]="offer.company"/>
             </div>
             <div class="time_company column">
               <div class="column__row semibold">{{offer.timeStr}}</div>

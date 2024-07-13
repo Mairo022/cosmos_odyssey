@@ -128,11 +128,9 @@ h3 {
 
         .company_logo {
             align-self: center;
-
-            &__img {
-                height: 35px;
-                width: 35px;
-            }
+            width: 35px;
+            font-size: 12px;
+            color: hsl(0, 0%, 46%);
         }
 
         .time_company {

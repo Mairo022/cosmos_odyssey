@@ -7,11 +7,12 @@ import { CommonModule } from '@angular/common';
 import { RouteOffersSort, RouteOffersSortProperty, RouteProvider, RoutesRendered } from './flights.model'
 import { v4 as uuidv4 } from 'uuid';
 import { ActivatedRoute, Router } from '@angular/router';
+import { CompanyLogoComponent } from '../company-logo/company-logo.component';
 
 @Component({
   selector: 'app-flights',
   standalone: true,
-  imports: [BookingDialogueComponent, ReactiveFormsModule, CommonModule],
+  imports: [CompanyLogoComponent, BookingDialogueComponent, ReactiveFormsModule, CommonModule],
   templateUrl: './flights.component.html',
   styleUrl: './flights.component.scss'
 })
