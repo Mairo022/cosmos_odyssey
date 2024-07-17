@@ -40,7 +40,11 @@ function getLinkedProviderOffers(routesList) {
         if (!fullRouteCompanies.has(provider.company.name))
             continue
 
-        const linkedProviderOffer = getLinkedProviderOffer(routes, provider)
+        const from = routes[0].routeInfo.from.name
+        const to = routes[0].routeInfo.to.name
+
+        const linkedProviderOffer = getLinkedProviderOffer(routes, {...provider, from, to})
+        
         if (linkedProviderOffer.length > 0) 
             providers.push(linkedProviderOffer)
       }
@@ -91,7 +95,7 @@ function getLinkedProviderOffer(routes, providerFirst) {
         const flightIndex = timegaps.indexOf(closestFlightStart)
         lastFlightEnd = new Date(providers[flightIndex].flightEnd).getTime()
 
-        history.push(providers[flightIndex])
+        history.push({...providers[flightIndex], from: route.routeInfo.from.name, to: route.routeInfo.to.name })
 
         timegaps = new Array()
         timegapIndexes = new Array()

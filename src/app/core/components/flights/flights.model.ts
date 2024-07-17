@@ -7,9 +7,12 @@ export interface RouteProvider {
     price: number
     flightStart: string
     flightEnd: string;
+    from: string,
+    to: string
 }
 
 export interface RoutesRendered {
+    arrayIndex: number
     company:string
     duration:number
     endDT: Date

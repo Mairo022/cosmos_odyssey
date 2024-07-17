@@ -22,6 +22,7 @@ export class FlightsComponent {
   companies = new Fetch<string[]>(this.routesService.getCompanies())
   routes = new Fetch<Array<RouteProvider[]>>
   routesOffers = new Array<RoutesRendered> 
+  routesData = new Array<RouteProvider[]>
 
   isBookingDialogueOpen: boolean = false;
   bookingDialogueData: RoutesRendered | undefined = undefined
@@ -41,19 +42,49 @@ export class FlightsComponent {
     })
   }
 
+  getRouteInfo(index: number, pathIndex: number): RouteProvider | undefined {
+    if (this.routesData == null) return undefined
+    const route = this.routesData[index][pathIndex]
+
+    return route
+  }
+
+  getRouteTime(index: number, pathIndex: number, type: "start" | "end") {
+    if (this.routesData == null) return ""
+
+    const route = this.routesData[index][pathIndex]
+    const startTime = route.flightStart
+    const endTime = route.flightEnd
+
+    if (type === "start") return startTime
+    return endTime
+  }
+
+  getRoutePlanet(index: number, pathIndex: number, type: "start" | "end"): string {
+    if (this.routesData == null) return ""
+
+    const route = this.routesData[index][pathIndex]
+    const from = route.from
+    const to = route.to
+
+    if (type === "start") return from
+    return to
+  }
+
   ngOnInit() {
     this.initLoadByQueryParams()
 
-    this.routes.data.subscribe(routeProvidersList => {
+    this.routes.data$.subscribe(routeProvidersList => {
       const from = this.routeForm.value.from
       const to = this.routeForm.value.to
 
       this.routesOffers = this.getRenderableOffers(routeProvidersList, from, to)
+      this.routesData = routeProvidersList
     })
   }
 
   ngOnDestroy() {
-    this.routes.data.unsubscribe()
+    this.routes.data$.unsubscribe()
   }
 
   initLoadByQueryParams() {
@@ -85,7 +116,8 @@ export class FlightsComponent {
   getRenderableOffers(routes: Array<RouteProvider[]>, from: string, to: string): RoutesRendered[] {
     const offers = new Array<RoutesRendered>
 
-    for (const paths of routes) {
+    routes.forEach((paths, i) => {
+      const arrayIndex = i
       const uuid = uuidv4()
       const company = paths[0].company.name
       const stops = paths.length - 1
@@ -100,12 +132,18 @@ export class FlightsComponent {
       let price = paths.reduce((total, offer) => total + offer.price * 1000, 0) / 1000
       const open = false;
       
-      offers.push({ 
-        company, offerIDs, stops, stopsStr, startDT, endDT, timeStr, duration, durationStr, price, from, to, uuid, open, visible
+      offers.push({
+        arrayIndex, uuid, offerIDs, 
+        company, from, to, price,
+        stops, stopsStr, 
+        startDT, endDT, timeStr,
+        duration, durationStr,
+        open, visible
       })
-    }
+    })
 
     const sortedOffers = this.getSortedRouteOffers(offers, this.defaultRouteOffersSort)
+    
     return sortedOffers
   }
 
@@ -147,6 +185,16 @@ export class FlightsComponent {
     })
   }
 
+  getTimegap(start: string, end: string): string {
+    const startDT = new Date(start)
+    const endDT = new Date(end)
+
+    const gapInMin = (endDT.getTime() - startDT.getTime()) / (1000 * 60)
+    const gap = this.formatTime(gapInMin)
+
+    return gap
+  }
+  
   formatTime(timeMinutes: number): string {
     const weekInMin = 10080
     const dayInMin = 1440
@@ -190,6 +238,14 @@ export class FlightsComponent {
     if (stops > 1) return `${stops} stops`
     if (stops === 1) return `${stops} stop`
     return `No stops`
+  }
+
+  formatTimeHHMM(time: string) {
+    const date = new Date(time);
+    return date.toLocaleTimeString(navigator.language, {
+      hour: '2-digit',
+      minute:'2-digit'
+    });
   }
 
   isActivePath(planet: string, source: "from" | "to"): boolean {
