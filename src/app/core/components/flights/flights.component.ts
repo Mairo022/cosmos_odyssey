@@ -89,7 +89,7 @@ export class FlightsComponent {
       const uuid = uuidv4()
       const company = paths[0].company.name
       const stops = paths.length - 1
-      const stopsStr = stops > 1 ? `${stops} stops` : `${stops} stop`
+      const stopsStr = this.formatStops(stops)
       const startDT = new Date(paths[0].flightStart)
       const endDT = new Date(paths[paths.length - 1].flightEnd)
       const timeStr = this.formatDatetime(startDT) + " - " + this.formatDatetime(endDT)
@@ -158,14 +158,17 @@ export class FlightsComponent {
 
     if (timeWeeks > 0) {
       const daysLeft = timeDays - timeWeeks * 7
-      return `${timeWeeks}w ${daysLeft.toFixed(0)}d`
+      if (daysLeft === 0) return `${timeWeeks}w`
+      return `${timeWeeks}w ${daysLeft}d`
     }
     if (timeDays > 0) {
       const hoursLeft = timeHours - timeDays * 24
+      if (hoursLeft === 0) return `${timeDays}d`
       return `${timeDays}d ${hoursLeft}h`
     }
     if (timeHours > 0) {
       const minsLeft = timeMinutes - timeHours * 60
+      if (minsLeft === 0) return `${timeHours}h`
       return `${timeHours}h ${minsLeft}m`
     }
 
@@ -181,6 +184,12 @@ export class FlightsComponent {
       hour12: false,
     };
     return date.toLocaleString('en-US', options);
+  }
+
+  formatStops(stops: number): string {
+    if (stops > 1) return `${stops} stops`
+    if (stops === 1) return `${stops} stop`
+    return `No stops`
   }
 
   isActivePath(planet: string, source: "from" | "to"): boolean {
