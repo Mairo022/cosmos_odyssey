@@ -1,0 +1,6 @@
+<div>{{ booking$ | async }}</div>
+<form [formGroup]="bookingForm" (ngSubmit)="onSubmit()">
+    <input formControlName="firstname" type="text" placeholder="First name">
+    <input formControlName="lastname" type="text" placeholder="Last name">
+    <button class="submit" type="submit">Book</button>
+</form> 

@@ -1,4 +1,3 @@
-<app-booking-dialogue [offer]="bookingDialogueData" [isOpen]="isBookingDialogueOpen" (openChangeEvent)="closeBookingDialogue()"/>
 <form class="search" [formGroup]="routeForm" (ngSubmit)="onSubmit()">
   <select formControlName="from">
     <option disabled [ngValue]="null">Where from?</option>
@@ -75,7 +74,7 @@
                   }
                 }
               }
-              <button type="button" class="booking_row__book" (click)="openBookingDialogue(offer)">Select flight</button>
+              <a class="booking_row__book" routerLink="booking" (click)="saveBooking(offer.arrayIndex, offer)">Select flight</a>
             </div>
           </li>
         }

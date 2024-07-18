@@ -1,22 +1,24 @@
 import { Component, inject } from '@angular/core';
-import { BookingDialogueComponent } from '../booking-dialogue/booking-dialogue.component';
 import { RoutesService } from '../../services/routes.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Fetch } from '../../services/fetch';
 import { CommonModule } from '@angular/common';
 import { RouteOffersSort, RouteOffersSortProperty, RouteProvider, RoutesRendered } from './flights.model'
 import { v4 as uuidv4 } from 'uuid';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CompanyLogoComponent } from '../company-logo/company-logo.component';
+import { AppState } from '../../store/app.state';
+import { LocalStorage } from '../../utils/localStorage';
 
 @Component({
   selector: 'app-flights',
   standalone: true,
-  imports: [CompanyLogoComponent, BookingDialogueComponent, ReactiveFormsModule, CommonModule],
+  imports: [CompanyLogoComponent, ReactiveFormsModule, CommonModule, RouterLink],
   templateUrl: './flights.component.html',
   styleUrl: './flights.component.scss'
 })
 export class FlightsComponent {
+  private readonly appState = AppState.getInstance()
   private readonly routesService = inject(RoutesService)
   planets = new Fetch<string[]>(this.routesService.getPlanets())
   companies = new Fetch<string[]>(this.routesService.getCompanies())
@@ -263,12 +265,12 @@ export class FlightsComponent {
   setBookingRowOpen(index: number) {
     this.routesOffers[index].open = !this.routesOffers[index].open
   }
-  openBookingDialogue(offer: RoutesRendered) {
-    this.bookingDialogueData = offer
-    this.isBookingDialogueOpen = true
-  }
-  closeBookingDialogue() {
-    this.bookingDialogueData = undefined
-    this.isBookingDialogueOpen = false
+
+  saveBooking(routeIndex: number, routeOverview: RoutesRendered): void {
+    const booking = this.routesData[routeIndex]
+    const savedBooking = {overview: routeOverview, routes: booking}
+
+    LocalStorage.setItem("booking", savedBooking)
+    this.appState.booking$.next(savedBooking)
   }
 }
