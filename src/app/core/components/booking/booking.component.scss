@@ -1,0 +1,128 @@
+.header {
+    display: flex;
+
+    &__path {
+        display: inline-block;
+        flex-grow: 1;
+        font-size: 30px;
+        font-weight: 600;
+        color: hsl(225, 6%, 18%);
+
+        &__gap {
+            color: hsl(0,0%, 56%);
+            margin: 0 10px;
+        }
+    }
+
+    &__price {
+        align-self: end;
+        font-size: 26px;
+        font-weight: 600;
+        color: hsl(225, 6%, 18%);
+    }
+}
+
+.selection {
+    &__header {
+        font-size: 20px;
+        font-weight: 600;
+        color: hsl(225, 6%, 18%);
+        margin-bottom: 12px;
+    }
+
+    &__flights {
+        border-radius: 8px;
+        border: 1px solid hsl(220, 10%, 88%);
+        padding: 16px 0;
+
+        & .header {
+            display: flex;
+            padding: 0 24px 16px 24px;
+            gap: 10px 16px;
+            align-items: center;
+
+            &__departing {
+                flex-grow: 1;
+                font-size: 18px;
+            }
+            &__back {
+                font-size: 14px;
+                font-weight: 600;
+                border: 1px solid hsl(220, 10%, 88%);
+                border-radius: 20px;
+                padding: 5px 20px;
+                color:hsl(215, 82%, 50%);
+
+                &:hover {
+                    color: hsl(215, 82%, 47%);
+                    background-color: hsl(220, 70%, 88%, 0.25);
+                }
+            }
+        }
+
+        & .flight {
+            display: flex;
+            flex-direction: row;
+            padding: 0 24px;
+            gap: 0 16px;
+            font-size: 16px;
+
+            &__company_logo {
+                width: 43px;
+            }
+
+            &__container {
+                flex-grow: 1;
+            }
+
+            &__info {
+                &__time {
+                    padding: 12px 0;
+                }
+            }
+
+            &__company_text {
+                padding: 12px 0 0;
+            }
+
+            & .subtext {
+                font-size: 14px;
+                color: hsl(0, 0%, 46%);
+            }
+
+            &__layover {
+                width: 100%;
+                font-size: 14px;
+                padding: 16px 0;
+                margin: 20px 0;
+                border: 1px solid hwb(220 87% 11%);
+                border-left: 0px;
+                border-right: 0px;
+            }
+        }
+    }
+
+    &__btn {
+        background-color: hsl(215, 82%, 47%);
+        border-radius: 20px;
+        border: none;
+        color: white;
+        padding: 8px 26px;
+        cursor: pointer;
+        margin-left: auto;
+        margin-top: 12px;
+        display: block;
+
+        &:hover {
+            background-color: hsl(215, 82%, 40%);
+        }
+    }
+}
+
+.dot-big {
+    margin: 0 8px;
+}
+
+.dot-medium {
+    margin: 0 6px;
+}

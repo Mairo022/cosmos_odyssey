@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
+import { Booking } from "./app.types";
 
 @Injectable({
     providedIn: "root"
@@ -8,7 +9,7 @@ import { BehaviorSubject } from "rxjs";
 export class AppState {
     private static instance: AppState
     private readonly EMPTY_BOOKING = {overview: undefined, routes: []}
-    private _booking$ = new BehaviorSubject<any>({...this.EMPTY_BOOKING})
+    private _booking$ = new BehaviorSubject<Booking>({...this.EMPTY_BOOKING})
 
     private constructor() {}
 
@@ -18,7 +19,7 @@ export class AppState {
         return this.instance
     }
 
-    get booking$(): BehaviorSubject<any> {
+    get booking$(): BehaviorSubject<Booking> {
         return this._booking$
     }
 

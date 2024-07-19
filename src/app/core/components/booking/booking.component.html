@@ -1,5 +1,57 @@
-<div>{{ booking$ | async }}</div>
-<form [formGroup]="bookingForm" (ngSubmit)="onSubmit()">
+@if (booking$ | async; as booking) {
+@if (booking.overview && booking.routes) {
+<div class="header">
+  <div class="header__path">
+    <span>{{booking.overview.from}}</span>
+    <span class="header__path__gap">-</span>
+    <span>{{booking.overview.to}}</span>
+  </div>
+  <span class="header__price">{{formatPrice(booking.overview.price)}}</span>
+</div>
+<div class="selection">
+  <h2 class="selection__header">Selected flights</h2>
+  <div class="selection__flights">
+    <div class="header"> 
+      <div class="header__departing">
+        <span>Departing flight</span>
+        <span class="dot-big">·</span>
+        <span>{{DtToDayMonthDate(booking.overview.startDT)}}</span>
+      </div>
+      <a routerLink=".." class="header__back">Change flight</a>
+    </div>
+      @for (route of booking.routes; track route.id) {
+        <div class="flight">
+          <div class="flight__company_logo">
+            <app-company-logo [company]="booking.overview.company"/>
+          </div>
+          <div class="flight__container">
+            <div class="flight__info">
+              <span>{{DtStrToTime(route.flightStart)}}</span>
+              <span class="dot-big">·</span>
+              <span>{{route.from}}</span>
+              <div class="flight__info__time subtext">Travel time: {{getTimegap(route.flightStart, route.flightEnd)}}</div>
+            </div>
+            <div class="flight__info">
+              <span>{{DtStrToTime(route.flightEnd)}}</span>
+              <span class="dot-big">·</span>
+              <span>{{route.to}}</span>
+            </div>
+            <div class="flight__company_text subtext">{{route.company.name}}</div>
+            @if ($index != booking.overview.stops) {
+              <div class="flight__layover">
+                <span>{{getTimegap(route.flightEnd, booking.routes[$index+1].flightStart)}} layover</span>
+                <span class="dot-medium">·</span>
+                <span>{{route.to}}</span>
+              </div>
+            }
+          </div>
+        </div>
+      }
+  </div>
+  <button class="selection__btn" type="button">Continue</button>
+</div>
+}}
+<form [formGroup]="bookingForm" (ngSubmit)="onSubmit()" hidden="true">
     <input formControlName="firstname" type="text" placeholder="First name">
     <input formControlName="lastname" type="text" placeholder="Last name">
     <button class="submit" type="submit">Book</button>
