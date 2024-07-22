@@ -32,6 +32,25 @@
         & > button {
             width: 110px;
         }
+
+        &__submit {
+            transition: color 0.2s ease-in-out;
+
+            &.loading {
+                transition: background-image 0.3s ease-in;
+                color: transparent;
+                background-image: url("/assets/ui/spinner.svg");
+                background-size: 20px;
+                background-repeat: no-repeat;
+                background-position: center;
+            }
+        }
+    }
+
+    &__failed {
+        color: red;
+        text-align: center;
+        margin-top: 14px;
     }
 }
 
@@ -145,6 +164,24 @@
         margin-left: auto;
         margin-top: 12px;
         display: block;
+    }
+}
+
+.success {
+    font-size: 16px;
+    text-align: center;
+    max-width: 500px;
+    margin: 32px auto;
+}
+
+.link {
+    font-size: 16px;
+    border-radius: 20px;
+    padding: 5px 20px;
+    color: hsl(215, 86%, 54%);
+
+    &:hover {
+        color: hsl(215, 82%, 44%);
     }
 }
 

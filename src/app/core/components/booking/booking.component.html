@@ -1,5 +1,6 @@
 @if (booking$ | async; as booking) {
 @if (booking.overview && booking.routes) {
+@if (userView === Views.BOOKING || userView === Views.OVERVIEW) {
 <div class="header">
   <div class="header__path">
     <span>{{booking.overview.from}}</span>
@@ -8,7 +9,8 @@
   </div>
   <span class="header__price">{{formatPrice(booking.overview.price)}}</span>
 </div>
-@if (isBooking) {
+}
+@if (userView === Views.BOOKING) {
 <form [formGroup]="bookingForm" (ngSubmit)="onSubmit()" class="booking">
   <div class="inputs">
     <div class="inputs__input">
@@ -27,11 +29,20 @@
     </div>
   </div>
   <div class="buttons">
-    <button class="buttons__back btn-tertiary" type="button" (click)="setIsBooking()">Go back</button>
-    <button class="buttons__submit btn-primary" type="submit" [disabled]="bookingForm.valid">Book</button>
+    <button class="buttons__back btn-tertiary" type="button" (click)="setView(Views.OVERVIEW)">Go back</button>
+    <button class="buttons__submit btn-primary"
+            [class.loading]="bookingFetch.isLoading | async"
+            [disabled]="!bookingForm.valid"
+            type="submit">
+    Book
+  </button>
   </div>
+  @if (bookingFetch.hasError | async) {
+    <div class="booking__failed">Booking failed</div>
+  }
 </form>
-} @else {
+}
+@if (userView === Views.OVERVIEW) {
 <div class="selection">
   <h2 class="selection__header">Selected flights</h2>
   <div class="selection__flights">
@@ -72,6 +83,15 @@
         </div>
       }
   </div>
-  <button class="selection__btn btn-primary" type="button" (click)="setIsBooking()">Continue</button>
+  <button class="selection__btn btn-primary" type="button" (click)="setView(Views.BOOKING)">Continue</button>
 </div>
-}}}
+}
+@if (userView === Views.SUCCESS) {
+  <div class="success">
+    <p>
+      Booking Confirmed! Your flight has been booked successfully. Please check your email for your ticket and further instructions.
+    </p>
+    <a routerLink="/" class="link">Return to homepage</a>
+  </div>
+}
+}}

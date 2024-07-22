@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { AppState } from '../../store/app.state';
 import { CommonModule } from '@angular/common';
-import { Subscription, of } from 'rxjs';
+import { Subscription, delay, of } from 'rxjs';
 import { HttpResponse } from '@angular/common/http';
 import { FormGroup, FormBuilder, ReactiveFormsModule, Validators, FormControl, AbstractControl, ValidatorFn } from '@angular/forms';
 import { BookingService } from '../../services/booking.service';
@@ -9,6 +9,7 @@ import { Fetch } from '../../services/fetch';
 import { CompanyLogoComponent } from "../company-logo/company-logo.component";
 import { RouterLink } from '@angular/router';
 import { getTimegap } from '../../utils/timeUtils';
+import { Booking, Views } from './booking.model';
 
 @Component({
   selector: 'app-booking',
@@ -19,7 +20,7 @@ import { getTimegap } from '../../utils/timeUtils';
 })
 export class BookingComponent {
   appState = AppState.getInstance() 
-  booking$ = this.appState.booking$;
+  booking$ = this.appState.booking$
 
   private readonly bookingService = inject(BookingService)
   private _subscriptions: Subscription[] = []
@@ -27,7 +28,7 @@ export class BookingComponent {
   bookingFetch = new Fetch<HttpResponse<any>>()
   bookingForm: FormGroup
 
-  isBooking = true
+  userView: Views = Views.OVERVIEW
 
   constructor(private fb: FormBuilder) {
     this.bookingForm = this.fb.group({
@@ -38,16 +39,32 @@ export class BookingComponent {
 
   onSubmit(): void {
     const {firstname, lastname} = this.bookingForm.value
+    const bookingData = this.booking$.getValue()
     
-    if (!firstname || !lastname) {
+    if (!firstname || !lastname || !bookingData.overview || !bookingData.routes) {
       return
     }
+
+    const booking: Booking = {
+      firstname: "Mickey",
+      lastname: "Lincoln",
+      routes: bookingData.overview.offerIDs,
+      price: bookingData.overview.price,
+      travelTime: bookingData.overview.duration,
+      companyName: bookingData.overview.company,
+      id: bookingData.overview.uuid
+    }
+
+    this.bookingFetch.load(this.bookingService.addBooking(booking)
+      .pipe(delay(300))) // Simulate more realistic loading time
   }
 
   ngOnInit() {
-    this._subscriptions.push(this.booking$.subscribe(value => {
-      console.log('Booking value:', value);
-    }));
+    this._subscriptions.push(
+      this.bookingFetch.data$.subscribe(response => {
+        if (response.status === 201)
+          this.setView(Views.SUCCESS)
+    }))
   }
 
   ngOnDestroy() {
@@ -105,7 +122,11 @@ export class BookingComponent {
     return getTimegap(start, end)
   }
 
-  setIsBooking() {
-    this.isBooking = !this.isBooking
+  setView(view: Views): void {
+    this.userView = view
+  }
+
+  get Views() {
+    return Views
   }
 }

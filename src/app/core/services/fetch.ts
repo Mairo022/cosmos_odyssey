@@ -1,9 +1,9 @@
-import { EMPTY, Observable, Subject, Subscription, catchError, finalize, map, of, tap, throwError } from "rxjs"
+import { BehaviorSubject, EMPTY, Observable, Subject, Subscription, catchError, finalize, tap, throwError } from "rxjs"
 
 export class Fetch<TData> {
-  private _isLoading = new Subject<boolean>
-  private _hasError = new Subject<boolean>
-  private _data = new Subject<TData>
+  private _isLoading$ = new BehaviorSubject<boolean>(false)
+  private _hasError$ = new BehaviorSubject<boolean>(false)
+  private _data$ = new Subject<TData>
   private _action$: Observable<TData> = EMPTY
   private _actionSubscription: Subscription | null = null
 
@@ -18,18 +18,18 @@ export class Fetch<TData> {
       this._actionSubscription.unsubscribe()
     }
     
-    this._isLoading.next(true)
+    this._isLoading$.next(true)
     this._action$ = action$.pipe(
       tap((d) => {
-        this._data.next(d)
-        this._hasError.next(false)
+        this._data$.next(d)
+        this._hasError$.next(false)
       }),
       catchError(() => {
-        this._hasError.next(true)
+        this._hasError$.next(true)
         return throwError(() => new Error("Fetch error"))
       }),
       finalize(() => {
-        this._isLoading.next(false)
+        this._isLoading$.next(false)
       })
     )
 
@@ -37,9 +37,9 @@ export class Fetch<TData> {
   }
 
   reset(): void {
-    this._isLoading.next(false)
-    this._hasError.next(false)
-    this._data = new Subject<TData>
+    this._isLoading$.next(false)
+    this._hasError$.next(false)
+    this._data$ = new Subject<TData>
     this._action$ = EMPTY
 
     if (this._actionSubscription) {
@@ -47,19 +47,19 @@ export class Fetch<TData> {
     }
   }
 
-  get data(): Subject<TData> {
-    return this._data
+  get data$(): Subject<TData> {
+    return this._data$
   }
 
   get action$(): Observable<TData> {
     return this._action$
   }
 
-  get isLoading(): Subject<boolean> {
-    return this._isLoading
+  get isLoading(): BehaviorSubject<boolean> {
+    return this._isLoading$
   }
 
-  get hasError(): Subject<boolean> {
-    return this._hasError
+  get hasError(): BehaviorSubject<boolean> {
+    return this._hasError$
   }
 }

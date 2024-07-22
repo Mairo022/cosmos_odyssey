@@ -1,6 +1,6 @@
 import { HttpClient, HttpResponse } from "@angular/common/http"
 import { Observable } from "rxjs"
-import { Booking } from "../components/flights/flights.model"
+import { Booking } from "../components/booking/booking.model"
 import { Injectable } from "@angular/core"
 
 @Injectable({

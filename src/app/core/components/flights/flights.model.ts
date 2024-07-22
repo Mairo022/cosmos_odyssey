@@ -37,13 +37,3 @@ export interface RouteOffersSort {
     property: RouteOffersSortProperty
     direction: SortDirection
 }
-
-export interface Booking {
-    firstname: string
-    lastname: string
-    routes: string[]
-    price: number
-    travelTime: number
-    companyName: string
-    id: string
-}
