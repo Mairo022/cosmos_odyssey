@@ -1,5 +1,6 @@
 * {
     font-family: 'Open Sans';
+    color: hsl(225, 6%, 18%);
 }
 
 select {
@@ -7,6 +8,11 @@ select {
 }
 
 button {
+    cursor: pointer;
+    outline: none;
+}
+
+input {
     outline: none;
 }
 

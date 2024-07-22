@@ -8,6 +8,30 @@
   </div>
   <span class="header__price">{{formatPrice(booking.overview.price)}}</span>
 </div>
+@if (isBooking) {
+<form [formGroup]="bookingForm" (ngSubmit)="onSubmit()" class="booking">
+  <div class="inputs">
+    <div class="inputs__input">
+      <label class="inputs__input__label" for="firstname">First name</label>
+      <input formControlName="firstname" id="firstname" type="text" placeholder="" class="inputs__input__field">
+      @if (!isInputValid("firstname")) {
+        <span class="inputs__input__error">* First name is required</span>
+      }
+    </div>
+    <div class="inputs__input">
+      <label class="inputs__input__label" for="lastname">Last name</label>
+      <input formControlName="lastname" id="lastname" type="text" placeholder="" class="inputs__input__field">
+      @if (!isInputValid("lastname")) {
+        <span class="inputs__input__error">* Last name is required</span>
+      }
+    </div>
+  </div>
+  <div class="buttons">
+    <button class="buttons__back btn-tertiary" type="button" (click)="setIsBooking()">Go back</button>
+    <button class="buttons__submit btn-primary" type="submit" [disabled]="bookingForm.valid">Book</button>
+  </div>
+</form>
+} @else {
 <div class="selection">
   <h2 class="selection__header">Selected flights</h2>
   <div class="selection__flights">
@@ -48,11 +72,6 @@
         </div>
       }
   </div>
-  <button class="selection__btn" type="button">Continue</button>
+  <button class="selection__btn btn-primary" type="button" (click)="setIsBooking()">Continue</button>
 </div>
-}}
-<form [formGroup]="bookingForm" (ngSubmit)="onSubmit()" hidden="true">
-    <input formControlName="firstname" type="text" placeholder="First name">
-    <input formControlName="lastname" type="text" placeholder="Last name">
-    <button class="submit" type="submit">Book</button>
-</form> 
+}}}

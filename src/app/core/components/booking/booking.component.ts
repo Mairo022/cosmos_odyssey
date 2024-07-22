@@ -1,9 +1,9 @@
 import { Component, inject } from '@angular/core';
 import { AppState } from '../../store/app.state';
 import { CommonModule } from '@angular/common';
-import { Subscription } from 'rxjs';
+import { Subscription, of } from 'rxjs';
 import { HttpResponse } from '@angular/common/http';
-import { FormGroup, FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, FormBuilder, ReactiveFormsModule, Validators, FormControl, AbstractControl, ValidatorFn } from '@angular/forms';
 import { BookingService } from '../../services/booking.service';
 import { Fetch } from '../../services/fetch';
 import { CompanyLogoComponent } from "../company-logo/company-logo.component";
@@ -27,10 +27,12 @@ export class BookingComponent {
   bookingFetch = new Fetch<HttpResponse<any>>()
   bookingForm: FormGroup
 
+  isBooking = true
+
   constructor(private fb: FormBuilder) {
     this.bookingForm = this.fb.group({
-      firstname: "",
-      lastname: ""
+      firstname: ["", Validators.required, this.noWhitespaceValidator],
+      lastname: ["", Validators.required, this.noWhitespaceValidator]
     })
   }
 
@@ -52,6 +54,31 @@ export class BookingComponent {
     for (const subscription of this._subscriptions) {
       subscription.unsubscribe()
     }
+  }
+
+  get firstname(): AbstractControl | null {
+    return this.bookingForm.get('firstname')
+  }
+
+  get lastname(): AbstractControl | null {
+    return this.bookingForm.get('lastname')
+  }
+
+  noWhitespaceValidator(control: AbstractControl) {
+    const isWhitespace = control.value.trim().length === 0;
+    return isWhitespace ? of({'whitespace': true}) : of(null);  
+  }
+
+  isInputValid(property: string): boolean {
+    if (property === "firstname") {
+      return !(this.firstname && this.firstname.dirty && this.firstname.errors)
+    }
+    
+    if (property === "lastname") {
+      return !(this.lastname && this.lastname.dirty && this.lastname.errors)
+    }
+    
+    return false
   }
 
   formatPrice(price: number): string {
@@ -76,5 +103,9 @@ export class BookingComponent {
 
   getTimegap(start: string, end: string): string {
     return getTimegap(start, end)
+  }
+
+  setIsBooking() {
+    this.isBooking = !this.isBooking
   }
 }
