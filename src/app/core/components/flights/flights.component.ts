@@ -8,7 +8,6 @@ import { v4 as uuidv4 } from 'uuid';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CompanyLogoComponent } from '../company-logo/company-logo.component';
 import { AppState } from '../../store/app.state';
-import { LocalStorage } from '../../utils/localStorage';
 
 @Component({
   selector: 'app-flights',
@@ -18,22 +17,21 @@ import { LocalStorage } from '../../utils/localStorage';
   styleUrl: './flights.component.scss'
 })
 export class FlightsComponent {
-  private readonly appState = AppState.getInstance()
-  private readonly routesService = inject(RoutesService)
-  planets = new Fetch<string[]>(this.routesService.getPlanets())
-  companies = new Fetch<string[]>(this.routesService.getCompanies())
-  routes = new Fetch<Array<RouteProvider[]>>
+  private readonly _appState = AppState.getInstance()
+  private readonly _routesService = inject(RoutesService)
+
+  planets = new Fetch<string[]>(this._routesService.getPlanets())
+  companies = new Fetch<string[]>(this._routesService.getCompanies())
+
+  private _routes = new Fetch<Array<RouteProvider[]>>
+  private _routesData = new Array<RouteProvider[]>
   routesOffers = new Array<RoutesRendered> 
-  routesData = new Array<RouteProvider[]>
 
-  isBookingDialogueOpen: boolean = false;
-  bookingDialogueData: RoutesRendered | undefined = undefined
-
-  private readonly defaultRouteOffersSort: RouteOffersSort = {
+  private readonly _defaultRouteOffersSort: RouteOffersSort = {
     property: "startDT",
     direction: "asc"
   }
-  private routesOffersSort = {...this.defaultRouteOffersSort}
+  private _routesOffersSort = {...this._defaultRouteOffersSort}
 
   routeForm: FormGroup
 
@@ -45,27 +43,16 @@ export class FlightsComponent {
   }
 
   getRouteInfo(index: number, pathIndex: number): RouteProvider | undefined {
-    if (this.routesData == null) return undefined
-    const route = this.routesData[index][pathIndex]
+    if (this._routesData == null) return undefined
+    const route = this._routesData[index][pathIndex]
 
     return route
   }
 
-  getRouteTime(index: number, pathIndex: number, type: "start" | "end") {
-    if (this.routesData == null) return ""
-
-    const route = this.routesData[index][pathIndex]
-    const startTime = route.flightStart
-    const endTime = route.flightEnd
-
-    if (type === "start") return startTime
-    return endTime
-  }
-
   getRoutePlanet(index: number, pathIndex: number, type: "start" | "end"): string {
-    if (this.routesData == null) return ""
+    if (this._routesData == null) return ""
 
-    const route = this.routesData[index][pathIndex]
+    const route = this._routesData[index][pathIndex]
     const from = route.from
     const to = route.to
 
@@ -76,20 +63,20 @@ export class FlightsComponent {
   ngOnInit() {
     this.initLoadByQueryParams()
 
-    this.routes.data$.subscribe(routeProvidersList => {
+    this._routes.data$.subscribe(routeProvidersList => {
       const from = this.routeForm.value.from
       const to = this.routeForm.value.to
 
       this.routesOffers = this.getRenderableOffers(routeProvidersList, from, to)
-      this.routesData = routeProvidersList
+      this._routesData = routeProvidersList
     })
   }
 
   ngOnDestroy() {
-    this.routes.data$.unsubscribe()
+    this._routes.data$.unsubscribe()
   }
 
-  initLoadByQueryParams() {
+  initLoadByQueryParams(): void {
     this.route.queryParams.subscribe(params => {
       const from: string | undefined = params['from']
       const to: string | undefined = params['to']
@@ -98,7 +85,7 @@ export class FlightsComponent {
       if (this.routeForm.value.from !== from) this.routeForm.patchValue({ from })
       if (this.routeForm.value.to !== to) this.routeForm.patchValue({ to })
 
-      this.routes.load(this.routesService.getRoutes(from, to))
+      this._routes.load(this._routesService.getRoutes(from, to))
     })
   }
 
@@ -144,7 +131,7 @@ export class FlightsComponent {
       })
     })
 
-    const sortedOffers = this.getSortedRouteOffers(offers, this.defaultRouteOffersSort)
+    const sortedOffers = this.getSortedRouteOffers(offers, this._defaultRouteOffersSort)
     
     return sortedOffers
   }
@@ -154,8 +141,8 @@ export class FlightsComponent {
     const property = sort.property
     const direction = sort.direction
 
-    this.routesOffersSort.property = property
-    this.routesOffersSort.direction = direction
+    this._routesOffersSort.property = property
+    this._routesOffersSort.direction = direction
 
     if (direction == "asc") offersCopy.sort((a,b) => (a[property] as number) - (b[property] as number))
     if (direction == "desc") offersCopy.sort((a,b) => (b[property] as number) - (a[property] as number))
@@ -169,8 +156,8 @@ export class FlightsComponent {
       direction: "asc"
     }
     
-    if (this.routesOffersSort.property == property) {
-      sort.direction = this.routesOffersSort.direction == "asc" ? "desc" : "asc"
+    if (this._routesOffersSort.property == property) {
+      sort.direction = this._routesOffersSort.direction == "asc" ? "desc" : "asc"
     } else {
       sort.direction = "desc"
     }
@@ -242,7 +229,7 @@ export class FlightsComponent {
     return `No stops`
   }
 
-  formatTimeHHMM(time: string) {
+  formatTimeHHMM(time: string): string {
     const date = new Date(time);
     return date.toLocaleTimeString(navigator.language, {
       hour: '2-digit',
@@ -262,14 +249,14 @@ export class FlightsComponent {
     return false
   }
 
-  setBookingRowOpen(index: number) {
+  setBookingRowOpen(index: number): void {
     this.routesOffers[index].open = !this.routesOffers[index].open
   }
 
-  saveBooking(routeIndex: number, routeOverview: RoutesRendered): void {
-    const booking = this.routesData[routeIndex]
+  saveBookingToState(routeIndex: number, routeOverview: RoutesRendered): void {
+    const booking = this._routesData[routeIndex]
     const savedBooking = {overview: routeOverview, routes: booking}
 
-    this.appState.booking$ = savedBooking
+    this._appState.booking$ = savedBooking
   }
 }

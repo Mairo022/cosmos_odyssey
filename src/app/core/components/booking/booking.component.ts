@@ -19,10 +19,10 @@ import { Booking, Views } from './booking.model';
   styleUrl: './booking.component.scss'
 })
 export class BookingComponent {
-  appState = AppState.getInstance() 
-  booking$ = this.appState.booking$
+  private readonly _appState = AppState.getInstance() 
+  booking$ = this._appState.booking$
 
-  private readonly bookingService = inject(BookingService)
+  private readonly _bookingService = inject(BookingService)
   private _subscriptions: Subscription[] = []
 
   bookingFetch = new Fetch<HttpResponse<any>>()
@@ -55,7 +55,7 @@ export class BookingComponent {
       id: bookingData.overview.uuid
     }
 
-    this.bookingFetch.load(this.bookingService.addBooking(booking)
+    this.bookingFetch.load(this._bookingService.addBooking(booking)
       .pipe(delay(300))) // Simulate more realistic loading time
   }
 
@@ -64,7 +64,7 @@ export class BookingComponent {
       this.bookingFetch.data$.subscribe(response => {
         if (response.status === 201) {
           this.setView(Views.SUCCESS)
-          this.appState.resetBooking()
+          this._appState.resetBooking()
         }
     }))
   }
@@ -128,7 +128,7 @@ export class BookingComponent {
     this.userView = view
   }
 
-  get Views() {
+  get Views(): typeof Views {
     return Views
   }
 }

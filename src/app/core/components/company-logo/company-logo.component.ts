@@ -9,9 +9,8 @@ import { Component, Input } from '@angular/core';
 })
 export class CompanyLogoComponent {
   @Input() company = ''
-  path = "assets/company_logos/explore-origin.svg"
 
-  private companyLogoMap = new Map<string, string>([
+  private readonly _companyLogoMap = new Map<string, string>([
     ['SpaceX', 'assets/company_logos/spacex.svg'],
     ['Explore Origin', 'assets/company_logos/explore-origin.svg'],
     ['Space Odyssey', 'assets/company_logos/space-odyssey.svg'],
@@ -25,6 +24,6 @@ export class CompanyLogoComponent {
   ])
 
   getLogo(company: string): string {
-    return this.companyLogoMap.get(company) ?? ""
+    return this._companyLogoMap.get(company) ?? ""
   }
 }

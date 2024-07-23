@@ -7,7 +7,7 @@ import { Injectable } from "@angular/core"
   providedIn: 'root'
 })
 export class BookingService {
-    private API_URL = "http://localhost:4400/api/bookings"
+    private readonly API_URL = "http://localhost:4400/api/bookings"
 
     constructor(private httpClient: HttpClient) {}
   
