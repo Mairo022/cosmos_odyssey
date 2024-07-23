@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
 import { Booking } from "./app.types";
-import { LocalStorage } from "../utils/localStorage";
+import { LocalStorage } from "../utils/local-storage-utils";
 
 @Injectable({
     providedIn: "root"

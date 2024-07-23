@@ -1,15 +1,16 @@
 import { Component, inject } from '@angular/core';
 import { AppState } from '../../store/app.state';
 import { CommonModule } from '@angular/common';
-import { Subscription, delay, of } from 'rxjs';
+import { Subscription, delay } from 'rxjs';
 import { HttpResponse } from '@angular/common/http';
 import { FormGroup, FormBuilder, ReactiveFormsModule, Validators, FormControl, AbstractControl, ValidatorFn } from '@angular/forms';
 import { BookingService } from '../../services/booking.service';
 import { Fetch } from '../../services/fetch';
 import { CompanyLogoComponent } from "../company-logo/company-logo.component";
 import { RouterLink } from '@angular/router';
-import { getTimegap } from '../../utils/timeUtils';
+import { getTimegap } from '../../utils/time-utils';
 import { Booking, Views } from './booking.model';
+import { noWhitespaceValidator } from '../../validators/no-whitespace-validator';
 
 @Component({
   selector: 'app-booking',
@@ -32,8 +33,8 @@ export class BookingComponent {
 
   constructor(private fb: FormBuilder) {
     this.bookingForm = this.fb.group({
-      firstname: ["", Validators.required, this.noWhitespaceValidator],
-      lastname: ["", Validators.required, this.noWhitespaceValidator]
+      firstname: ["", Validators.required, noWhitespaceValidator],
+      lastname: ["", Validators.required, noWhitespaceValidator]
     })
   }
 
@@ -81,11 +82,6 @@ export class BookingComponent {
 
   get lastname(): AbstractControl | null {
     return this.bookingForm.get('lastname')
-  }
-
-  noWhitespaceValidator(control: AbstractControl) {
-    const isWhitespace = control.value.trim().length === 0;
-    return isWhitespace ? of({'whitespace': true}) : of(null);  
   }
 
   isInputValid(property: string): boolean {

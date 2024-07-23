@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, map } from 'rxjs';
-import { RouteProvider } from '../components/flights/flights.model';
+import { RouteProvider } from '../components/flights/flights.component.model';
 
 @Injectable({
   providedIn: 'root'
