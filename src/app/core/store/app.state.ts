@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
 import { Booking } from "./app.types";
+import { LocalStorage } from "../utils/localStorage";
 
 @Injectable({
     providedIn: "root"
@@ -23,7 +24,13 @@ export class AppState {
         return this._booking$
     }
 
-    clearBooking() {
-        this._booking$.next({...this.EMPTY_BOOKING})
+    set booking$(booking: Booking) {
+        LocalStorage.setItem("booking", booking)
+        this._booking$.next(booking)
+    }
+
+    resetBooking(): void {
+        LocalStorage.deleteItem("booking")
+        this._booking$ = new BehaviorSubject<Booking>({...this.EMPTY_BOOKING})
     }
 }

@@ -62,8 +62,10 @@ export class BookingComponent {
   ngOnInit() {
     this._subscriptions.push(
       this.bookingFetch.data$.subscribe(response => {
-        if (response.status === 201)
+        if (response.status === 201) {
           this.setView(Views.SUCCESS)
+          this.appState.resetBooking()
+        }
     }))
   }
 

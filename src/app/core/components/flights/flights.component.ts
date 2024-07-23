@@ -270,7 +270,6 @@ export class FlightsComponent {
     const booking = this.routesData[routeIndex]
     const savedBooking = {overview: routeOverview, routes: booking}
 
-    LocalStorage.setItem("booking", savedBooking)
-    this.appState.booking$.next(savedBooking)
+    this.appState.booking$ = savedBooking
   }
 }
