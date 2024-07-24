@@ -62,7 +62,7 @@ function getLinkedProviderOffer(routes, providerFirst) {
 
     let history = new Array(providerFirst)
     let timegaps = new Array()
-    let timegapIndexes = new Array()
+    let timegapsIndexes = new Array()
 
     let isFirstRoute = 1;
     for (const route of routes) {
@@ -82,7 +82,7 @@ function getLinkedProviderOffer(routes, providerFirst) {
 
             if (enoughTime) {
                 timegaps.push(timegap)
-                timegapIndexes.push(i)
+                timegapsIndexes.push(i)
             }
         })
 
@@ -92,13 +92,14 @@ function getLinkedProviderOffer(routes, providerFirst) {
         }
 
         const closestFlightStart = Math.min(...timegaps)
-        const flightIndex = timegaps.indexOf(closestFlightStart)
+        const timegapIndex = timegaps.indexOf(closestFlightStart)
+        const flightIndex = timegapsIndexes[timegapIndex]
         lastFlightEnd = new Date(providers[flightIndex].flightEnd).getTime()
 
         history.push({...providers[flightIndex], from: route.routeInfo.from.name, to: route.routeInfo.to.name })
 
         timegaps = new Array()
-        timegapIndexes = new Array()
+        timegapsIndexes = new Array()
     }
 
     const isOfferComplete = history.length == routes.length
