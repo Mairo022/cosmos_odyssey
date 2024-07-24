@@ -7,14 +7,22 @@ import { RouteOffersSort, RouteOffersSortProperty, RouteProvider, RoutesRendered
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CompanyLogoComponent } from '../company-logo/company-logo.component';
 import { AppState } from '../../store/app.state';
-import { formatTime, getRenderableOffers, getSortedRouteOffers } from './flights.component.utils';
+import { getRenderableOffers, getSortedRouteOffers } from './flights.component.utils';
+import { formatTime } from '../../utils/time-utils';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 @Component({
   selector: 'app-flights',
   standalone: true,
   imports: [CompanyLogoComponent, ReactiveFormsModule, CommonModule, RouterLink],
   templateUrl: './flights.component.html',
-  styleUrl: './flights.component.scss'
+  styleUrl: './flights.component.scss',
+  animations: [
+    trigger('openClose', [
+      transition(':enter', [style({maxHeight: '0'}), animate('800ms', style({maxHeight: '1000px'}))]),
+      transition(':leave', [animate('400ms ease-out', style({maxHeight: '0'}))]),
+    ]),
+  ]
 })
 export class FlightsComponent {
   private readonly _appState = AppState.getInstance()
@@ -142,6 +150,14 @@ export class FlightsComponent {
       hour: '2-digit',
       minute:'2-digit'
     });
+  }
+
+  DtStrToTime(datetimeStr: string): string {
+    return new Intl.DateTimeFormat('en-US', { 
+      hour: 'numeric', 
+      minute: 'numeric', 
+      hour12: true 
+    }).format(new Date(datetimeStr))
   }
 
   isActivePath(planet: string, source: "from" | "to"): boolean {

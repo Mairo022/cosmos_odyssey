@@ -107,7 +107,7 @@ h3 {
         flex-wrap: wrap;
         gap: 5px 25px;
         border-bottom: 1px solid hsl(0,0%,80%);
-        padding: 20px 25px;
+        padding: 24px 25px;
 
         &:last-child {
             border: none;
@@ -178,37 +178,82 @@ h3 {
         }
 
         .booking_row {
-            max-height: 0;
             width: 100%;
-            transition-property: max-height;
-            transition-duration: 400ms;
-            overflow-y: hidden;
-
-            &.open {
-                max-height: 1000px;
-                transition-duration: 2000ms;
-            }
+            margin-top: 8px;
+            margin-bottom: 12px;
+            overflow: hidden;
 
             &__book {
                 display: block;
-                font-weight: 600;
-                padding: 8px 20px;
-                border-radius: 16px;
                 font-size: 14px;
-                margin: 15px auto 0;
-                background-color: transparent;
-                border: 1px solid hsl(0, 0%, 80%);
-                color: #1a73e8;
-                cursor: pointer;
+                font-weight: 600;
+                border: 1px solid hsl(220, 10%, 88%);
+                border-radius: 20px;
+                padding: 5px 20px;
+                color: hsl(215, 86%, 54%);
+                margin-left: auto;
+                width: fit-content;
+                margin-top: 8px;
 
                 &:hover {
-                    background-color: hsl(230, 75%, 98%);
+                    color: hsl(215, 82%, 47%);
+                    background-color: hsl(220, 70%, 88%, 0.25);
+                }
+            }
+
+            & .flight {
+                display: flex;
+                flex-direction: row;
+                padding: 0 24px;
+                gap: 6px 0;
+                font-size: 16px;
+            
+                &__company_logo {
+                    max-width: 35px;
+                    flex-grow: 1;
+                }
+            
+                &__container {
+                    flex-grow: 1;
+                }
+            
+                &__info {
+                    &__time {
+                        padding: 12px 0;
+                    }
+                }
+            
+                &__company_text {
+                    padding: 12px 0 0;
+                }
+            
+                & .subtext {
+                    font-size: 14px;
+                    color: hsl(0, 0%, 46%);
+                }
+            
+                &__layover {
+                    width: 100%;
+                    font-size: 14px;
+                    padding: 16px 0;
+                    margin: 20px 0;
+                    border: 1px solid hwb(220 87% 11%);
+                    border-left: 0px;
+                    border-right: 0px;
                 }
             }
         }
 
 
     }
+}
+
+.dot-big {
+    margin: 0 8px;
+}
+
+.dot-medium {
+    margin: 0 6px;
 }
 
 .semibold {
