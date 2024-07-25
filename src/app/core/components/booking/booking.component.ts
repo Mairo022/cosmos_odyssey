@@ -1,13 +1,13 @@
 import { Component, inject } from '@angular/core';
 import { AppState } from '../../store/app.state';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { Subscription, delay } from 'rxjs';
 import { HttpResponse } from '@angular/common/http';
-import { FormGroup, FormBuilder, ReactiveFormsModule, Validators, FormControl, AbstractControl, ValidatorFn } from '@angular/forms';
+import { FormGroup, FormBuilder, ReactiveFormsModule, Validators, AbstractControl } from '@angular/forms';
 import { BookingService } from '../../services/booking.service';
 import { Fetch } from '../../services/fetch';
 import { CompanyLogoComponent } from "../company-logo/company-logo.component";
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { getTimegap } from '../../utils/time-utils';
 import { Booking, Views } from './booking.model';
 import { noWhitespaceValidator } from '../../validators/no-whitespace-validator';
@@ -31,7 +31,7 @@ export class BookingComponent {
 
   userView: Views = Views.OVERVIEW
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private _router: Router, private _location: Location) {
     this.bookingForm = this.fb.group({
       firstname: ["", Validators.required, noWhitespaceValidator],
       lastname: ["", Validators.required, noWhitespaceValidator]
@@ -61,6 +61,8 @@ export class BookingComponent {
   }
 
   ngOnInit() {
+    this.initRedirect()
+   
     this._subscriptions.push(
       this.bookingFetch.data$.subscribe(response => {
         if (response.status === 201) {
@@ -73,6 +75,12 @@ export class BookingComponent {
   ngOnDestroy() {
     for (const subscription of this._subscriptions) {
       subscription.unsubscribe()
+    }
+  }
+
+  private initRedirect(): void {
+    if (!this.booking$.getValue().overview || !this.booking$.getValue().routes) {
+      this._router.navigateByUrl("/")
     }
   }
 

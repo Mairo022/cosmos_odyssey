@@ -52,7 +52,12 @@
         <span class="dot-big">·</span>
         <span>{{DtToDayMonthDate(booking.overview.startDT)}}</span>
       </div>
-      <a routerLink=".." class="header__back">Change flight</a>
+      <a routerLink=".." 
+         [queryParams]="{from: booking.overview.from, to: booking.overview.to}" 
+         class="header__back"
+      >
+        Change flight
+      </a>
     </div>
       @for (route of booking.routes; track route.id) {
         <div class="flight">
