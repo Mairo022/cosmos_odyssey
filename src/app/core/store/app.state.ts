@@ -12,7 +12,15 @@ export class AppState {
     private readonly EMPTY_BOOKING = {overview: undefined, routes: []}
     private _booking$ = new BehaviorSubject<Booking>({...this.EMPTY_BOOKING})
 
-    private constructor() {}
+    private constructor() {
+        const booking = LocalStorage.getItem<Booking>("booking")
+
+        if (booking && booking.overview && booking.routes) {
+            booking.overview.startDT = new Date(booking.overview.startDT)
+            booking.overview.endDT = new Date(booking.overview.endDT)
+            this._booking$.next(booking)
+        }
+    }
 
     static getInstance(): AppState {
         if (!this._instance) 
