@@ -1,0 +1,52 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model bookings {
+  id           String    @id @db.Uuid
+  route_ids    String[]  @db.Uuid
+  flight_ids   String[]  @db.Uuid
+  price        Decimal   @db.Decimal(20, 2)
+  start        DateTime  @db.Timestamptz(6)
+  end          DateTime  @db.Timestamptz(6)
+  user_id      String?   @db.Uuid
+  firstname    String    @db.VarChar(100)
+  lastname     String    @db.VarChar(100)
+  email        String    @db.VarChar(100)
+  created_at   DateTime? @default(now()) @db.Timestamptz(6)
+  updated_at   DateTime? @default(now()) @db.Timestamptz(6)
+  cancelled    Boolean?  @default(false)
+  pricelist_id String    @db.Uuid
+}
+
+model flights {
+  id           String     @id @db.Uuid
+  route_id     String     @db.Uuid
+  company      String     @db.VarChar(100)
+  price        Decimal    @db.Decimal(20, 2)
+  start        DateTime   @db.Timestamptz(6)
+  end          DateTime   @db.Timestamptz(6)
+  pricelist_id String     @db.Uuid
+  pricelists   pricelists @relation(fields: [pricelist_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "pricelist")
+  routes       routes     @relation(fields: [route_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "route")
+}
+
+model pricelists {
+  id          String    @id @db.Uuid
+  valid_until DateTime  @db.Timestamptz(6)
+  created_at  DateTime  @default(now()) @db.Timestamptz(6)
+  flights     flights[]
+}
+
+model routes {
+  id       String    @id @db.Uuid
+  from     String    @db.VarChar(20)
+  to       String    @db.VarChar(20)
+  distance BigInt
+  flights  flights[]
+}

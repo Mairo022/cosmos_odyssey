@@ -1,7 +1,6 @@
 import express from "express";
 import {getRoutes, getPlanets, getCompanies} from './controller/routesController.js'
 import {getBooking, getBookings, addBooking} from './controller/bookingController.js'
-import * as db from "./db/db"
 import dotenv from 'dotenv'
 
 dotenv.config()
@@ -24,7 +23,4 @@ app.get("/api/bookings", getBookings)
 app.get("/api/bookings/:routeID", getBooking)
 app.post("/api/bookings", addBooking)
 
-app.listen(process.env.SERVER_PORT, async () => {
-    await db.testDBConnection()
-})
- 
+app.listen(process.env.SERVER_PORT) 
