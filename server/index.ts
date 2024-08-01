@@ -2,6 +2,7 @@ import express from "express";
 import {getRoutes, getPlanets, getCompanies} from './controller/routesController.js'
 import {getBooking, getBookings, addBooking} from './controller/bookingController.js'
 import dotenv from 'dotenv'
+import updatePricelist from "./scripts/pricelistUpdateHandler";
 
 dotenv.config()
 
@@ -13,7 +14,7 @@ app.use((_, res, next) => {
     res.header(`Access-Control-Allow-Methods`, `GET,PUT,POST,DELETE`);
     res.header(`Access-Control-Allow-Headers`, `Content-Type`);
     next()
-})
+}) 
 
 app.get("/api/routes", getRoutes)
 app.get("/api/routes/planets", getPlanets)
@@ -23,4 +24,11 @@ app.get("/api/bookings", getBookings)
 app.get("/api/bookings/:routeID", getBooking)
 app.post("/api/bookings", addBooking)
 
-app.listen(process.env.SERVER_PORT) 
+app.listen(process.env.SERVER_PORT, () => {
+    if (process.env.ENV == "LIVE") {
+        const delay = 24 * 60 * 60 * 1000
+        setInterval(() => {
+            updatePricelist()
+        }, delay)
+    }
+}) 
