@@ -9,11 +9,11 @@ export function getRenderableOffers(routes: Array<RouteProvider[]>, from: string
     routes.forEach((paths, i) => {
       const arrayIndex = i
       const uuid = uuidv4()
-      const company = paths[0].company.name
+      const company = paths[0].company
       const stops = paths.length - 1
       const stopsStr = formatStops(stops)
-      const startDT = new Date(paths[0].flightStart)
-      const endDT = new Date(paths[paths.length - 1].flightEnd)
+      const startDT = new Date(paths[0].start)
+      const endDT = new Date(paths[paths.length - 1].end)
       const timeStr = formatDatetime(startDT) + " - " + formatDatetime(endDT)
       const duration = (endDT.getTime() - startDT.getTime()) / (1000 * 60)
       const durationStr = formatTime(duration)

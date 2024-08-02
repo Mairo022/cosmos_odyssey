@@ -35,6 +35,7 @@ export interface AvailableRoute {
     from: string
     to: string
     distance: number
+    pricelist_id: string
 }
 
 export interface Pricelist {
@@ -52,4 +53,34 @@ interface Flight {
     start: string,
     end: string,
     pricelist_id: string
+}
+
+export type FlightsDB = FlightDB[]
+
+interface FlightDB extends Flight {
+    from: string
+    to: string
+    distance: number
+}
+
+export type RoutesProviders = RoutesProvider[]
+
+export interface RoutesProvider extends AvailableRoute {
+    from: string
+    to: string
+    distance: number
+    providers: RouteProvider[]
+}
+
+export interface RouteProvider {
+    id: string,
+    route_id: string,
+    company: string,
+    price: number,
+    start: string,
+    end: string,
+}
+
+export interface RoutesToClient {
+
 }

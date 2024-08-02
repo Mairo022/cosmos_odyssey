@@ -72,20 +72,20 @@
                       <div class="flight__company_logo"></div>
                       <div class="flight__container">
                         <div class="flight__info">
-                          <span>{{DtStrToTime(route.flightStart)}}</span>
+                          <span>{{DtStrToTime(route.start)}}</span>
                           <span class="dot-big">·</span>
                           <span>{{route.from}}</span>
-                          <div class="flight__info__time subtext">Travel time: {{getTimegap(route.flightStart, route.flightEnd)}}</div>
+                          <div class="flight__info__time subtext">Travel time: {{getTimegap(route.start, route.end)}}</div>
                         </div>
                         <div class="flight__info">
-                          <span>{{DtStrToTime(route.flightEnd)}}</span>
+                          <span>{{DtStrToTime(route.end)}}</span>
                           <span class="dot-big">·</span>
                           <span>{{route.to}}</span>
                         </div>
-                        <div class="flight__company_text subtext">{{route.company.name}}</div>
+                        <div class="flight__company_text subtext">{{route.company}}</div>
                         @if ($index != offer.stops) {
                           <div class="flight__layover">
-                            <span>{{getTimegap(route.flightEnd, getRouteInfo(offer.arrayIndex, j+1)?.flightStart ?? "")}} layover</span>
+                            <span>{{getTimegap(route.end, getRouteInfo(offer.arrayIndex, j+1)?.start ?? "")}} layover</span>
                             <span class="dot-medium">·</span>
                             <span>{{route.to}}</span>
                           </div>

@@ -7,7 +7,7 @@ export async function addPricelistToDB(routes: Routes): Promise<void> {
         id: routes.id,
         valid_until: routes.validUntil
     }
-    const availableRoutes = getAvailableRoutes(routes.legs)
+    const availableRoutes = getAvailableRoutes(routes.legs, routes.id)
     const flights = getFlights(routes.legs, routes.id)
 
     try {
@@ -33,7 +33,7 @@ async function insertToRoutes(tx: Prisma.TransactionClient, data: AvailableRoute
     return await tx.routes.createMany({data})
 }
 
-function getAvailableRoutes(routes: Routes['legs']): AvailableRoutes {
+function getAvailableRoutes(routes: Routes['legs'], pricelistID: string): AvailableRoutes {
     const availableRoutes: AvailableRoutes = new Array
 
     for (const route of routes) {
@@ -41,7 +41,8 @@ function getAvailableRoutes(routes: Routes['legs']): AvailableRoutes {
             id: route.id,
             from: route.routeInfo.from.name,
             to: route.routeInfo.to.name,
-            distance: route.routeInfo.distance
+            distance: route.routeInfo.distance,
+            pricelist_id: pricelistID
         })
     }
 

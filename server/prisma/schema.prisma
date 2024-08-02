@@ -41,12 +41,15 @@ model pricelists {
   valid_until DateTime  @db.Timestamptz(6)
   created_at  DateTime  @default(now()) @db.Timestamptz(6)
   flights     flights[]
+  routes      routes[]
 }
 
 model routes {
-  id       String    @id @db.Uuid
-  from     String    @db.VarChar(20)
-  to       String    @db.VarChar(20)
-  distance BigInt
-  flights  flights[]
+  id           String     @id @db.Uuid
+  from         String     @db.VarChar(20)
+  to           String     @db.VarChar(20)
+  distance     BigInt
+  pricelist_id String     @db.Uuid
+  flights      flights[]
+  pricelists   pricelists @relation(fields: [pricelist_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "pricelist")
 }

@@ -1,6 +1,6 @@
-import { findRoutes, findPlanets, findCompanies } from "../services/routesService.js"
+import { findRoutes, findPlanets, findCompanies } from "../services/routesService"
 
-export function getRoutes(req, res) {
+export async function getRoutes(req, res) {
     const from = req.query.from
     const to = req.query.to
     
@@ -9,17 +9,17 @@ export function getRoutes(req, res) {
         return res.status(400).json("Invalid parameters")
     }
 
-    const routes = findRoutes(from, to)
+    const routes = await findRoutes(from, to)
     return res.status(200).json(routes)
 }
 
-export function getPlanets(_, res) {
-    const planets = findPlanets()
+export async function getPlanets(_, res) {
+    const planets = await findPlanets()
     return res.status(200).json(planets)
 }
 
-export function getCompanies(_, res) {
-    const companies = findCompanies()
+export async function getCompanies(_, res) {
+    const companies = await findCompanies()
     return res.status(200).json(companies)
 }
 

@@ -1,14 +1,12 @@
 export interface RouteProvider {
     id: string,
-    company: {
-        id: string
-        name: string
-    }
+    company: string
     price: number
-    flightStart: string
-    flightEnd: string;
+    start: string
+    end: string;
     from: string,
-    to: string
+    to: string,
+    distance: string
 }
 
 export interface RoutesRendered {

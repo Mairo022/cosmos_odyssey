@@ -46,6 +46,7 @@ CREATE TABLE "routes" (
     "from" VARCHAR(20) NOT NULL,
     "to" VARCHAR(20) NOT NULL,
     "distance" BIGINT NOT NULL,
+    "pricelist_id" UUID NOT NULL,
 
     CONSTRAINT "routes_pkey" PRIMARY KEY ("id")
 );
@@ -55,4 +56,7 @@ ALTER TABLE "flights" ADD CONSTRAINT "pricelist" FOREIGN KEY ("pricelist_id") RE
 
 -- AddForeignKey
 ALTER TABLE "flights" ADD CONSTRAINT "route" FOREIGN KEY ("route_id") REFERENCES "routes"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE "routes" ADD CONSTRAINT "pricelist" FOREIGN KEY ("pricelist_id") REFERENCES "pricelists"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 
