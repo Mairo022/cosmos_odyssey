@@ -2,7 +2,14 @@ import { Routes } from "../types/routes"
 import prisma from "../db/prisma"
 import { addPricelistToDB } from "./pricelistToDB"
 
-export default async function updatePricelist(): Promise<void> {
+export default async function schedulePricelistUpdate(): Promise<void> {
+    if (process.env.ENV == "LIVE") {
+        const delay = 24 * 60 * 60 * 1000
+        setInterval(updatePricelist, delay)
+    }
+}
+
+async function updatePricelist(): Promise<void> {
     await getUpdatedPricelist()
         .then(async (pricelist) => {
             try {

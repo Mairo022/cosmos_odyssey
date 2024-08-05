@@ -2,8 +2,8 @@ import express from "express";
 import {getRoutes, getPlanets, getCompanies} from './controller/routesController.js'
 import {getBooking, getBookings, addBooking} from './controller/bookingController.js'
 import dotenv from 'dotenv'
-import updatePricelist from "./scripts/pricelistUpdateHandler";
 import { asyncHandler, errorHandler } from "./middlewares";
+import schedulePricelistUpdate from "./scripts/pricelistUpdateHandler";
 
 dotenv.config()
 
@@ -25,14 +25,7 @@ app.get("/api/bookings", asyncHandler(getBookings))
 app.get("/api/bookings/:routeID", asyncHandler(getBooking))
 app.post("/api/bookings", asyncHandler(addBooking))
 
-app.listen(process.env.SERVER_PORT, () => {
-    if (process.env.ENV == "LIVE") {
-        const delay = 24 * 60 * 60 * 1000
-        setInterval(() => {
-            updatePricelist()
-        }, delay)
-    }
-})
+app.listen(process.env.SERVER_PORT, schedulePricelistUpdate)
 
 app.use(errorHandler)
 
