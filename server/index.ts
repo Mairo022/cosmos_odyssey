@@ -3,6 +3,7 @@ import {getRoutes, getPlanets, getCompanies} from './controller/routesController
 import {getBooking, getBookings, addBooking} from './controller/bookingController.js'
 import dotenv from 'dotenv'
 import updatePricelist from "./scripts/pricelistUpdateHandler";
+import { asyncHandler, errorHandler } from "./middlewares";
 
 dotenv.config()
 
@@ -16,13 +17,13 @@ app.use((_, res, next) => {
     next()
 }) 
 
-app.get("/api/routes", getRoutes)
-app.get("/api/routes/planets", getPlanets)
-app.get("/api/routes/companies", getCompanies)
+app.get("/api/routes", asyncHandler(getRoutes))
+app.get("/api/routes/planets", asyncHandler(getPlanets))
+app.get("/api/routes/companies", asyncHandler(getCompanies))
 
-app.get("/api/bookings", getBookings)
-app.get("/api/bookings/:routeID", getBooking)
-app.post("/api/bookings", addBooking)
+app.get("/api/bookings", asyncHandler(getBookings))
+app.get("/api/bookings/:routeID", asyncHandler(getBooking))
+app.post("/api/bookings", asyncHandler(addBooking))
 
 app.listen(process.env.SERVER_PORT, () => {
     if (process.env.ENV == "LIVE") {
@@ -31,4 +32,16 @@ app.listen(process.env.SERVER_PORT, () => {
             updatePricelist()
         }, delay)
     }
-}) 
+})
+
+app.use(errorHandler)
+
+process.on('uncaughtException', (error: Error) => {
+    console.error('Uncaught exception:', error)
+    process.exit(1)
+})
+
+process.on('unhandledRejection', (reason: string, promise: Promise<any>) => {
+    console.error('Unhandled rejection at:', promise, 'reason:', reason)
+    process.exit(1)
+})
