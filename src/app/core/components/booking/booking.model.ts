@@ -1,7 +1,7 @@
 export interface Booking {
     firstname: string
     lastname: string
-    routes: string[]
+    flight_ids: string[]
     price: number
     travelTime: number
     companyName: string

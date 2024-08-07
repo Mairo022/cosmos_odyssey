@@ -8,16 +8,11 @@ datasource db {
 }
 
 model bookings {
-  id           String    @id @db.Uuid
+  id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   route_ids    String[]  @db.Uuid
   flight_ids   String[]  @db.Uuid
   price        Decimal   @db.Decimal(20, 2)
-  start        DateTime  @db.Timestamptz(6)
-  end          DateTime  @db.Timestamptz(6)
   user_id      String?   @db.Uuid
-  firstname    String    @db.VarChar(100)
-  lastname     String    @db.VarChar(100)
-  email        String    @db.VarChar(100)
   created_at   DateTime? @default(now()) @db.Timestamptz(6)
   updated_at   DateTime? @default(now()) @db.Timestamptz(6)
   cancelled    Boolean?  @default(false)
@@ -52,4 +47,12 @@ model routes {
   pricelist_id String     @db.Uuid
   flights      flights[]
   pricelists   pricelists @relation(fields: [pricelist_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "pricelist")
+}
+
+model users {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  firstname   String    @db.VarChar(100)
+  lastname    String    @db.VarChar(100)
+  email       String    @db.VarChar(100)
+  created_at  DateTime  @default(now()) @db.Timestamptz(6)
 }

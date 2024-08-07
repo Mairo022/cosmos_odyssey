@@ -23,6 +23,6 @@ export class BookingService {
   
     addBooking(booking: Booking):  Observable<HttpResponse<void>> {
       const url = this.API_URL
-      return this.httpClient.post<void>(url, {body: booking}, { observe: 'response'})
+      return this.httpClient.post<void>(url, booking, { observe: 'response'})
     }
 }

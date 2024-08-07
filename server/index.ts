@@ -1,9 +1,11 @@
 import express from "express";
 import {getRoutes, getPlanets, getCompanies} from './controller/routesController.js'
-import {getBooking, getBookings, addBooking} from './controller/bookingController.js'
+import {getBooking, addBooking} from './controller/bookingController'
 import dotenv from 'dotenv'
 import { asyncHandler, errorHandler } from "./middlewares";
 import schedulePricelistUpdate from "./scripts/pricelistUpdateHandler";
+import {} from "./types/global";
+import "./extensions"
 
 dotenv.config()
 
@@ -21,7 +23,6 @@ app.get("/api/routes", asyncHandler(getRoutes))
 app.get("/api/routes/planets", asyncHandler(getPlanets))
 app.get("/api/routes/companies", asyncHandler(getCompanies))
 
-app.get("/api/bookings", asyncHandler(getBookings))
 app.get("/api/bookings/:routeID", asyncHandler(getBooking))
 app.post("/api/bookings", asyncHandler(addBooking))
 

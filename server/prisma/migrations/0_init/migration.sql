@@ -1,15 +1,10 @@
 -- CreateTable
 CREATE TABLE "bookings" (
-    "id" UUID NOT NULL,
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "route_ids" UUID[],
     "flight_ids" UUID[],
     "price" DECIMAL(20,2) NOT NULL,
-    "start" TIMESTAMPTZ(6) NOT NULL,
-    "end" TIMESTAMPTZ(6) NOT NULL,
-    "user_id" UUID,
-    "firstname" VARCHAR(100) NOT NULL,
-    "lastname" VARCHAR(100) NOT NULL,
-    "email" VARCHAR(100) NOT NULL,
+    "user_id" UUID NOT NULL,
     "created_at" TIMESTAMPTZ(6) DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMPTZ(6) DEFAULT CURRENT_TIMESTAMP,
     "cancelled" BOOLEAN DEFAULT false,
@@ -49,6 +44,17 @@ CREATE TABLE "routes" (
     "pricelist_id" UUID NOT NULL,
 
     CONSTRAINT "routes_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "users" (
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "firstname" VARCHAR(100) NOT NULL,
+    "lastname" VARCHAR(100) NOT NULL,
+    "email" VARCHAR(100) NOT NULL,
+    "created_at" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "users_pkey" PRIMARY KEY ("id")
 );
 
 -- AddForeignKey

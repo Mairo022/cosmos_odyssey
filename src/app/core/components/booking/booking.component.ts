@@ -49,7 +49,7 @@ export class BookingComponent {
     const booking: Booking = {
       firstname: "Mickey",
       lastname: "Lincoln",
-      routes: bookingData.overview.offerIDs,
+      flight_ids: bookingData.overview.offerIDs,
       price: bookingData.overview.price,
       travelTime: bookingData.overview.duration,
       companyName: bookingData.overview.company,
