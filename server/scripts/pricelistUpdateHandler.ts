@@ -1,12 +1,20 @@
 import { Routes } from "../types/routes"
 import prisma from "../db/prisma"
 import { addPricelistToDB } from "./pricelistToDB"
+import { RoutesCache } from "../data/RoutesCache"
 
 export default async function schedulePricelistUpdate(): Promise<void> {
     if (process.env.ENV == "LIVE") {
-        const delay = 24 * 60 * 60 * 1000
-        setInterval(updatePricelist, delay)
+        await updateActions()
+
+        const dayDelay = 24 * 60 * 60 * 1000
+        setInterval(updateActions, dayDelay)
     }
+}
+
+async function updateActions(): Promise<void> {
+    await updatePricelist()
+    await RoutesCache.updateAll()
 }
 
 async function updatePricelist(): Promise<void> {
