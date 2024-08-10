@@ -6,6 +6,7 @@ import { asyncHandler, errorHandler } from "./middlewares";
 import schedulePricelistUpdate from "./scripts/pricelistUpdateHandler";
 import {} from "./types/global";
 import "./extensions"
+import { routesValidator } from "./validators/routesValidator";
 
 dotenv.config()
 
@@ -19,7 +20,7 @@ app.use((_, res, next) => {
     next()
 }) 
 
-app.get("/api/routes", asyncHandler(getRoutes))
+app.get("/api/routes", routesValidator, asyncHandler(getRoutes))
 app.get("/api/routes/planets", asyncHandler(getPlanets))
 app.get("/api/routes/companies", asyncHandler(getCompanies))
 

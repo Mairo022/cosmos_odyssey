@@ -10,6 +10,9 @@ export default async function schedulePricelistUpdate(): Promise<void> {
         const dayDelay = 24 * 60 * 60 * 1000
         setInterval(updateActions, dayDelay)
     }
+    if (process.env.ENV == "DEV") {
+        RoutesCache.developmentSetCompaniesPlanets()
+    }
 }
 
 async function updateActions(): Promise<void> {

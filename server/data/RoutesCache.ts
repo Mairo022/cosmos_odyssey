@@ -15,6 +15,11 @@ export class RoutesCache {
             })
     }
 
+    static developmentSetCompaniesPlanets(): void {
+        this.#companies = ["SpaceX","Explore Origin","Space Odyssey","Explore Dynamite","Galaxy Express","Spacegenix","Travel Nova","Space Piper","Spacelux","Space Voyager"]
+        this.#planets = ["Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune"]
+    }
+
     static async updatePlanets(): Promise<void> {
         this.#planets = (await prisma.routes.groupBy({by: 'from'})).map(planet => planet.from)
 
