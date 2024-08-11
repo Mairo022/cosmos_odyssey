@@ -7,6 +7,7 @@ import schedulePricelistUpdate from "./scripts/pricelistUpdateHandler";
 import {} from "./types/global";
 import "./extensions"
 import { routesValidator } from "./validators/routesValidator";
+import { bookingValidator } from "./validators/bookingValidator";
 
 dotenv.config()
 
@@ -24,8 +25,8 @@ app.get("/api/routes", routesValidator, asyncHandler(getRoutes))
 app.get("/api/routes/planets", asyncHandler(getPlanets))
 app.get("/api/routes/companies", asyncHandler(getCompanies))
 
-app.get("/api/bookings/:routeID", asyncHandler(getBooking))
-app.post("/api/bookings", asyncHandler(addBooking))
+app.get("/api/bookings/:bookingID", asyncHandler(getBooking))
+app.post("/api/bookings", bookingValidator, asyncHandler(addBooking))
 
 app.listen(process.env.SERVER_PORT, schedulePricelistUpdate)
 
