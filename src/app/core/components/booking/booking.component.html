@@ -27,6 +27,13 @@
         <span class="inputs__input__error">* Last name is required</span>
       }
     </div>
+    <div class="inputs__input">
+      <label class="inputs__input__label" for="email">Email</label>
+      <input formControlName="email" id="email" type="text" placeholder="" class="inputs__input__field">
+      @if (!isInputValid("email")) {
+        <span class="inputs__input__error">* {{getValidationMessage("email")}}</span>
+      }
+    </div>
   </div>
   <div class="buttons">
     <button class="buttons__back btn-tertiary" type="button" (click)="setView(Views.OVERVIEW)">Go back</button>
@@ -46,14 +53,14 @@
 <div class="selection">
   <h2 class="selection__header">Selected flights</h2>
   <div class="selection__flights">
-    <div class="header"> 
+    <div class="header">
       <div class="header__departing">
         <span>Departing flight</span>
         <span class="dot-big">·</span>
         <span>{{DtToDayMonthDate(booking.overview.startDT)}}</span>
       </div>
-      <a routerLink=".." 
-         [queryParams]="{from: booking.overview.from, to: booking.overview.to}" 
+      <a routerLink=".."
+         [queryParams]="{from: booking.overview.from, to: booking.overview.to}"
          class="header__back"
       >
         Change flight

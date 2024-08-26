@@ -11,6 +11,9 @@ import { Router, RouterLink } from '@angular/router';
 import { getTimegap } from '../../utils/time-utils';
 import { Booking, Views } from './booking.model';
 import { noWhitespaceValidator } from '../../validators/no-whitespace-validator';
+import emailValidator from "../../validators/email-validator";
+import getValidationError from "../../utils/validation-messages";
+import capitalise from "../../utils/capitalise";
 
 @Component({
   selector: 'app-booking',
@@ -20,7 +23,7 @@ import { noWhitespaceValidator } from '../../validators/no-whitespace-validator'
   styleUrl: './booking.component.scss'
 })
 export class BookingComponent {
-  private readonly _appState = AppState.getInstance() 
+  private readonly _appState = AppState.getInstance()
   booking$ = this._appState.booking$
 
   private readonly _bookingService = inject(BookingService)
@@ -34,25 +37,26 @@ export class BookingComponent {
   constructor(private fb: FormBuilder, private _router: Router, private _location: Location) {
     this.bookingForm = this.fb.group({
       firstname: ["", Validators.required, noWhitespaceValidator],
-      lastname: ["", Validators.required, noWhitespaceValidator]
-    })
+      lastname: ["", Validators.required, noWhitespaceValidator],
+      email: ["", Validators.required, [noWhitespaceValidator, emailValidator]],
+    }, { updateOn: 'blur' })
   }
 
   onSubmit(): void {
-    const {firstname, lastname} = this.bookingForm.value
+    const {firstname, lastname, email} = this.bookingForm.value
     const bookingData = this.booking$.getValue()
-    
+
     if (!firstname || !lastname || !bookingData.overview || !bookingData.routes) {
       return
     }
 
     const booking: Booking = {
-      firstname: "Mickey",
-      lastname: "Lincoln",
+      firstname: firstname,
+      lastname: lastname,
+      email: email,
       flight_ids: bookingData.overview.offerIDs,
       price: bookingData.overview.price,
       travelTime: bookingData.overview.duration,
-      companyName: bookingData.overview.company,
       id: bookingData.overview.uuid
     }
 
@@ -62,7 +66,7 @@ export class BookingComponent {
 
   ngOnInit() {
     this.initRedirect()
-   
+
     this._subscriptions.push(
       this.bookingFetch.data$.subscribe(response => {
         if (response.status === 201) {
@@ -92,24 +96,32 @@ export class BookingComponent {
     return this.bookingForm.get('lastname')
   }
 
+  get email(): AbstractControl | null {
+    return this.bookingForm.get('email')
+  }
+
   isInputValid(property: string): boolean {
     if (property === "firstname") {
       return !(this.firstname && this.firstname.dirty && this.firstname.errors)
     }
-    
+
     if (property === "lastname") {
       return !(this.lastname && this.lastname.dirty && this.lastname.errors)
     }
-    
+
+    if (property === "email") {
+      return !(this.email && this.email.dirty && this.email.errors)
+    }
+
     return false
   }
 
   formatPrice(price: number): string {
     return "€" + price.toString().replace(".", ",")
   }
-  
+
   DtToDayMonthDate(datetime: Date): string {
-    return new Intl.DateTimeFormat('en-US', { 
+    return new Intl.DateTimeFormat('en-US', {
       weekday: 'short',
       month: 'short',
       day: 'numeric'
@@ -117,11 +129,29 @@ export class BookingComponent {
   }
 
   DtStrToTime(datetimeStr: string): string {
-    return new Intl.DateTimeFormat('en-US', { 
-      hour: 'numeric', 
-      minute: 'numeric', 
-      hour12: true 
+    return new Intl.DateTimeFormat('en-US', {
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: true
     }).format(new Date(datetimeStr))
+  }
+
+  getValidationMessage(property: string): string {
+    let errorKey = ""
+
+    switch (property) {
+      case 'firstname':
+        errorKey = Object.keys(this.firstname?.errors || {})[0] ?? ""
+        break
+      case 'lastname':
+        errorKey = Object.keys(this.lastname?.errors || {})[0] ?? ""
+        break
+      case 'email':
+        errorKey = Object.keys(this.email?.errors || {})[0] ?? ""
+        break
+    }
+
+    return getValidationError(errorKey, capitalise(property))
   }
 
   getTimegap(start: string, end: string): string {

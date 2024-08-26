@@ -17,7 +17,7 @@ export async function bookingValidator(req, res, next) {
         if (!isValidEmail(booking.email)) {
             return res.status(400).json("Invalid e-mail address")
         }
-        
+
         if (!isValidName(booking.firstname) || !isValidName(booking.lastname)) {
             return res.status(400).json("Invalid name format")
         }
@@ -78,7 +78,7 @@ async function isValidPricelist(pricelistID: string): Promise<boolean> {
 
 function isValidName(name: string): boolean {
     const lettersRegex = /^[\p{L}]+$/u
-        
+
     return name.length >= 2 && lettersRegex.test(name)
 }
 

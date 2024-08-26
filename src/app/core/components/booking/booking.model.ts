@@ -4,7 +4,7 @@ export interface Booking {
     flight_ids: string[]
     price: number
     travelTime: number
-    companyName: string
+    email: string
     id: string
 }
 
