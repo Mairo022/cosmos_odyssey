@@ -9,7 +9,7 @@ export interface Booking {
 }
 
 export enum Views {
-    OVERVIEW = "OVERVIEW",
-    BOOKING = "BOOKING",
-    SUCCESS = "SUCCESS"
+    OVERVIEW = "overview",
+    BOOKING = "booking",
+    SUCCESS = "success"
 }

@@ -36,7 +36,7 @@
     </div>
   </div>
   <div class="buttons">
-    <button class="buttons__back btn-tertiary" type="button" (click)="setView(Views.OVERVIEW)">Go back</button>
+    <button class="buttons__back btn-tertiary" type="button" (click)="changeView(Views.OVERVIEW)">Go back</button>
     <button class="buttons__submit btn-primary"
             [class.loading]="bookingFetch.isLoading | async"
             [disabled]="!bookingForm.valid"
@@ -95,7 +95,7 @@
         </div>
       }
   </div>
-  <button class="selection__btn btn-primary" type="button" (click)="setView(Views.BOOKING)">Continue</button>
+  <button class="selection__btn btn-primary" type="button" (click)="changeView(Views.BOOKING)">Continue</button>
 </div>
 }
 @if (userView === Views.SUCCESS) {

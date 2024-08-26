@@ -7,7 +7,7 @@ import { FormGroup, FormBuilder, ReactiveFormsModule, Validators, AbstractContro
 import { BookingService } from '../../services/booking.service';
 import { Fetch } from '../../services/fetch';
 import { CompanyLogoComponent } from "../company-logo/company-logo.component";
-import { Router, RouterLink } from '@angular/router';
+import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import { getTimegap } from '../../utils/time-utils';
 import { Booking, Views } from './booking.model';
 import { noWhitespaceValidator } from '../../validators/no-whitespace-validator';
@@ -34,7 +34,11 @@ export class BookingComponent {
 
   userView: Views = Views.OVERVIEW
 
-  constructor(private fb: FormBuilder, private _router: Router, private _location: Location) {
+  constructor(private fb: FormBuilder,
+              private _router: Router,
+              private _location: Location,
+              private _route: ActivatedRoute
+  ) {
     this.bookingForm = this.fb.group({
       firstname: ["", Validators.required, noWhitespaceValidator],
       lastname: ["", Validators.required, noWhitespaceValidator],
@@ -70,10 +74,14 @@ export class BookingComponent {
     this._subscriptions.push(
       this.bookingFetch.data$.subscribe(response => {
         if (response.status === 201) {
-          this.setView(Views.SUCCESS)
+          this.changeView(Views.SUCCESS)
           this._appState.resetBooking()
         }
     }))
+
+    this._route.queryParams.subscribe(params => {
+      this.userView = params['view'] ?? this.userView
+    })
   }
 
   ngOnDestroy() {
@@ -158,8 +166,10 @@ export class BookingComponent {
     return getTimegap(start, end)
   }
 
-  setView(view: Views): void {
-    this.userView = view
+  changeView(view: Views): void {
+    this._router.navigate([], {
+      queryParams: { view }
+    })
   }
 
   get Views(): typeof Views {

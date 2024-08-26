@@ -59,7 +59,7 @@
             <div class="price column semibold">€{{offer.price}}</div>
             <button class="button_open column"
                     [class.open]="offer.open"
-                    type="button" 
+                    type="button"
                     (click)="setBookingRowOpen($index)"
             >
             &triangledown;
@@ -94,7 +94,7 @@
                     </div>
                   }
                 }
-                  <a class="booking_row__book" routerLink="booking" (click)="saveBookingToState(offer.arrayIndex, offer)">Select flight</a>
+                  <a class="booking_row__book" routerLink="booking" [queryParams]="{view: 'overview'}" (click)="saveBookingToState(offer.arrayIndex, offer)">Select flight</a>
                 </div>
               }
           </li>
