@@ -1,20 +1,26 @@
-import { Component, inject } from '@angular/core';
-import { RoutesService } from '../../services/routes.service';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { Fetch } from '../../services/fetch';
-import { CommonModule } from '@angular/common';
-import { RouteOffersSort, RouteOffersSortProperty, RouteProvider, RoutesRendered } from './flights.component.model'
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { CompanyLogoComponent } from '../company-logo/company-logo.component';
-import { AppState } from '../../store/app.state';
-import { getRenderableOffers, getSortedRouteOffers } from './flights.component.utils';
-import { formatTime } from '../../utils/time-utils';
-import { animate, state, style, transition, trigger } from '@angular/animations';
+import {Component, inject} from '@angular/core';
+import {RoutesService} from '../../services/routes.service';
+import {FormBuilder, FormGroup, ReactiveFormsModule} from '@angular/forms';
+import {Fetch, FetchStatus} from '../../services/fetch';
+import {CommonModule} from '@angular/common';
+import {
+  RouteOffersSort,
+  RouteOffersSortProperty,
+  RouteProvider,
+  RoutesRendered,
+} from './flights.component.model'
+import {ActivatedRoute, Router, RouterLink} from '@angular/router';
+import {CompanyLogoComponent} from '../company-logo/company-logo.component';
+import {AppState} from '../../store/app.state';
+import {getRenderableOffers, getSortedRouteOffers} from './flights.component.utils';
+import {formatTime} from '../../utils/time-utils';
+import {animate, style, transition, trigger} from '@angular/animations';
+import {LoadingComponent} from "../loading/loading.component";
 
 @Component({
   selector: 'app-flights',
   standalone: true,
-  imports: [CompanyLogoComponent, ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [CompanyLogoComponent, ReactiveFormsModule, CommonModule, RouterLink, LoadingComponent],
   templateUrl: './flights.component.html',
   styleUrl: './flights.component.scss',
   animations: [
@@ -25,15 +31,17 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
   ]
 })
 export class FlightsComponent {
+  protected readonly FetchStatus = FetchStatus
+
   private readonly _appState = AppState.getInstance()
   private readonly _routesService = inject(RoutesService)
 
   planets = new Fetch<string[]>(this._routesService.getPlanets())
   companies = new Fetch<string[]>(this._routesService.getCompanies())
 
-  private _routes = new Fetch<Array<RouteProvider[]>>
+  routes = new Fetch<Array<RouteProvider[]>>
   private _routesData = new Array<RouteProvider[]>
-  routesOffers = new Array<RoutesRendered> 
+  routesOffers = new Array<RoutesRendered>
 
   private readonly _defaultRouteOffersSort: RouteOffersSort = {
     property: "startDT",
@@ -53,7 +61,7 @@ export class FlightsComponent {
   ngOnInit() {
     this.initLoadByQueryParams()
 
-    this._routes.data$.subscribe(routeProvidersList => {
+    this.routes.data$.subscribe(routeProvidersList => {
       const from = this.routeForm.value.from
       const to = this.routeForm.value.to
 
@@ -63,7 +71,7 @@ export class FlightsComponent {
   }
 
   ngOnDestroy() {
-    this._routes.data$.unsubscribe()
+    this.routes.data$.unsubscribe()
   }
 
   initLoadByQueryParams(): void {
@@ -75,7 +83,7 @@ export class FlightsComponent {
       if (this.routeForm.value.from !== from) this.routeForm.patchValue({ from })
       if (this.routeForm.value.to !== to) this.routeForm.patchValue({ to })
 
-      this._routes.load(this._routesService.getRoutes(from, to))
+      this.routes.load(this._routesService.getRoutes(from, to))
     })
   }
 
@@ -115,7 +123,7 @@ export class FlightsComponent {
       property: property,
       direction: "asc"
     }
-    
+
     if (this._routesOffersSort.property == property) {
       sort.direction = this._routesOffersSort.direction == "asc" ? "desc" : "asc"
     } else {
@@ -143,7 +151,7 @@ export class FlightsComponent {
 
     return gap
   }
-  
+
   formatTimeHHMM(time: string): string {
     const date = new Date(time);
     return date.toLocaleTimeString(navigator.language, {
@@ -153,10 +161,10 @@ export class FlightsComponent {
   }
 
   DtStrToTime(datetimeStr: string): string {
-    return new Intl.DateTimeFormat('en-US', { 
-      hour: 'numeric', 
-      minute: 'numeric', 
-      hour12: true 
+    return new Intl.DateTimeFormat('en-US', {
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: true
     }).format(new Date(datetimeStr))
   }
 

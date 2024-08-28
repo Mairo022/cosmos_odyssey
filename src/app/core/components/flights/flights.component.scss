@@ -47,6 +47,7 @@ select {
 }
 
 h3 {
+    margin-top: 4rem;
     font-weight: 600;
 }
 
@@ -119,7 +120,7 @@ h3 {
             &__row-bold {
                 font-weight: 600;
             }
-            
+
             &__subrow {
                 color: hsl(0,0%, 46%);
                 font-size: 12px;
@@ -174,7 +175,7 @@ h3 {
 
             &:hover {
                 background-color: hsla(0, 0%, 94%, 50%);
-            }                
+            }
         }
 
         .booking_row {
@@ -207,31 +208,31 @@ h3 {
                 padding: 0 24px;
                 gap: 6px 0;
                 font-size: 16px;
-            
+
                 &__company_logo {
                     max-width: 35px;
                     flex-grow: 1;
                 }
-            
+
                 &__container {
                     flex-grow: 1;
                 }
-            
+
                 &__info {
                     &__time {
                         padding: 12px 0;
                     }
                 }
-            
+
                 &__company_text {
                     padding: 12px 0 0;
                 }
-            
+
                 & .subtext {
                     font-size: 14px;
                     color: hsl(0, 0%, 46%);
                 }
-            
+
                 &__layover {
                     width: 100%;
                     font-size: 14px;
@@ -258,4 +259,9 @@ h3 {
 
 .semibold {
     font-weight: 600;
+}
+
+.loading {
+  margin-top: 4rem;
+  text-align: center;
 }

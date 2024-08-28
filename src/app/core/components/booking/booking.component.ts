@@ -5,7 +5,7 @@ import { Subscription, delay } from 'rxjs';
 import { HttpResponse } from '@angular/common/http';
 import { FormGroup, FormBuilder, ReactiveFormsModule, Validators, AbstractControl } from '@angular/forms';
 import { BookingService } from '../../services/booking.service';
-import { Fetch } from '../../services/fetch';
+import {Fetch, FetchStatus} from '../../services/fetch';
 import { CompanyLogoComponent } from "../company-logo/company-logo.component";
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import { getTimegap } from '../../utils/time-utils';
@@ -23,13 +23,15 @@ import capitalise from "../../utils/capitalise";
   styleUrl: './booking.component.scss'
 })
 export class BookingComponent {
+  protected readonly FetchStatus = FetchStatus
+
   private readonly _appState = AppState.getInstance()
   booking$ = this._appState.booking$
 
   private readonly _bookingService = inject(BookingService)
   private _subscriptions: Subscription[] = []
 
-  bookingFetch = new Fetch<HttpResponse<any>>()
+  bookingFetch = new Fetch<HttpResponse<any>>(undefined, 200)
   bookingForm: FormGroup
 
   userView: Views = Views.OVERVIEW
@@ -64,8 +66,7 @@ export class BookingComponent {
       id: bookingData.overview.uuid
     }
 
-    this.bookingFetch.load(this._bookingService.addBooking(booking)
-      .pipe(delay(300))) // Simulate more realistic loading time
+    this.bookingFetch.load(this._bookingService.addBooking(booking))
   }
 
   ngOnInit() {
@@ -148,10 +149,10 @@ export class BookingComponent {
     let errorKey = ""
 
     switch (property) {
-      case 'firstname':
+      case 'first name':
         errorKey = Object.keys(this.firstname?.errors || {})[0] ?? ""
         break
-      case 'lastname':
+      case 'last name':
         errorKey = Object.keys(this.lastname?.errors || {})[0] ?? ""
         break
       case 'email':

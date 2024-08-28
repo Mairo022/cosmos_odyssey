@@ -17,14 +17,14 @@
       <label class="inputs__input__label" for="firstname">First name</label>
       <input formControlName="firstname" id="firstname" type="text" placeholder="" class="inputs__input__field">
       @if (!isInputValid("firstname")) {
-        <span class="inputs__input__error">* First name is required</span>
+        <span class="inputs__input__error">* {{getValidationMessage("first name")}}</span>
       }
     </div>
     <div class="inputs__input">
       <label class="inputs__input__label" for="lastname">Last name</label>
       <input formControlName="lastname" id="lastname" type="text" placeholder="" class="inputs__input__field">
       @if (!isInputValid("lastname")) {
-        <span class="inputs__input__error">* Last name is required</span>
+        <span class="inputs__input__error">* {{getValidationMessage("last name")}}</span>
       }
     </div>
     <div class="inputs__input">
@@ -38,14 +38,14 @@
   <div class="buttons">
     <button class="buttons__back btn-tertiary" type="button" (click)="changeView(Views.OVERVIEW)">Go back</button>
     <button class="buttons__submit btn-primary"
-            [class.loading]="bookingFetch.isLoading | async"
+            [class.loading]="FetchStatus.Loading === bookingFetch.status$.value"
             [disabled]="!bookingForm.valid"
             type="submit">
     Book
   </button>
   </div>
-  @if (bookingFetch.hasError | async) {
-    <div class="booking__failed">Booking failed</div>
+  @if (FetchStatus.Error === bookingFetch.status$.value) {
+    <div class="booking__failed">* Booking failed ({{bookingFetch.error.getValue().error}})</div>
   }
 </form>
 }

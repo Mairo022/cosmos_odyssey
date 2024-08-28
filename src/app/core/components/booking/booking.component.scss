@@ -1,6 +1,9 @@
 .booking {
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
     margin: 32px auto 0;
-    width: fit-content;
+    align-items: center;
 
     & .inputs {
         &__input {
@@ -14,7 +17,7 @@
                 border: none;
                 border-bottom: 1px solid hsl(220, 10%, 87%);
                 padding: 8px 20px;
-                box-shadow: inset 0 1px 2px hsla(0, 0%, 0%, 0.39), 0 -1px 1px #FFF, 0 1px 0 #FFF;                
+                box-shadow: inset 0 1px 2px hsla(0, 0%, 0%, 0.39), 0 -1px 1px #FFF, 0 1px 0 #FFF;
             }
 
             &__error {
@@ -25,8 +28,6 @@
     }
 
     & .buttons {
-        display: flex;
-        justify-content: space-between;
         padding-top: 12px;
 
         & > button {
@@ -50,6 +51,7 @@
     &__failed {
         color: red;
         text-align: center;
+        text-wrap: wrap;
         margin-top: 14px;
     }
 }
@@ -213,7 +215,7 @@
     font-size: 14px;
     border: none;
     background-color: transparent;
-    color: hsl(215, 86%, 54%);   
+    color: hsl(215, 86%, 54%);
 
     &:hover {
         color: hsl(215, 86%, 48%);
