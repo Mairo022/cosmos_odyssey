@@ -16,11 +16,12 @@ import {getRenderableOffers, getSortedRouteOffers} from './flights.component.uti
 import {formatTime} from '../../utils/time-utils';
 import {animate, style, transition, trigger} from '@angular/animations';
 import {LoadingComponent} from "../loading/loading.component";
+import {SelectBoxComponent} from "../select-box/select-box.component";
 
 @Component({
   selector: 'app-flights',
   standalone: true,
-  imports: [CompanyLogoComponent, ReactiveFormsModule, CommonModule, RouterLink, LoadingComponent],
+  imports: [CompanyLogoComponent, ReactiveFormsModule, CommonModule, RouterLink, LoadingComponent, SelectBoxComponent],
   templateUrl: './flights.component.html',
   styleUrl: './flights.component.scss',
   animations: [
@@ -94,17 +95,6 @@ export class FlightsComponent {
     return route
   }
 
-  getRoutePlanet(index: number, pathIndex: number, type: "start" | "end"): string {
-    if (this._routesData == null) return ""
-
-    const route = this._routesData[index][pathIndex]
-    const from = route.from
-    const to = route.to
-
-    if (type === "start") return from
-    return to
-  }
-
   onSubmit(): void {
     const from = this.routeForm.value.from
     const to = this.routeForm.value.to
@@ -116,6 +106,15 @@ export class FlightsComponent {
     this.router.navigate(['.'], {
       queryParams: {from, to}
     })
+  }
+
+  onSelectChanged(selected: string, controller: string) {
+    if (controller === 'company') {
+      this.filterRouteOffersByCompany(selected)
+      return
+    }
+
+    this.routeForm.get(controller)?.setValue(selected)
   }
 
   sortRouteOffers(property: RouteOffersSortProperty): void {
@@ -135,7 +134,7 @@ export class FlightsComponent {
 
   filterRouteOffersByCompany(company: string): void {
     this.routesOffers.forEach(offer => {
-      if (company === "all")
+      if (company === "All companies")
         offer.visible = true
       else if (offer.company !== company)
         offer.visible = false
@@ -166,18 +165,6 @@ export class FlightsComponent {
       minute: 'numeric',
       hour12: true
     }).format(new Date(datetimeStr))
-  }
-
-  isActivePath(planet: string, source: "from" | "to"): boolean {
-    if (source === "to") return this.routeForm.value.to === planet
-    if (source === "from") return this.routeForm.value.from === planet
-    return false
-  }
-
-  isSelectedPlanet(planet: string, source: "from" | "to"): boolean {
-    if (source === "from" && planet === this.routeForm.value.to) return true
-    if (source === "to" && planet === this.routeForm.value.from) return true
-    return false
   }
 
   setBookingRowOpen(index: number): void {

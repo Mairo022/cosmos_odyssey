@@ -1,7 +1,14 @@
 .search {
-    padding: 15px 0;
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
+    gap: 1rem 0;
+    padding: 15px 0;
+
+    .select-box {
+      width: 100%;
+      max-width: 220px;
+    }
 
     .gap {
         width: 10px;
@@ -11,6 +18,7 @@
         position: relative;
         left: -12px;
         top: 2px;
+        z-index: 50;
 
         .arrows__svg {
             padding: 4px;
