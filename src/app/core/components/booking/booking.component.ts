@@ -24,22 +24,20 @@ import capitalise from "../../utils/capitalise";
 })
 export class BookingComponent {
   protected readonly FetchStatus = FetchStatus
-
-  private readonly _appState = AppState.getInstance()
-  booking$ = this._appState.booking$
-
   private readonly _bookingService = inject(BookingService)
   private _subscriptions: Subscription[] = []
 
   bookingFetch = new Fetch<HttpResponse<any>>(undefined, 200)
   bookingForm: FormGroup
 
+  booking$ = this._appState.booking$
+
   userView: Views = Views.OVERVIEW
 
   constructor(private fb: FormBuilder,
               private _router: Router,
-              private _location: Location,
-              private _route: ActivatedRoute
+              private _route: ActivatedRoute,
+              private readonly _appState: AppState
   ) {
     this.bookingForm = this.fb.group({
       firstname: ["", Validators.required, noWhitespaceValidator],

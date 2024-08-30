@@ -34,7 +34,6 @@ import {SelectBoxComponent} from "../select-box/select-box.component";
 export class FlightsComponent {
   protected readonly FetchStatus = FetchStatus
 
-  private readonly _appState = AppState.getInstance()
   private readonly _routesService = inject(RoutesService)
 
   planets = new Fetch<string[]>(this._routesService.getPlanets())
@@ -52,7 +51,7 @@ export class FlightsComponent {
 
   routeForm: FormGroup
 
-  constructor(private fb: FormBuilder, private router: Router, private route: ActivatedRoute) {
+  constructor(private fb: FormBuilder, private router: Router, private route: ActivatedRoute, private readonly _appState: AppState) {
     this.routeForm = this.fb.group({
       from: null,
       to: null
