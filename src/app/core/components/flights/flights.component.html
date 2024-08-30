@@ -2,8 +2,9 @@
   <app-select-box
     class="select-box"
     name="from"
-    defaultOption="Where from?"
-    [options]="planets.data$ | async"
+    placeholder="Where from?"
+    [defaultValue]="routeForm.value.from"
+    [optionsSubject]="planets.data$"
     [hiddenOption]="routeForm.value.to"
     (selectChanged)="onSelectChanged($event, 'from')"
   />
@@ -15,8 +16,9 @@
   <app-select-box
     class="select-box"
     name="to"
-    defaultOption="Where to?"
-    [options]="planets.data$ | async"
+    placeholder="Where to?"
+    [defaultValue]="routeForm.value.to"
+    [optionsSubject]="planets.data$"
     [hiddenOption]="routeForm.value.from"
     (selectChanged)="onSelectChanged($event, 'to')"
   />
@@ -28,9 +30,8 @@
 <app-select-box
   class="select-box"
   name="company"
-  defaultOption="All companies"
-  [showDefaultOption]="true"
-  [options]="companies.data$ | async"
+  defaultValue="All companies"
+  [optionsSubject]="companies.data$"
   [hiddenOption]="routeForm.value.from"
   (selectChanged)="onSelectChanged($event, 'company')"
 />

@@ -1,4 +1,5 @@
-import {Component, EventEmitter, Input, Output, SimpleChanges} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Subject, take} from "rxjs";
 
 @Component({
   selector: 'app-select-box',
@@ -9,9 +10,6 @@ import {Component, EventEmitter, Input, Output, SimpleChanges} from '@angular/co
         <span [attr.class]="'value ' + name">{{selectedValue}}</span>
       </div>
       <ul class="options" [class.closed]="!open">
-        @if (showDefaultOption && defaultOption !== selectedValue) {
-          <li class="option" (click)="handleSelectChange(defaultOption)">{{defaultOption}}</li>
-        }
         @for (option of options; track option) {
           @if (option !== selectedValue && option !== hiddenOption) {
             <li class="option" (click)="handleSelectChange(option)">{{option}}</li>
@@ -25,16 +23,22 @@ import {Component, EventEmitter, Input, Output, SimpleChanges} from '@angular/co
 export class SelectBoxComponent {
   @Input() name = ""
   @Input() hiddenOption = ""
-  @Input() defaultOption = "CHANGE ME"
-  @Input() options: Array<string> | null = null ?? []
-  @Input() showDefaultOption = false
+  @Input() optionsSubject: Subject<string[]> = new Subject()
+
+  @Input() placeholder = ""
+  @Input() defaultValue = ""
 
   @Output() selectChanged = new EventEmitter<string>()
 
   open = false
-  selectedValue = this.defaultOption
+  selectedValue = ""
+  options = new Array<string>
 
   ngOnInit() {
+    this.optionsSubject.pipe(take(1)).subscribe(options => {
+      this.initAssignValues(options)
+    })
+
     this.onWindowClick = this.onWindowClick.bind(this)
     document.addEventListener('click', this.onWindowClick)
   }
@@ -43,10 +47,20 @@ export class SelectBoxComponent {
     document.removeEventListener('click', this.onWindowClick)
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['defaultOption']) {
-      this.selectedValue = changes['defaultOption'].currentValue;
+  initAssignValues(options: Array<string>) {
+    if (this.defaultValue) {
+      const isAdditionalOption = !options.includes(this.defaultValue)
+
+      this.options = isAdditionalOption
+        ? [this.defaultValue].concat(options)
+        : options
+
+      this.selectedValue = this.defaultValue
+      return
     }
+
+    this.options = options
+    this.selectedValue = this.placeholder
   }
 
   onWindowClick(e: MouseEvent) {
