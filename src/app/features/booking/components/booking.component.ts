@@ -1,24 +1,24 @@
 import { Component, inject } from '@angular/core';
-import { AppState } from '../../store/app.state';
-import { CommonModule, Location } from '@angular/common';
-import { Subscription, delay } from 'rxjs';
+import { AppState } from '../../../store/app.state';
+import { CommonModule } from '@angular/common';
+import { Subscription } from 'rxjs';
 import { HttpResponse } from '@angular/common/http';
 import { FormGroup, FormBuilder, ReactiveFormsModule, Validators, AbstractControl } from '@angular/forms';
-import { BookingService } from '../../services/booking.service';
-import {Fetch, FetchStatus} from '../../services/fetch';
-import { CompanyLogoComponent } from "../company-logo/company-logo.component";
+import { BookingService } from '../services/booking.service';
+import {Fetch, FetchStatus} from '../../../utils/fetch';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
-import { getTimegap } from '../../utils/time-utils';
-import { Booking, Views } from './booking.model';
-import { noWhitespaceValidator } from '../../validators/no-whitespace-validator';
-import emailValidator from "../../validators/email-validator";
-import getValidationError from "../../utils/validation-messages";
-import capitalise from "../../utils/capitalise";
+import { getTimegap } from '../../../utils/time-utils';
+import { Booking, Views } from '../types/booking.model';
+import { noWhitespaceValidator } from '../../../validators/no-whitespace-validator';
+import emailValidator from "../../../validators/email-validator";
+import getValidationError from "../../../utils/validation-messages";
+import capitalise from "../../../utils/capitalise";
+import {ComponentsModule} from "../../../components/components.module";
 
 @Component({
   selector: 'app-booking',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, CompanyLogoComponent, RouterLink],
+  imports: [ReactiveFormsModule, CommonModule, RouterLink, ComponentsModule],
   templateUrl: './booking.component.html',
   styleUrl: './booking.component.scss'
 })

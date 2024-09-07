@@ -1,5 +1,5 @@
-import { formatTime } from "../../utils/time-utils"
-import { RouteOffersSort, RouteProvider, RoutesRendered } from "./flights.component.model"
+import { formatTime } from "../../../utils/time-utils"
+import { RouteOffersSort, RouteProvider, RoutesRendered } from "../types/flights.model"
 import { v4 as uuidv4 } from 'uuid'
 
 
@@ -18,14 +18,14 @@ export function getRenderableOffers(routes: Array<RouteProvider[]>, from: string
       const duration = (endDT.getTime() - startDT.getTime()) / (1000 * 60)
       const durationStr = formatTime(duration)
       const offerIDs = paths.map(path => path.id)
-      const visible = true 
+      const visible = true
       let price = paths.reduce((total, offer) => total + offer.price * 1000, 0) / 1000
       const open = false;
-      
+
       offers.push({
-        arrayIndex, uuid, offerIDs, 
+        arrayIndex, uuid, offerIDs,
         company, from, to, price,
-        stops, stopsStr, 
+        stops, stopsStr,
         startDT, endDT, timeStr,
         duration, durationStr,
         open, visible
@@ -33,7 +33,7 @@ export function getRenderableOffers(routes: Array<RouteProvider[]>, from: string
     })
 
     const sortedOffers = getSortedRouteOffers(offers, defaultRouteOffersSort, routesOffersSort)
-    
+
     return sortedOffers
 }
 
@@ -47,7 +47,7 @@ export function getSortedRouteOffers(offers: RoutesRendered[], sort: RouteOffers
 
     if (direction == "asc") offersCopy.sort((a,b) => (a[property] as number) - (b[property] as number))
     if (direction == "desc") offersCopy.sort((a,b) => (b[property] as number) - (a[property] as number))
-    
+
     return offersCopy
 }
 

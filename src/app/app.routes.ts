@@ -1,14 +1,12 @@
 import { Routes } from '@angular/router';
-import { FlightsComponent } from './core/components/flights/flights.component';
-import { BookingComponent } from './core/components/booking/booking.component';
 
 export const routes: Routes = [
-    {
-        path: '',
-        component: FlightsComponent
-    },
-    {
-        path: 'booking',
-        component: BookingComponent
-    }
+  {
+    path: '',
+    loadComponent: () => import('./features/flights/components/flights.component').then(m => m.FlightsComponent)
+  },
+  {
+    path: 'booking',
+    loadComponent: () => import('./features/booking/components/booking.component').then(m => m.BookingComponent)
+  }
 ];

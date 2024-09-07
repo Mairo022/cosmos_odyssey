@@ -1,12 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, map } from 'rxjs';
-import { RouteProvider } from '../components/flights/flights.component.model';
+import { RouteProvider } from '../types/flights.model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class RoutesService {
+export class FlightsService {
   private readonly API_URL = "http://localhost:4400/api/routes"
 
   constructor(private httpClient: HttpClient) {}

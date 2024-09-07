@@ -1,27 +1,25 @@
 import {Component, inject} from '@angular/core';
-import {RoutesService} from '../../services/routes.service';
+import {FlightsService} from '../services/flights.service';
 import {FormBuilder, FormGroup, ReactiveFormsModule} from '@angular/forms';
-import {Fetch, FetchStatus} from '../../services/fetch';
+import {Fetch, FetchStatus} from '../../../utils/fetch';
 import {CommonModule} from '@angular/common';
 import {
   RouteOffersSort,
   RouteOffersSortProperty,
   RouteProvider,
   RoutesRendered,
-} from './flights.component.model'
+} from '../types/flights.model'
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
-import {CompanyLogoComponent} from '../company-logo/company-logo.component';
-import {AppState} from '../../store/app.state';
+import {AppState} from '../../../store/app.state';
 import {getRenderableOffers, getSortedRouteOffers} from './flights.component.utils';
-import {formatTime} from '../../utils/time-utils';
+import {formatTime} from '../../../utils/time-utils';
 import {animate, style, transition, trigger} from '@angular/animations';
-import {LoadingComponent} from "../loading/loading.component";
-import {SelectBoxComponent} from "../select-box/select-box.component";
+import {ComponentsModule} from "../../../components/components.module";
 
 @Component({
   selector: 'app-flights',
   standalone: true,
-  imports: [CompanyLogoComponent, ReactiveFormsModule, CommonModule, RouterLink, LoadingComponent, SelectBoxComponent],
+  imports: [ComponentsModule, ReactiveFormsModule, CommonModule, RouterLink],
   templateUrl: './flights.component.html',
   styleUrl: './flights.component.scss',
   animations: [
@@ -34,7 +32,7 @@ import {SelectBoxComponent} from "../select-box/select-box.component";
 export class FlightsComponent {
   protected readonly FetchStatus = FetchStatus
 
-  private readonly _routesService = inject(RoutesService)
+  private readonly _routesService = inject(FlightsService)
 
   planets = new Fetch<string[]>(this._routesService.getPlanets())
   companies = new Fetch<string[]>(this._routesService.getCompanies())

@@ -40,7 +40,7 @@
             &.loading {
                 transition: background-image 0.3s ease-in;
                 color: transparent;
-                background-image: url("/assets/ui/spinner.svg");
+                background-image: url("/src/assets/ui/spinner.svg");
                 background-size: 20px;
                 background-repeat: no-repeat;
                 background-position: center;

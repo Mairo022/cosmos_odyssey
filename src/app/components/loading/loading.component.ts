@@ -2,7 +2,7 @@ import {Component, Input} from '@angular/core';
 
 @Component({
   selector: 'app-loading',
-  standalone: true,
+  standalone: false,
   templateUrl: './spinner.svg',
 })
 export class LoadingComponent {

@@ -3,7 +3,7 @@ import {Subject, take} from "rxjs";
 
 @Component({
   selector: 'app-select-box',
-  standalone: true,
+  standalone: false,
   template: `
     <div class="select_box">
       <div [attr.class]="'selected ' + name"  (click)="onTriggerDropdown()">

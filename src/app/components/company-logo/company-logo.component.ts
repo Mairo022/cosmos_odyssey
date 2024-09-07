@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-company-logo',
-  standalone: true,
+  standalone: false,
   template: `
     <img [src]="getLogo(company)" [alt]="company" class="company_logo" width="35px">
   `

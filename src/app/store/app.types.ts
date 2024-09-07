@@ -1,4 +1,4 @@
-import { RouteProvider, RoutesRendered } from "../components/flights/flights.component.model";
+import { RouteProvider, RoutesRendered } from "../features/flights/types/flights.model";
 
 export interface Booking {
     overview: RoutesRendered | undefined
