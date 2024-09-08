@@ -1,22 +1,37 @@
 * {
-    font-family: 'Open Sans';
-    color: hsl(225, 6%, 18%);
+  font-family: 'Open Sans', serif;
+  color: hsl(225, 6%, 18%);
+}
+
+body {
+  margin: 0;
+  background-color: hsl(0,0%,97%);
 }
 
 select {
-    outline: none;
+  outline: none;
 }
 
 button {
-    cursor: pointer;
-    outline: none;
+  cursor: pointer;
+  outline: none;
 }
 
 input {
-    outline: none;
+  outline: none;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
 }
 
 ul {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
 }

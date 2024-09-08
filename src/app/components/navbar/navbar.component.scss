@@ -1,0 +1,92 @@
+.nav {
+  background-color: white;
+  padding: 1rem;
+
+  &__container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 2rem 1rem;
+    margin: 0 auto;
+    min-height: 90px;
+    max-width: 1400px;
+    width: 100%;
+  }
+}
+
+.site,
+.options,
+.pages {
+  display: flex;
+}
+
+.site {
+  align-items:center;
+  gap: 1rem;
+
+  &__logo {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+  }
+
+  &__name {
+    margin: 0;
+    margin-bottom: 4px; // To "center", due to font's top and bottom ends being different height?
+    font-size: 1.5rem;
+    font-weight: 800;
+    line-height: 1.5rem;
+    color: hsl(3, 79%, 56%);
+  }
+}
+
+.options {
+  background-color: hsl(0, 0%, 94%);
+  border-radius: 50px;
+
+  &__toggle {
+    font-weight: 600;
+    border: none;
+    padding: 1rem 2rem;
+    color: white;
+    background: black;
+    border-radius: 50px;
+  }
+
+  &__passengers {
+    width: 72px;
+    padding: 1rem 1.5rem;
+    border: none;
+    border-radius: 50px;
+    text-align: center;
+    background: transparent;
+  }
+
+}
+
+.pages {
+  gap: 1.5rem;
+
+  &__page {
+    font-size: 1rem;
+    text-decoration: none;
+    font-weight: 600;
+  }
+}
+
+.activelink {
+  pointer-events: none;
+  text-decoration-line: underline;
+  text-decoration-color: #e84238;
+  text-decoration-thickness: 4px;
+  text-underline-offset: 5px;
+}
+
+@media (max-width: 650px) {
+  .nav__container {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    flex-direction: column;
+  }
+}
