@@ -1,12 +1,13 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, ElementRef, EventEmitter, HostListener, Input, Output, ViewChild} from '@angular/core';
 import {Subject, take} from "rxjs";
 
 @Component({
   selector: 'app-select-box',
   standalone: false,
   template: `
-    <div class="select_box">
+    <div class="select_box" #selectBox>
       <div [attr.class]="'selected ' + name"  (click)="onTriggerDropdown()">
+        <span [attr.class]="'name ' + name">{{name}}</span>
         <span [attr.class]="'value ' + name">{{selectedValue}}</span>
       </div>
       <ul class="options" [class.closed]="!open">
@@ -21,6 +22,8 @@ import {Subject, take} from "rxjs";
   styleUrl: './select-box.component.scss'
 })
 export class SelectBoxComponent {
+  @ViewChild('selectBox', { static: true }) selectBox: ElementRef | undefined
+
   @Input() name = ""
   @Input() hiddenOption = ""
   @Input() optionsSubject: Subject<string[]> = new Subject()
@@ -38,13 +41,6 @@ export class SelectBoxComponent {
     this.optionsSubject.pipe(take(1)).subscribe(options => {
       this.initAssignValues(options)
     })
-
-    this.onWindowClick = this.onWindowClick.bind(this)
-    document.addEventListener('click', this.onWindowClick)
-  }
-
-  ngOnDestroy() {
-    document.removeEventListener('click', this.onWindowClick)
   }
 
   initAssignValues(options: Array<string>) {
@@ -63,16 +59,14 @@ export class SelectBoxComponent {
     this.selectedValue = this.placeholder
   }
 
+  @HostListener('window:click', ['$event'])
   onWindowClick(e: MouseEvent) {
-    if (!this.open && !e.target && !this.open) return
+    if (!this.open || !e.target || !this.selectBox) return
 
-    const classname = (e.target as HTMLElement).className
-    const isSelectElement =
-         classname == "option"
-      || classname == `selected ${this.name}`
-      || classname == `value ${this.name}`
+    const clickedElement = e.target as HTMLElement
+    const isInsideSelectBox = this.selectBox.nativeElement.contains(clickedElement)
 
-    if (!isSelectElement) {
+    if (!isInsideSelectBox) {
       this.open = false
     }
   }

@@ -62,7 +62,6 @@
     text-align: center;
     background: transparent;
   }
-
 }
 
 .pages {
@@ -83,7 +82,7 @@
   text-underline-offset: 5px;
 }
 
-@media (max-width: 650px) {
+@media (max-width: 700px) {
   .nav__container {
     padding-top: 1rem;
     padding-bottom: 1rem;

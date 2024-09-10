@@ -1,275 +1,397 @@
+.flights {
+  margin: 2rem auto;
+  max-width: 1400px;
+  width: 100%;
+}
+
 .search {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 0 1fr 0.07fr;
+  margin-bottom: 1rem;
+
+  & > *:not(:last-child) {
+    margin-right: 1rem;
+  }
+
+  .select_box {
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 55px;
+      height: 55px;
+      z-index: 1;
+      border-radius: 50%;
+      background-color: hsl(0, 0%, 94%);
+      box-shadow: inset 0 0 2px hsl(0, 0%, 85%);
+    }
+
+    &:first-of-type::after {
+      right: -35px;
+      clip-path: inset(0 34px 0 0);
+    }
+
+    &:nth-of-type(2)::after {
+      left: -35px;
+      clip-path: inset(0 0 0 34px);
+    }
+  }
+
+  &__arrows {
+    align-self: center;
+    position: relative;
+    left: -1.75rem;
+    z-index: 11;
+    margin-top: 5px;
+
+    .arrows__svg {
+      padding: .5rem;
+      cursor: pointer;
+      background-color: black;
+      border-radius: 50%;
+      fill: hsl(0, 0%, 100%);
+
+      &:hover {
+        background-color: hsl(0, 0%, 25%);
+        transition: background-color 200ms;
+      }
+    }
+  }
+
+  &__submit {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: white;
+    background-color: black;
+    font-size: 1rem;
+    border: 1px solid hsl(0, 0%, 80%);
+    border-radius: 50px;
+    cursor: pointer;
+    transition: background-color 50ms;
+
+    &__img {
+      max-height: 1.5rem;
+      width: 1.5rem;
+    }
+  }
+
+  &__submit:hover {
+    background-color: hsl(0, 0%, 25%);
+    transition: background-color 200ms;
+  }
+}
+
+.offers__table .table__content__row,
+.offers__table .table__headers {
+  .time_company,
+  .departure {
+    flex: 1 0 25%;
+    min-width: 150px;
+  }
+
+  .time,
+  .duration_route {
+    flex: 1 0 15%
+  }
+
+  .stops {
+    flex: 1 0 15%;
+  }
+
+  .price {
+    flex: 1 0 10%;
+  }
+
+  .gap {
+    width: 35px;
+  }
+}
+
+.offers__table {
+  .table__headers {
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
-    gap: 1rem 0;
-    padding: 15px 0;
+    gap: 5px 25px;
+    padding: 5px 25px 5px;
+    margin-left: 60px;
 
-    .select-box {
+    .sort_button {
+      padding-top: 5px;
+      padding-bottom: 8px;
+      font-weight: 600;
+      background: transparent;
+      border: 1px solid transparent;
+      text-align: left;
+      font-size: 13px;
+      cursor: pointer;
+      color: hsl(0, 0%, 43%);
+
+      &:hover {
+        border-bottom: 1px solid hsl(0, 0%, 70%);
+      }
+    }
+  }
+
+  .table__content__row {
+    display: flex;
+    align-items: start;
+    flex-wrap: wrap;
+    gap: 5px 25px;
+    padding: 24px 25px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: hsl(0, 0%, 85%) 0 0 2px;
+    margin-bottom: 1rem;
+
+    &:last-child {
+      border: none;
+    }
+
+    .column {
+      font-size: 16px;
+
+      &__row-bold {
+        font-weight: 600;
+      }
+
+      &__subrow {
+        color: hsl(0, 0%, 46%);
+        font-size: 12px;
+      }
+    }
+
+    .company_logo {
+      align-self: center;
+      width: 35px;
+      font-size: 12px;
+      color: hsl(0, 0%, 46%);
+    }
+
+
+    .button_open {
+      position: relative;
+      top: -10px;
+      right: -12px;
+      border-radius: 50%;
+      width: 35px;
+      height: 35px;
+      background-color: hsl(3, 79%, 56%);
+      border: none;
+      font-size: 26px;
+      line-height: 0;
+      cursor: pointer;
+      transition-timing-function: ease-out;
+      transition-duration: 100ms;
+      color: hsl(0, 0%, 55%);
+
+      &.open {
+        -webkit-transform: scaleY(-1);
+        transform: scaleY(-1);
+      }
+
+      &:hover {
+        background-color: hsl(3, 79%, 46%);
+      }
+    }
+
+    .booking_row {
       width: 100%;
-      max-width: 220px;
-    }
+      margin-top: 8px;
+      margin-bottom: 12px;
+      overflow: hidden;
 
-    .gap {
-        width: 10px;
-    }
+      &__book {
+        display: block;
+        font-size: 14px;
+        font-weight: 600;
+        border-radius: 20px;
+        padding: 1rem 2rem;
+        text-decoration: none;
+        color: white;
+        background-color: black;
+        margin-left: auto;
+        width: fit-content;
+        margin-top: 2.5rem;
 
-    &__arrows {
-        position: relative;
-        left: -12px;
-        top: 2px;
-        z-index: 50;
+        &:hover {
+          background-color: hsl(0, 0%, 25%);
+          transition: background-color 200ms;
+        }
+      }
 
-        .arrows__svg {
-            padding: 4px;
-            background-color: white;
-            border-radius: 50%;
-            border: 1px solid hsl(0, 0%, 80%);
-            fill: hsl(0,0%,70%);
-       }
-    }
-
-    &__submit {
-        background-color: hsl(0, 0%, 94%);
-        padding: 15px 25px;
-        font-size: 1rem;
-        border: 1px solid hsl(0,0%,80%);
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 50ms;
-    }
-
-    &__submit:hover {
-        background-color: hsl(0, 0%, 90%);
-        transition: background-color 50ms;
-    }
-}
-
-select {
-    padding: 15px 25px;
-    font-size: 1rem;
-    line-height: 50px;
-    border-color: hsl(0,0%,80%);
-    border-radius: 5px;
-    background-color: white;
-}
-
-h3 {
-    margin-top: 4rem;
-    font-weight: 600;
-}
-
-.flights__table {
-    .table__headers {
+      & .flight {
         display: flex;
-        flex-wrap: wrap;
-        gap: 5px 25px;
-        padding: 5px 25px;
-        margin-left: 60px;
+        flex-direction: row;
+        padding: 0 24px;
+        gap: 6px 0;
+        font-size: 16px;
 
-        .sort_button {
-            padding-top: 5px;
-            padding-bottom: 8px;
-            font-weight: 600;
-            background: transparent;
-            border: 1px solid transparent;
-            text-align: left;
-            font-size: 13px;
-            cursor: pointer;
-            color: hsl(0, 0%, 43%);
-
-            &:hover {
-                border-bottom: 1px solid hsl(0, 0%, 70%);
-            }
+        &__company_logo {
+          max-width: 35px;
+          flex-grow: 1;
         }
 
-        .departure {
-            flex: 1 0 25%;
-            min-width: 150px;
+        &__container {
+          flex-grow: 1;
         }
-        .time {
-            flex: 1 0 15%
+
+        &__info {
+          &__time {
+            padding: 12px 0;
+          }
         }
-        .stops {
-            flex: 1 0 15%;
+
+        &__company_text {
+          padding: 12px 0 0;
         }
-        .distance {
-            flex: 1 0 10%;
+
+        & .subtext {
+          font-size: 14px;
+          color: hsl(0, 0%, 46%);
         }
-        .price {
-            flex: 1 0 10%;
+
+        &__layover {
+          width: 100%;
+          font-size: 14px;
+          padding: 16px 0;
+          margin: 20px 0;
+          border: 1px solid hwb(220 87% 11%);
+          border-left: 0px;
+          border-right: 0px;
         }
-        .gap {
-            width: 35px;
-        }
+      }
     }
-
-    .table__content {
-        border: 1px solid hsl(0,0%,80%);
-        border-radius: 5px;
-        background-color: white;
-    }
-
-    .table__content__row {
-        display: flex;
-        align-items: start;
-        flex-wrap: wrap;
-        gap: 5px 25px;
-        border-bottom: 1px solid hsl(0,0%,80%);
-        padding: 24px 25px;
-
-        &:last-child {
-            border: none;
-        }
-
-        .column {
-            font-size: 16px;
-
-            &__row-bold {
-                font-weight: 600;
-            }
-
-            &__subrow {
-                color: hsl(0,0%, 46%);
-                font-size: 12px;
-            }
-        }
-
-        .company_logo {
-            align-self: center;
-            width: 35px;
-            font-size: 12px;
-            color: hsl(0, 0%, 46%);
-        }
-
-        .time_company {
-            flex: 1 0 25%;
-            min-width: 150px;
-        }
-        .duration_route {
-            flex: 1 0 15%
-        }
-        .stops {
-            flex: 1 0 15%;
-        }
-        .distance {
-            flex: 1 0 10%;
-        }
-
-        .price {
-            flex: 1 0 10%;
-        }
-
-        .button_open {
-            position: relative;
-            top: -10px;
-            right: -12px;
-            border-radius: 50%;
-            width: 35px;
-            height: 35px;
-            background-color: transparent;
-            border: none;
-            font-size: 26px;
-            line-height: 0;
-            cursor: pointer;
-            transition-timing-function: ease-out;
-            transition-duration: 100ms;
-            color: hsl(0, 0%, 55%);
-
-            &.open {
-                -webkit-transform: scaleY(-1);
-                transform: scaleY(-1);
-            }
-
-            &:hover {
-                background-color: hsla(0, 0%, 94%, 50%);
-            }
-        }
-
-        .booking_row {
-            width: 100%;
-            margin-top: 8px;
-            margin-bottom: 12px;
-            overflow: hidden;
-
-            &__book {
-                display: block;
-                font-size: 14px;
-                font-weight: 600;
-                border: 1px solid hsl(220, 10%, 88%);
-                border-radius: 20px;
-                padding: 5px 20px;
-                color: hsl(215, 86%, 54%);
-                margin-left: auto;
-                width: fit-content;
-                margin-top: 8px;
-
-                &:hover {
-                    color: hsl(215, 82%, 47%);
-                    background-color: hsl(220, 70%, 88%, 0.25);
-                }
-            }
-
-            & .flight {
-                display: flex;
-                flex-direction: row;
-                padding: 0 24px;
-                gap: 6px 0;
-                font-size: 16px;
-
-                &__company_logo {
-                    max-width: 35px;
-                    flex-grow: 1;
-                }
-
-                &__container {
-                    flex-grow: 1;
-                }
-
-                &__info {
-                    &__time {
-                        padding: 12px 0;
-                    }
-                }
-
-                &__company_text {
-                    padding: 12px 0 0;
-                }
-
-                & .subtext {
-                    font-size: 14px;
-                    color: hsl(0, 0%, 46%);
-                }
-
-                &__layover {
-                    width: 100%;
-                    font-size: 14px;
-                    padding: 16px 0;
-                    margin: 20px 0;
-                    border: 1px solid hwb(220 87% 11%);
-                    border-left: 0px;
-                    border-right: 0px;
-                }
-            }
-        }
-
-
-    }
+  }
 }
 
 .dot-big {
-    margin: 0 8px;
+  margin: 0 8px;
 }
 
 .dot-medium {
-    margin: 0 6px;
+  margin: 0 6px;
 }
 
 .semibold {
-    font-weight: 600;
+  font-weight: 600;
 }
 
 .loading {
   margin-top: 4rem;
   text-align: center;
+}
+
+@media (max-width: 800px) {
+  .offers__table {
+    & .table__headers {
+      display: none;
+    }
+
+    & .table__content__row {
+      display: grid;
+      grid-template-columns: auto 1fr 1fr max-content;
+      grid-template-rows: repeat(5, min-content);
+      grid-template-areas:
+        "logo timespan timespan timespan"
+        "logo route route route"
+        "logo misc misc misc"
+        "logo price price button"
+        ". open open open";
+      gap: .3rem 0;
+      overflow: hidden;
+
+      .company_logo {
+        grid-area: logo;
+        align-self: start;
+        margin-right: 25px;
+      }
+
+      .timespan {
+        grid-area: timespan;
+      }
+
+      .route {
+        grid-area: route;
+        color: hsl(0, 0%, 46%);
+        font-size: 14px;
+      }
+
+      .misc {
+        grid-area: misc;
+        word-break: break-word;
+
+        & > span {
+          color: hsl(0, 0%, 46%);
+          font-size: 14px;
+          white-space: nowrap;
+
+          &::after {
+            padding: 0 10px;
+            content: '·';
+          }
+
+          &:last-of-type::after {
+            content: '';
+            padding: 0;
+          }
+        }
+      }
+
+      .price {
+        grid-area: price;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-weight: 600;
+      }
+
+      .button {
+        position: relative;
+        grid-area: button;
+
+        &_open {
+          position: absolute;
+        }
+      }
+
+      .booking_row {
+        grid-area: open;
+      }
+
+      .flight__company_logo {
+        display: none;
+      }
+
+      .flight {
+        padding: 0!important;
+      }
+
+      .booking_row__book {
+        margin-left: 0;
+      }
+    }
+
+  }
+}
+
+@media (max-width: 500px) {
+  .search {
+    grid-template-columns: 1fr 0 1fr;
+    gap: 2rem 0;
+
+    &__submit {
+      grid-column: 1 / -1;
+      height: 50px;
+    }
+
+    .select_box:last-of-type {
+      margin-right: 0;
+    }
+  }
 }

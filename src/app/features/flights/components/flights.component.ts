@@ -1,4 +1,4 @@
-import {Component, inject} from '@angular/core';
+import {Component, HostListener, inject} from '@angular/core';
 import {FlightsService} from '../services/flights.service';
 import {FormBuilder, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {Fetch, FetchStatus} from '../../../utils/fetch';
@@ -31,7 +31,7 @@ import {ComponentsModule} from "../../../components/components.module";
 })
 export class FlightsComponent {
   protected readonly FetchStatus = FetchStatus
-
+  private readonly _SMALL_SCREEN_SIZE = 800
   private readonly _routesService = inject(FlightsService)
 
   planets = new Fetch<string[]>(this._routesService.getPlanets())
@@ -48,6 +48,8 @@ export class FlightsComponent {
   private _routesOffersSort = {...this._defaultRouteOffersSort}
 
   routeForm: FormGroup
+
+  isSmallScreen = window.innerWidth <= this._SMALL_SCREEN_SIZE
 
   constructor(private fb: FormBuilder, private router: Router, private route: ActivatedRoute, private readonly _appState: AppState) {
     this.routeForm = this.fb.group({
@@ -148,14 +150,6 @@ export class FlightsComponent {
     return gap
   }
 
-  formatTimeHHMM(time: string): string {
-    const date = new Date(time);
-    return date.toLocaleTimeString(navigator.language, {
-      hour: '2-digit',
-      minute:'2-digit'
-    });
-  }
-
   DtStrToTime(datetimeStr: string): string {
     return new Intl.DateTimeFormat('en-US', {
       hour: 'numeric',
@@ -173,5 +167,10 @@ export class FlightsComponent {
     const savedBooking = {overview: routeOverview, routes: booking}
 
     this._appState.booking$ = savedBooking
+  }
+
+  @HostListener('window:resize')
+  onWindowResize() {
+    this.isSmallScreen = window.innerWidth <= this._SMALL_SCREEN_SIZE
   }
 }
