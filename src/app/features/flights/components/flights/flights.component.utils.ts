@@ -1,5 +1,5 @@
-import { formatTime } from "../../../utils/time-utils"
-import { RouteOffersSort, RouteProvider, RoutesRendered } from "../types/flights.model"
+import { formatTime } from "../../../../utils/time-utils"
+import { RouteOffersSort, RouteProvider, RoutesRendered } from "../../types/flights.model"
 import { v4 as uuidv4 } from 'uuid'
 
 

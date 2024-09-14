@@ -1,25 +1,27 @@
 import {Component, HostListener, inject} from '@angular/core';
-import {FlightsService} from '../services/flights.service';
+import {FlightsService} from '../../services/flights.service';
 import {FormBuilder, FormGroup, ReactiveFormsModule} from '@angular/forms';
-import {Fetch, FetchStatus} from '../../../utils/fetch';
+import {Fetch, FetchStatus} from '../../../../utils/fetch';
 import {CommonModule} from '@angular/common';
 import {
   RouteOffersSort,
   RouteOffersSortProperty,
   RouteProvider,
   RoutesRendered,
-} from '../types/flights.model'
+} from '../../types/flights.model'
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
-import {AppState} from '../../../store/app.state';
+import {AppState} from '../../../../store/app.state';
 import {getRenderableOffers, getSortedRouteOffers} from './flights.component.utils';
-import {formatTime} from '../../../utils/time-utils';
+import {formatTime} from '../../../../utils/time-utils';
 import {animate, style, transition, trigger} from '@angular/animations';
-import {ComponentsModule} from "../../../components/components.module";
+import {ComponentsModule} from "../../../../components/components.module";
+import {FiltersComponent} from "../filters/filters.component";
+import {take} from "rxjs";
 
 @Component({
   selector: 'app-flights',
   standalone: true,
-  imports: [ComponentsModule, ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [ComponentsModule, ReactiveFormsModule, CommonModule, RouterLink, FiltersComponent],
   templateUrl: './flights.component.html',
   styleUrl: './flights.component.scss',
   animations: [
@@ -27,15 +29,16 @@ import {ComponentsModule} from "../../../components/components.module";
       transition(':enter', [style({maxHeight: '0'}), animate('800ms', style({maxHeight: '1000px'}))]),
       transition(':leave', [animate('400ms ease-out', style({maxHeight: '0'}))]),
     ]),
-  ]
+  ],
 })
 export class FlightsComponent {
   protected readonly FetchStatus = FetchStatus
-  private readonly _SMALL_SCREEN_SIZE = 800
+  private readonly _SMALL_SCREEN_SIZE = 1100
   private readonly _routesService = inject(FlightsService)
 
   planets = new Fetch<string[]>(this._routesService.getPlanets())
-  companies = new Fetch<string[]>(this._routesService.getCompanies())
+  companiesFetch = new Fetch<string[]>(this._routesService.getCompanies())
+  companies = new Array<string>
 
   routes = new Fetch<Array<RouteProvider[]>>
   private _routesData = new Array<RouteProvider[]>
@@ -68,6 +71,8 @@ export class FlightsComponent {
       this.routesOffers = getRenderableOffers(routeProvidersList, from, to, this._defaultRouteOffersSort, this._routesOffersSort)
       this._routesData = routeProvidersList
     })
+
+    this.companiesFetch.data$.pipe(take(1)).subscribe(data => {this.companies = data})
   }
 
   ngOnDestroy() {

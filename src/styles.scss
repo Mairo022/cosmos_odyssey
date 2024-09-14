@@ -1,6 +1,7 @@
 * {
   font-family: 'Open Sans', serif;
   color: hsl(225, 6%, 18%);
+  box-sizing: border-box;
 }
 
 body {
@@ -31,7 +32,22 @@ input[type=number] {
   -moz-appearance: textfield;
 }
 
+input[type=radio] {
+  margin: 0;
+}
+
+input[type=checkbox] {
+  margin: 0;
+}
+
 ul {
   margin: 0;
   padding: 0;
+}
+
+h4 {
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+  font-weight: 600;
 }

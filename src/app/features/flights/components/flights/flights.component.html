@@ -51,6 +51,8 @@
   }
 
   @if (FetchStatus.Loaded === routes.status$.value) {
+    <app-filters class="filters" [spacelines]="companies"/>
+
     <div class="offers">
       <div class="offers__table">
         <div class="table__headers">
