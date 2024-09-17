@@ -1,71 +1,23 @@
-@if (booking$ | async; as booking) {
-@if (booking.overview && booking.routes) {
-@if (userView === Views.BOOKING || userView === Views.OVERVIEW) {
-<div class="header">
-  <div class="header__path">
-    <span>{{booking.overview.from}}</span>
-    <span class="header__path__gap">-</span>
-    <span>{{booking.overview.to}}</span>
-  </div>
-  <span class="header__price">{{formatPrice(booking.overview.price)}}</span>
-</div>
-}
-@if (userView === Views.BOOKING) {
-<form [formGroup]="bookingForm" (ngSubmit)="onSubmit()" class="booking">
-  <div class="inputs">
-    <div class="inputs__input">
-      <label class="inputs__input__label" for="firstname">First name</label>
-      <input formControlName="firstname" id="firstname" type="text" placeholder="" class="inputs__input__field">
-      @if (!isInputValid("firstname")) {
-        <span class="inputs__input__error">* {{getValidationMessage("first name")}}</span>
-      }
-    </div>
-    <div class="inputs__input">
-      <label class="inputs__input__label" for="lastname">Last name</label>
-      <input formControlName="lastname" id="lastname" type="text" placeholder="" class="inputs__input__field">
-      @if (!isInputValid("lastname")) {
-        <span class="inputs__input__error">* {{getValidationMessage("last name")}}</span>
-      }
-    </div>
-    <div class="inputs__input">
-      <label class="inputs__input__label" for="email">Email</label>
-      <input formControlName="email" id="email" type="text" placeholder="" class="inputs__input__field">
-      @if (!isInputValid("email")) {
-        <span class="inputs__input__error">* {{getValidationMessage("email")}}</span>
-      }
-    </div>
-  </div>
-  <div class="buttons">
-    <button class="buttons__back btn-tertiary" type="button" (click)="changeView(Views.OVERVIEW)">Go back</button>
-    <button class="buttons__submit btn-primary"
-            [class.loading]="FetchStatus.Loading === bookingFetch.status$.value"
-            [disabled]="!bookingForm.valid"
-            type="submit">
-    Book
-  </button>
-  </div>
-  @if (FetchStatus.Error === bookingFetch.status$.value) {
-    <div class="booking__failed">* Booking failed ({{bookingFetch.error.getValue().error}})</div>
-  }
-</form>
-}
+<app-navbar/>
+<div class="main">
+  <div class="container">
+    @if (booking$ | async; as booking) {
+    @if (booking.overview && booking.routes) {
+
 @if (userView === Views.OVERVIEW) {
-<div class="selection">
-  <h2 class="selection__header">Selected flights</h2>
-  <div class="selection__flights">
-    <div class="header">
-      <div class="header__departing">
-        <span>Departing flight</span>
+  <div class="overview">
+    <div class="overview__flights">
+      <div class="header">
+        <span class="departing">Departing flight</span>
+        <span class="dot-big">·</span>
+        <div class="locations">
+          <span class="location">{{booking.overview.from}}</span>
+          <span class="slash">—</span>
+          <span class="location">{{booking.overview.to}}</span>
+        </div>
         <span class="dot-big">·</span>
         <span>{{DtToDayMonthDate(booking.overview.startDT)}}</span>
       </div>
-      <a routerLink=".."
-         [queryParams]="{from: booking.overview.from, to: booking.overview.to}"
-         class="header__back"
-      >
-        Change flight
-      </a>
-    </div>
       @for (route of booking.routes; track route.id) {
         <div class="flight">
           <div class="flight__company_logo">
@@ -94,9 +46,51 @@
           </div>
         </div>
       }
+    </div>
+    <div class="overview__buttons">
+      <a class="overview__buttons__back" routerLink=".." [queryParams]="{from: booking.overview.from, to: booking.overview.to}">
+        Change flight
+      </a>
+      <button class="overview__buttons__continue btn-primary" type="button" (click)="changeView(Views.BOOKING)">
+        Continue
+      </button>
+    </div>
   </div>
-  <button class="selection__btn btn-primary" type="button" (click)="changeView(Views.BOOKING)">Continue</button>
-</div>
+}
+@if (userView === Views.BOOKING) {
+<form [formGroup]="bookingForm" (ngSubmit)="onSubmit()" class="booking">
+  <div class="inputs">
+    <label class="inputs__label" for="firstname">First name</label>
+    <input formControlName="firstname" id="firstname" type="text" placeholder="" class="inputs__field">
+    @if (!isInputValid("firstname")) {
+      <span class="inputs__error">* {{getValidationMessage("first name")}}</span>
+    }
+    <label class="inputs__label" for="lastname">Last name</label>
+    <input formControlName="lastname" id="lastname" type="text" placeholder="" class="inputs__field">
+    @if (!isInputValid("lastname")) {
+      <span class="inputs__error">* {{getValidationMessage("last name")}}</span>
+    }
+    <label class="inputs__label" for="email">Email</label>
+    <input formControlName="email" id="email" type="text" placeholder="" class="inputs__field">
+    @if (!isInputValid("email")) {
+      <span class="inputs__error">* {{getValidationMessage("email")}}</span>
+    }
+  </div>
+  <div class="buttons">
+    <button class="buttons__back" type="button" (click)="changeView(Views.OVERVIEW)">
+      Go back
+    </button>
+    <button class="buttons__submit btn-primary"
+            [class.loading]="FetchStatus.Loading === bookingFetch.status$.value"
+            [disabled]="!bookingForm.valid"
+            type="submit">
+    Book
+  </button>
+  </div>
+  @if (FetchStatus.Error === bookingFetch.status$.value) {
+    <div class="error">* Booking failed ({{bookingFetch.error.getValue().error}})</div>
+  }
+</form>
 }
 @if (userView === Views.SUCCESS) {
   <div class="success">
@@ -106,4 +100,6 @@
     <a routerLink="/" class="link">Return to homepage</a>
   </div>
 }
-}}
+    }}
+  </div>
+</div>
