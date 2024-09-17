@@ -8,7 +8,7 @@
       [defaultValue]="routeForm.value.from"
       [optionsSubject]="planets.data$"
       [hiddenOption]="routeForm.value.to"
-      (selectChanged)="onSelectChanged($event, 'from')"
+      (selectChanged)="onLocationChanged($event, 'from')"
     />
     <span class="gap search__arrows">
       <span class="arrows__piece">
@@ -22,20 +22,12 @@
       [defaultValue]="routeForm.value.to"
       [optionsSubject]="planets.data$"
       [hiddenOption]="routeForm.value.from"
-      (selectChanged)="onSelectChanged($event, 'to')"
+      (selectChanged)="onLocationChanged($event, 'to')"
     />
     <button class="search__submit" type="submit">
       <img alt="search" class="search__submit__img" src="assets/ui/search.svg"/>
     </button>
   </form>
-<!--  <app-select-box-->
-<!--    class="select-box"-->
-<!--    name="company"-->
-<!--    defaultValue="All companies"-->
-<!--    [optionsSubject]="companies.data$"-->
-<!--    [hiddenOption]="routeForm.value.from"-->
-<!--    (selectChanged)="onSelectChanged($event, 'company')"-->
-<!--  />-->
   @if (FetchStatus.Error === routes.status$.value) {
     <div>{{routes.error}}</div>
   }
@@ -51,7 +43,7 @@
   }
 
   @if (FetchStatus.Loaded === routes.status$.value) {
-    <app-filters class="filters" [spacelines]="companies"/>
+    <app-filters class="filters" [spacelines]="companies" (filtersChanged)="onFiltersChanged($event)"/>
 
     <div class="offers">
       <div class="offers__table">

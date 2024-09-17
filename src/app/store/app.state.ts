@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
 import { Booking } from "./app.types";
 import { LocalStorage } from "../utils/local-storage-utils";
+import {FiltersForm} from "../features/flights/types/filters.model";
 
 @Injectable({
     providedIn: "root"
@@ -10,6 +11,7 @@ import { LocalStorage } from "../utils/local-storage-utils";
 export class AppState {
     private readonly EMPTY_BOOKING = {overview: undefined, routes: []}
     private _booking$ = new BehaviorSubject<Booking>({...this.EMPTY_BOOKING})
+    private _offersFilters: null | FiltersForm = null
 
     constructor() {
         const booking = LocalStorage.getItem<Booking>("booking")
@@ -33,5 +35,13 @@ export class AppState {
     resetBooking(): void {
         LocalStorage.deleteItem("booking")
         this._booking$ = new BehaviorSubject<Booking>({...this.EMPTY_BOOKING})
+    }
+
+    get offerFilters(): null | FiltersForm {
+      return this._offersFilters
+    }
+
+    set offerFilters(filters: FiltersForm) {
+      this._offersFilters = filters
     }
 }

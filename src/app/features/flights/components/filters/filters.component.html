@@ -8,10 +8,10 @@
     </svg>
   </div>
 </button>
-<form class="filters" [class.filters-open]="dropdown_open">
+<form class="filters" [class.filters-open]="dropdown_open" [formGroup]="filtersForm" (ngSubmit)="onApplyFilters()">
   <div class="header">
     <h3 class="header__title">Filters</h3>
-    <button class="header__reset_btn" type="button">Reset</button>
+    <button class="header__reset_btn" type="button" (click)="resetFilters()">Reset</button>
   </div>
   <div class="stops">
     <h4 class="stops__title">Transit Amount</h4>
@@ -19,7 +19,7 @@
     @for (entry of STOPS_RADIO_OPTIONS; track entry) {
       <li class="stops__list__stop">
         <label>
-          <input type="radio" [checked]="entry['value'] === -1" [value]="entry['value']" name="stops"/>
+          <input type="radio" [checked]="entry['value'] === -1" [value]="entry['value']" name="stops" formControlName="stops"/>
           {{entry["key"]}}
         </label>
       </li>
@@ -28,9 +28,9 @@
   </div>
   <div class="price">
     <h4>Price Range</h4>
-    <input class="price__input" type="number" name="minprice">
+    <input class="price__input" type="number" name="minprice" formControlName="priceMin">
     <span class="price__separator">—</span>
-    <input class="price__input" type="number" name="maxprice">
+    <input class="price__input" type="number" name="maxprice" formControlName="priceMax">
   </div>
   <div class="spacelines">
     <h4>Spacelines</h4>
@@ -38,7 +38,7 @@
       @for (spaceline of spacelines; track spaceline) {
         <li class="spacelines__lines__line">
           <label>
-            <input type="checkbox" [id]="spaceline" name="spaceline" [value]="spaceline"/>
+            <input type="checkbox" [id]="spaceline" name="spaceline" [value]="spaceline" (change)="onSpacelineChange($event)"/>
             {{spaceline}}
           </label>
         </li>

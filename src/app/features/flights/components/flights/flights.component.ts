@@ -17,6 +17,7 @@ import {animate, style, transition, trigger} from '@angular/animations';
 import {ComponentsModule} from "../../../../components/components.module";
 import {FiltersComponent} from "../filters/filters.component";
 import {take} from "rxjs";
+import {FiltersForm} from "../../types/filters.model";
 
 @Component({
   selector: 'app-flights',
@@ -70,6 +71,10 @@ export class FlightsComponent {
 
       this.routesOffers = getRenderableOffers(routeProvidersList, from, to, this._defaultRouteOffersSort, this._routesOffersSort)
       this._routesData = routeProvidersList
+
+      if (this._appState.offerFilters) {
+        this.applyFilters(this._appState.offerFilters)
+      }
     })
 
     this.companiesFetch.data$.pipe(take(1)).subscribe(data => {this.companies = data})
@@ -112,12 +117,7 @@ export class FlightsComponent {
     })
   }
 
-  onSelectChanged(selected: string, controller: string) {
-    if (controller === 'company') {
-      this.filterRouteOffersByCompany(selected)
-      return
-    }
-
+  onLocationChanged(selected: string, controller: string) {
     this.routeForm.get(controller)?.setValue(selected)
   }
 
@@ -134,15 +134,6 @@ export class FlightsComponent {
     }
 
     this.routesOffers = getSortedRouteOffers(this.routesOffers, sort, this._routesOffersSort)
-  }
-
-  filterRouteOffersByCompany(company: string): void {
-    this.routesOffers.forEach(offer => {
-      if (company === "All companies")
-        offer.visible = true
-      else if (offer.company !== company)
-        offer.visible = false
-    })
   }
 
   getTimegap(start: string, end: string): string {
@@ -177,5 +168,43 @@ export class FlightsComponent {
   @HostListener('window:resize')
   onWindowResize() {
     this.isSmallScreen = window.innerWidth <= this._SMALL_SCREEN_SIZE
+  }
+
+  onFiltersChanged(filters: FiltersForm) {
+    this.applyFilters(filters)
+  }
+
+  applyFilters(filters: FiltersForm) {
+    this.filterOffersByStops(filters.stops)
+    this.filterOffersByCompany(filters.spacelines)
+    this.filterOffersByPrice(filters.priceMin, filters.priceMax)
+  }
+
+  filterOffersByStops(stops: number) {
+    this.routesOffers.forEach(offer => {
+      if (stops === -1) offer.visible = true
+      else offer.visible = offer.stops === stops
+    })
+  }
+
+  filterOffersByCompany(companies: Array<string>) {
+    if (companies.length === 0) return
+
+    this.routesOffers.forEach(offer => {
+      if (!offer.visible) return
+      if (!companies.includes(offer.company)) offer.visible = false
+    })
+  }
+
+  filterOffersByPrice(priceMin: number | null, priceMax: number | null) {
+    priceMin = priceMin ?? 0
+    priceMax = priceMax ?? Number.MAX_SAFE_INTEGER
+
+    const isPriceWithinRange = (price: number) => price >= priceMin && price <= priceMax
+
+    this.routesOffers.forEach(offer => {
+      if (!offer.visible) return
+      offer.visible = isPriceWithinRange(offer.price)
+    })
   }
 }
