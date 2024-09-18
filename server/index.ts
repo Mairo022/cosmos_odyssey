@@ -1,6 +1,6 @@
 import express from "express";
 import {getRoutes, getPlanets, getCompanies} from './controller/routesController.js'
-import {getBooking, addBooking, cancelBooking} from './controller/bookingController'
+import {getBooking, addBooking, cancelBooking, checkInBooking} from './controller/bookingController'
 import dotenv from 'dotenv'
 import { asyncHandler, errorHandler } from "./middlewares";
 import schedulePricelistUpdate from "./scripts/pricelistUpdateHandler";
@@ -9,6 +9,7 @@ import "./extensions"
 import { routesValidator } from "./validators/routes/routesValidator";
 import {getPutBookingValidator} from "./validators/booking/getPutBookingValidator";
 import {createBookingValidator} from "./validators/booking/createBookingValidator";
+import {checkInBookingValidator} from "./validators/booking/checkInBookingValidator";
 
 dotenv.config()
 
@@ -28,6 +29,7 @@ app.get("/api/routes/companies", asyncHandler(getCompanies))
 
 app.get("/api/bookings/:bookingID", getPutBookingValidator, asyncHandler(getBooking))
 app.put("/api/bookings/:bookingID/cancel", getPutBookingValidator, asyncHandler(cancelBooking))
+app.put("/api/bookings/:bookingID/check-in", checkInBookingValidator, asyncHandler(checkInBooking))
 app.post("/api/bookings", createBookingValidator, asyncHandler(addBooking))
 
 app.listen(process.env.SERVER_PORT, schedulePricelistUpdate)

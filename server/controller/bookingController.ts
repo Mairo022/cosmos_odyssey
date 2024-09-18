@@ -1,4 +1,4 @@
-import {findBooking, createBooking, cancelBookingService} from '../services/bookingsService'
+import {findBooking, createBooking, cancelBookingService, checkInBookingService} from '../services/bookingsService'
 import { BookingClient } from '../types/booking'
 
 export async function getBooking(req, res) {
@@ -10,6 +10,13 @@ export async function getBooking(req, res) {
 export async function cancelBooking(req, res) {
   const id = req.params.bookingID
   await cancelBookingService(id)
+
+  return res.status(204).json()
+}
+
+export async function checkInBooking(req, res) {
+  const id = req.params.bookingID
+  await checkInBookingService(id)
 
   return res.status(204).json()
 }

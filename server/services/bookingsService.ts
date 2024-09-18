@@ -16,6 +16,13 @@ export async function cancelBookingService(bookingID: string): Promise<void> {
   })
 }
 
+export async function checkInBookingService(bookingID: string): Promise<void> {
+  await prisma.bookings.update({
+    where: {id: bookingID},
+    data: {checked_in: true}
+  })
+}
+
 export async function createBooking(booking: BookingClient): Promise<void> {
     const routeIDs = await prisma.flights.findMany({
         select: {
