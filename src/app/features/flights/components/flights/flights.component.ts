@@ -16,7 +16,7 @@ import {formatTime} from '../../../../utils/time-utils';
 import {animate, style, transition, trigger} from '@angular/animations';
 import {ComponentsModule} from "../../../../components/components.module";
 import {FiltersComponent} from "../filters/filters.component";
-import {take} from "rxjs";
+import {Subject, take} from "rxjs";
 import {FiltersForm} from "../../types/filters.model";
 
 @Component({
@@ -52,6 +52,8 @@ export class FlightsComponent {
   private _routesOffersSort = {...this._defaultRouteOffersSort}
 
   routeForm: FormGroup
+  forcedFromLocation$ = new Subject<string>
+  forcedToLocation$ = new Subject<string>
 
   isSmallScreen = window.innerWidth <= this._SMALL_SCREEN_SIZE
 
@@ -115,6 +117,14 @@ export class FlightsComponent {
     this.router.navigate(['.'], {
       queryParams: {from, to}
     })
+  }
+
+  switchLocations() {
+    const from = this.routeForm.value.from
+    const to = this.routeForm.value.to
+
+    this.forcedFromLocation$.next(to)
+    this.forcedToLocation$.next(from)
   }
 
   onLocationChanged(selected: string, controller: string) {

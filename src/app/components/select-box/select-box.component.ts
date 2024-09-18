@@ -1,5 +1,16 @@
-import {Component, ElementRef, EventEmitter, HostListener, Input, Output, ViewChild} from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  ElementRef,
+  EventEmitter,
+  HostListener,
+  inject,
+  Input,
+  Output,
+  ViewChild
+} from '@angular/core';
 import {Subject, take} from "rxjs";
+import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 
 @Component({
   selector: 'app-select-box',
@@ -26,7 +37,8 @@ export class SelectBoxComponent {
 
   @Input() name = ""
   @Input() hiddenOption = ""
-  @Input() optionsSubject: Subject<string[]> = new Subject()
+  @Input() options$: Subject<string[]> = new Subject()
+  @Input() forcedValue$: Subject<string> = new Subject()
 
   @Input() placeholder = ""
   @Input() defaultValue = ""
@@ -37,10 +49,20 @@ export class SelectBoxComponent {
   selectedValue = ""
   options = new Array<string>
 
+  destroyRef = inject(DestroyRef);
+
   ngOnInit() {
-    this.optionsSubject.pipe(take(1)).subscribe(options => {
-      this.initAssignValues(options)
-    })
+    this.options$
+      .pipe(take(1))
+      .subscribe(options => {
+        this.initAssignValues(options)
+      })
+
+    this.forcedValue$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(value => {
+        this.handleSelectChange(value)
+      })
   }
 
   initAssignValues(options: Array<string>) {
