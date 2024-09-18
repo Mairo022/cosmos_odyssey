@@ -1,13 +1,14 @@
 import express from "express";
 import {getRoutes, getPlanets, getCompanies} from './controller/routesController.js'
-import {getBooking, addBooking} from './controller/bookingController'
+import {getBooking, addBooking, cancelBooking} from './controller/bookingController'
 import dotenv from 'dotenv'
 import { asyncHandler, errorHandler } from "./middlewares";
 import schedulePricelistUpdate from "./scripts/pricelistUpdateHandler";
 import {} from "./types/global";
 import "./extensions"
-import { routesValidator } from "./validators/routesValidator";
-import { bookingValidator } from "./validators/bookingValidator";
+import { routesValidator } from "./validators/routes/routesValidator";
+import {getPutBookingValidator} from "./validators/booking/getPutBookingValidator";
+import {createBookingValidator} from "./validators/booking/createBookingValidator";
 
 dotenv.config()
 
@@ -19,14 +20,15 @@ app.use((_, res, next) => {
     res.header(`Access-Control-Allow-Methods`, `GET,PUT,POST,DELETE`);
     res.header(`Access-Control-Allow-Headers`, `Content-Type`);
     next()
-}) 
+})
 
 app.get("/api/routes", routesValidator, asyncHandler(getRoutes))
 app.get("/api/routes/planets", asyncHandler(getPlanets))
 app.get("/api/routes/companies", asyncHandler(getCompanies))
 
-app.get("/api/bookings/:bookingID", asyncHandler(getBooking))
-app.post("/api/bookings", bookingValidator, asyncHandler(addBooking))
+app.get("/api/bookings/:bookingID", getPutBookingValidator, asyncHandler(getBooking))
+app.put("/api/bookings/:bookingID/cancel", getPutBookingValidator, asyncHandler(cancelBooking))
+app.post("/api/bookings", createBookingValidator, asyncHandler(addBooking))
 
 app.listen(process.env.SERVER_PORT, schedulePricelistUpdate)
 

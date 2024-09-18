@@ -1,12 +1,19 @@
-import { BookingClient, BookingDB } from "../types/booking";
+import {BookingClient, BookingDB} from "../types/booking";
 import prisma from "../db/prisma";
 
 export async function findBooking(bookingID: string): Promise<BookingDB> {
-    return await prisma.bookings.findFirst({
+    return prisma.bookings.findFirst({
         where: {
             id: bookingID
         }
     })
+}
+
+export async function cancelBookingService(bookingID: string): Promise<void> {
+  await prisma.bookings.update({
+    where: {id: bookingID},
+    data: {cancelled: true}
+  })
 }
 
 export async function createBooking(booking: BookingClient): Promise<void> {
@@ -34,7 +41,7 @@ export async function createBooking(booking: BookingClient): Promise<void> {
 
     const pricelistID = routeIDs[0].pricelist_id
 
-    const userID = booking.user_id 
+    const userID = booking.user_id
         ? booking.user_id
         : (await prisma.users.create({data: {
             firstname: booking.firstname,

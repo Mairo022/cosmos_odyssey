@@ -1,4 +1,4 @@
-import { RoutesCache } from "../data/RoutesCache"
+import { RoutesCache } from "../../data/RoutesCache"
 
 export function routesValidator(req, res, next) {
     const from = req.query.from.trim()
