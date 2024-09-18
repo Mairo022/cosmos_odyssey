@@ -32,13 +32,17 @@
     border-radius: 50%;
   }
 
+  & > a {
+    text-decoration: none;
+  }
+
   &__name {
-    margin: 0;
-    margin-bottom: 4px; // To "center", due to font's top and bottom ends being different height?
+    margin: 0 0 4px;
     font-size: 1.5rem;
     font-weight: 800;
     line-height: 1.5rem;
     color: hsl(3, 79%, 56%);
+    text-decoration: none;
   }
 }
 
