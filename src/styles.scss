@@ -40,6 +40,10 @@ input[type=checkbox] {
   margin: 0;
 }
 
+button[disabled] {
+  cursor: default;
+}
+
 ul {
   margin: 0;
   padding: 0;

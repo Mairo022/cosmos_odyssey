@@ -1,0 +1,29 @@
+<app-navbar/>
+<section class="check_in">
+  <h2 class="title">Check in for your flight</h2>
+  <form [formGroup]="checkInForm" (ngSubmit)="onCheckInSubmit()">
+    <input class="input" type="text" formControlName="ticket" placeholder="Booking reference or ticket number">
+    @if (!isInputValid("ticket")) {
+      <span class="input_error">* {{getValidationMessage("ticket")}}</span>
+    }
+    <input class="input" type="text" formControlName="email" placeholder="E-mail">
+    @if (!isInputValid("email")) {
+      <span class="input_error">* {{getValidationMessage("email")}}</span>
+    }
+    <button class="submit"
+            type="submit"
+            [disabled]="!checkInForm.valid || FetchStatus.Loading === checkInFetch.status$.value"
+            [class.loading]="FetchStatus.Loading === checkInFetch.status$.value">
+      Check in
+    </button>
+
+    @if (FetchStatus.Error === checkInFetch.status$.value) {
+      <div class="error">* Booking failed ({{checkInFetch.error.getValue().error}})</div>
+    }
+  </form>
+  @if (FetchStatus.Loaded === checkInFetch.status$.value) {
+    <div class="checked_in">
+      <div class="message">Your check-in for Flight {{ticket?.value}} is successful! Safe travels!</div>
+    </div>
+  }
+</section>
