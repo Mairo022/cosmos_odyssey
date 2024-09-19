@@ -1,3 +1,5 @@
+import {Prisma} from "@prisma/client";
+
 export interface BookingClient {
     id?: string
     user_id?: string
@@ -8,10 +10,18 @@ export interface BookingClient {
     price: number
 }
 
-export interface BookingDB {
-    id?: string
-    user_id: string
-    flight_ids: Array<string>
-    route_ids: Array<string>
-    price: Prisma.Decimal
+export interface FindBooking {
+  id: string
+  price: number
+  cancelled: boolean
+  checked_in: boolean
+  created_at: string
+  flights: {
+    from: string
+    to: string
+    distance: number
+    company: string
+    start: string
+    end: string
+  }[]
 }

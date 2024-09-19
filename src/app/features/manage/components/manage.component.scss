@@ -1,0 +1,362 @@
+.manage {
+  max-width: calc(1400px - 2rem);
+  width: calc(100% - 2rem);
+  margin: 2rem auto;
+}
+
+.form,
+.booking {
+  margin: 0 auto;
+  padding: 25px;
+  border-radius: 10px;
+  background-color: white;
+  box-shadow: hsl(0, 0%, 85%) 0 0 2px;
+}
+
+// View = Form
+
+.form {
+  max-width: 500px;
+
+  .title {
+    margin-bottom: 2.5rem;
+  }
+
+  .input {
+    width: 100%;
+    padding: .5rem 1.25rem;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    border-bottom: 1px solid hsl(220, 10%, 87%);
+    box-shadow: inset 0 1px 2px hsla(0, 0%, 0%, 0.39), 0 -1px 1px #FFF, 0 1px 0 #FFF;
+
+    &::placeholder {
+      font-size: 14px;
+      color: hsl(0, 0%, 50%);
+    }
+
+    &:last-of-type {
+      margin-top: 1rem;
+    }
+  }
+
+  .input_error {
+    display: block;
+    color: red;
+    font-size: 14px;
+    margin-top: .5rem;
+  }
+
+  .submit {
+    position: relative;
+    display: block;
+    margin-top: 2.5rem;
+    margin-left: auto;
+    padding: 1rem 2rem;
+    width: fit-content;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 20px;
+    text-decoration: none;
+    color: white;
+    background-color: black;
+    border: none;
+
+    &:hover {
+      background-color: hsl(0, 0%, 25%);
+      transition: background-color 200ms;
+    }
+
+    &.loading {
+      color: transparent;
+
+      &::before {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        content: "";
+        mask-image: url("/assets/ui/spinner.svg");
+        mask-size: 1.8rem;
+        mask-repeat: no-repeat;
+        mask-position: center;
+        background-color: hsl(3, 79%, 56%);
+      }
+    }
+  }
+}
+
+// View = Booking
+
+.booking {
+  display: block;
+  width: 100%;
+
+  &__route,
+  &__status,
+  &__time,
+  &__overview,
+  &__details,
+  &__actions,
+  &__response {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  &__route {
+    font-size: 24px;
+    font-weight: 600;
+    color: hsl(225, 6%, 18%);
+    margin-bottom: .5rem;
+
+    .slash {
+      margin: 0 0.5rem;
+    }
+  }
+
+  &__overview {
+    position: relative;
+    display: flex;
+    max-width: 1000px;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 5px 25px;
+    margin-top: 2rem;
+    padding: 24px 25px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: hsl(0, 0%, 85%) 0 0 2px;
+    clip-path: inset(-5px -5px -5px -5px);
+    transition: 0.1s ease;
+
+    &.details-open {
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+      clip-path: inset(-5px -5px 0 -5px);
+    }
+
+    .company_logo {
+      width: 35px;
+    }
+
+    .timespan {
+      font-weight: 600;
+      flex: 1 0 25%;
+    }
+
+    .duration {
+      flex: 1 0 8%
+    }
+
+    .stops {
+      flex: 0 0 10%;
+    }
+
+    .company {
+      flex: 1 0 15%;
+      font-weight: 600;
+    }
+
+    .price {
+      flex: 1 0 15%;
+    }
+
+    .button_open {
+      flex: 0 0 35px;
+    }
+  }
+
+  &__details {
+    clip-path: inset(2px -5px -5px -5px);
+    max-width: 1000px;
+    position: relative;
+    padding: 8px 25px 24px 85px;
+    background: white;
+    height: 0;
+    top: -2px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    box-shadow: hsl(0, 0%, 85%) 0 0 2px;
+    transform-origin: top;
+    transform: scaleY(0);
+    transition: transform 0.2s ease, height 0.2s ease;
+
+    &.open {
+      height: auto;
+      transition: transform 0.3s ease, height 0.3s ease;
+      transform: scaleY(1);
+      margin-bottom: 1rem;
+    }
+  }
+
+  &__details .flight {
+    .detail {
+      .subtext {
+        font-size: 14px;
+        color: hsl(0, 0%, 46%);
+        padding: 12px 0;
+      }
+    }
+
+    .layover {
+      font-size: 14px;
+      padding: 16px 0;
+      margin: 8px 0 20px;
+      border: 1px solid hwb(220 87% 11%);
+      border-left: 0px;
+      border-right: 0px;
+    }
+
+    .dot-big {
+      margin: 0 8px;
+    }
+  }
+
+  &__response {
+    position: relative;
+    margin-top: -22px;
+    padding: 0 16px 8px;
+    text-align: right;
+    color: #007c03;
+
+    &.error {
+      color: red;
+    }
+  }
+
+  &__actions {
+    .button_cancel {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      border: none;
+      border-radius: 20px;
+      padding: 1rem 2rem;
+      text-decoration: none;
+      color: white;
+      background-color: black;
+      margin-left: auto;
+      width: fit-content;
+
+      &:hover {
+        background-color: hsl(0, 0%, 25%);
+        transition: background-color 200ms;
+      }
+    }
+  }
+
+}
+
+.booking {
+  &__overview-small_screen {
+    display: grid;
+    grid-template-columns: auto 1fr 1fr max-content;
+    grid-template-rows: repeat(5, min-content);
+    grid-template-areas:
+        "logo timespan timespan timespan"
+        "logo misc misc misc"
+        "logo price price button";
+    gap: .3rem 0;
+    overflow: hidden;
+    max-width: 1000px;
+    align-items: center;
+    flex-wrap: nowrap;
+    margin-top: 1rem;
+    padding: 24px 25px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: hsl(0, 0%, 85%) 0 0 2px;
+
+    .company_logo {
+      grid-area: logo;
+      align-self: start;
+      margin-right: 25px;
+    }
+
+    .timespan {
+      font-weight: 600;
+      grid-area: timespan;
+    }
+
+    .misc {
+      grid-area: misc;
+      word-break: break-word;
+
+      & > span {
+        color: hsl(0, 0%, 46%);
+        font-size: 14px;
+        white-space: nowrap;
+
+        &::after {
+          padding: 0 10px;
+          content: '·';
+        }
+
+        &:last-of-type::after {
+          content: '';
+          padding: 0;
+        }
+      }
+    }
+
+    .company {
+      grid-area: price;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-weight: 600;
+    }
+
+    .actions {
+      position: relative;
+      grid-area: button;
+      align-self: end;
+      width: 35px;
+
+      .button_open {
+        position: absolute;
+        right: 0;
+        bottom: -17.5px;
+      }
+    }
+
+  }
+}
+
+.button_open {
+  position: relative;
+  right: 0;
+  border-radius: 50%;
+  height: 35px;
+  width: 35px;
+  border: none;
+  line-height: 0;
+  cursor: pointer;
+  color: hsl(0, 0%, 55%);
+  background-color: hsl(3, 79%, 56%);
+
+  svg {
+    transition-timing-function: ease-out;
+    transition-duration: 100ms;
+  }
+
+  &.open svg {
+    -webkit-transform: scaleY(-1);
+    transform: scaleY(-1);
+  }
+
+  &:hover {
+    background-color: hsl(3, 79%, 46%);
+  }
+}
+
+@media (max-width: 400px) {
+  .submit {
+    width: 100%;
+  }
+
+  .booking__button_cancel {
+    width: 100%;
+  }
+}

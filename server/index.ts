@@ -7,7 +7,7 @@ import schedulePricelistUpdate from "./scripts/pricelistUpdateHandler";
 import {} from "./types/global";
 import "./extensions"
 import { routesValidator } from "./validators/routes/routesValidator";
-import {getPutBookingValidator} from "./validators/booking/getPutBookingValidator";
+import {userBookingAccessValidator} from "./validators/booking/userBookingAccessValidator";
 import {createBookingValidator} from "./validators/booking/createBookingValidator";
 import {checkInBookingValidator} from "./validators/booking/checkInBookingValidator";
 
@@ -27,8 +27,8 @@ app.get("/api/routes", routesValidator, asyncHandler(getRoutes))
 app.get("/api/routes/planets", asyncHandler(getPlanets))
 app.get("/api/routes/companies", asyncHandler(getCompanies))
 
-app.get("/api/bookings/:bookingID", getPutBookingValidator, asyncHandler(getBooking))
-app.put("/api/bookings/:bookingID/cancel", getPutBookingValidator, asyncHandler(cancelBooking))
+app.post("/api/bookings/:bookingID", userBookingAccessValidator, asyncHandler(getBooking))
+app.put("/api/bookings/:bookingID/cancel", userBookingAccessValidator, asyncHandler(cancelBooking))
 app.put("/api/bookings/:bookingID/check-in", checkInBookingValidator, asyncHandler(checkInBooking))
 app.post("/api/bookings", createBookingValidator, asyncHandler(addBooking))
 

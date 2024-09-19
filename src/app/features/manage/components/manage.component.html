@@ -1,0 +1,134 @@
+<app-navbar/>
+<section class="manage">
+  @if (view === Views.FORM) {
+    <div class="form">
+      <h2 class="title">Manage your booking</h2>
+      <form [formGroup]="manageForm" (ngSubmit)="onManageSubmit()">
+        <input class="input" type="text" formControlName="ticket" placeholder="Booking reference or ticket number">
+        @if (!isInputValid("ticket")) {
+          <span class="input_error">* {{getValidationMessage("ticket")}}</span>
+        }
+        <input class="input" type="text" formControlName="email" placeholder="E-mail">
+        @if (!isInputValid("email")) {
+          <span class="input_error">* {{getValidationMessage("email")}}</span>
+        }
+        <button class="submit"
+                type="submit"
+                [disabled]="!manageForm.valid || FetchStatus.Loading === manageFetch.status$.value"
+                [class.loading]="FetchStatus.Loading === manageFetch.status$.value">
+          Manage
+        </button>
+
+        @if (FetchStatus.Error === manageFetch.status$.value) {
+          <div class="error">* Booking failed ({{manageFetch.error.getValue().error}})</div>
+        }
+      </form>
+    </div>
+  }
+  @if (view === Views.BOOKING && booking) {
+    <div class="booking">
+      <div class="booking__route">
+        <span>{{booking.flights[0].from}}</span>
+        <span class="slash">—</span>
+        <span>{{booking.flights[booking.flights.length-1].to}}</span>
+      </div>
+      <div class="booking__status">Status: {{getStatus(booking.cancelled, booking.checked_in)}}</div>
+      <div class="booking__time">Booked: {{formatDatetimeToDate(booking.created_at, "long")}}</div>
+      @if (!isSmallScreen) {
+        <div class="booking__overview" [class.details-open]="open">
+          <div class="company_logo">
+            <app-company-logo [company]="booking.flights[0].company"/>
+          </div>
+          <div class="timespan">
+            <div class="row">
+              {{formatDatetimeToDate(booking.flights[0].start)}} - {{formatDatetimeToDate(booking.flights[booking.flights.length-1].end)}}
+            </div>
+          </div>
+          <div class="duration">
+            <div class="row">
+              {{getDuration(booking.flights[0].start, booking.flights[booking.flights.length-1].end)}}
+            </div>
+          </div>
+          <div class="stops">
+            <div>{{booking.flights.length-1}} stops</div>
+          </div>
+          <div class="company">
+            <div>{{booking.flights[0].company}}</div>
+          </div>
+          <div class="price">
+            <div>€{{booking.price}}</div>
+          </div>
+          <button class="button_open"
+                  [class.open]="open"
+                  (click)="open = !open"
+                  type="button">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M19.9201 8.9502L13.4001 15.4702C12.6301 16.2402 11.3701 16.2402 10.6001 15.4702L4.08008 8.9502" stroke="#ffffff" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+          </button>
+        </div>
+      }
+      @if (isSmallScreen) {
+        <div class="booking__overview-small_screen">
+          <div class="company_logo">
+            <app-company-logo [company]="booking.flights[0].company"/>
+          </div>
+          <div class="timespan">
+            {{formatDatetimeToDate(booking.flights[0].start, "long")}} - {{formatDatetimeToDate(booking.flights[booking.flights.length-1].end, "long")}}
+          </div>
+          <div class="misc">
+            <span>{{booking.flights.length-1}} stops</span>
+            <span>{{getDuration(booking.flights[0].start, booking.flights[booking.flights.length-1].end)}}</span>
+            <span>€{{booking.price}}</span>
+          </div>
+          <div class="company">{{booking.flights[0].company}}</div>
+          <div class="actions">
+            <button class="button_open"
+                    [class.open]="open"
+                    (click)="open = !open"
+                    type="button">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M19.9201 8.9502L13.4001 15.4702C12.6301 16.2402 11.3701 16.2402 10.6001 15.4702L4.08008 8.9502" stroke="#ffffff" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+            </button>
+          </div>
+        </div>
+      }
+      <div class="booking__details" [class.open]="open">
+        @for (flight of booking.flights; track $index) {
+          <div class="flight">
+            <div class="detail">
+              <span>{{formatDatetimeToTime(flight.start)}}</span>
+              <span class="dot-big">·</span>
+              <span>{{flight.from}}</span>
+              <div class="subtext">Travel time: {{getDuration(flight.start, flight.end)}}</div>
+            </div>
+            <div class="detail">
+              <span>{{formatDatetimeToTime(flight.end)}}</span>
+              <span class="dot-big">·</span>
+              <span>{{flight.to}}</span>
+              <div class="subtext">{{flight.company}}</div>
+            </div>
+          @if ($index !== booking.flights.length-1) {
+            <div class="layover">
+              <span>{{getDuration(flight.end, booking.flights[$index+1].start)}} layover</span>
+              <span class="dot-big">·</span>
+              <span>{{flight.to}}</span>
+            </div>
+          }
+          </div>
+        }
+      </div>
+      @if (FetchStatus.LoadedEmpty === cancelFetch.status$.value) {
+        <div class="booking__response">Booking cancelled</div>
+      }
+      @if (FetchStatus.Error === cancelFetch.status$.value) {
+        <div class="booking__response error">Booking cancelled</div>
+      }
+      <div class="booking__actions">
+        <button class="button_cancel"
+                type="button"
+                (click)="onCancel()"
+                [disabled]="booking.cancelled">
+          Cancel Booking
+        </button>
+      </div>
+    </div>
+  }
+</section>

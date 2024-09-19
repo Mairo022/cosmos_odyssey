@@ -1,12 +1,33 @@
-import {BookingClient, BookingDB} from "../types/booking";
+import {BookingClient, FindBooking} from "../types/booking";
 import prisma from "../db/prisma";
+import { Prisma } from "@prisma/client";
 
-export async function findBooking(bookingID: string): Promise<BookingDB> {
-    return prisma.bookings.findFirst({
-        where: {
-            id: bookingID
-        }
-    })
+export async function findBooking(bookingID: string): Promise<FindBooking> {
+  const query = Prisma.sql`
+    SELECT
+      id,
+      cancelled,
+      checked_in,
+      price,
+      created_at,
+      (SELECT
+        json_agg(json_build_object(
+          'from', r.from,
+          'to', r.to,
+          'distance', r.distance,
+          'company', f.company,
+          'start', f.start,
+          'end', f.end
+        ))
+        FROM flights f
+        INNER JOIN routes r ON r.id = f.route_id
+        WHERE f.id = ANY(bookings.flight_ids)
+      ) as flights
+    FROM bookings
+    WHERE id = ${bookingID}::uuid
+    LIMIT 1`
+
+  return (await prisma.$queryRaw<FindBooking>(query))[0]
 }
 
 export async function cancelBookingService(bookingID: string): Promise<void> {

@@ -1,8 +1,8 @@
 import prisma from "../../db/prisma";
-import {getPutBookingValidator} from "./getPutBookingValidator";
+import {userBookingAccessValidator} from "./userBookingAccessValidator";
 
 export async function checkInBookingValidator(req, res, next) {
-  await getPutBookingValidator(req, res, async () => {
+  await userBookingAccessValidator(req, res, async () => {
     const bookingID = req.params.bookingID
 
     const isBookingCancelled = (await prisma.bookings.findUnique({

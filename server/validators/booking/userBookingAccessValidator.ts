@@ -1,7 +1,7 @@
 import prisma from "../../db/prisma";
 import {isValidEmail} from "./shared";
 
-export async function getPutBookingValidator(req, res, next) {
+export async function userBookingAccessValidator(req, res, next) {
   const body: unknown = req.body
   const bookingID = req.params.bookingID
 

@@ -4,7 +4,7 @@ import { BookingClient } from '../types/booking'
 export async function getBooking(req, res) {
     const bookingID = req.params.bookingID
 
-    return res.status(200).json(findBooking(bookingID))
+    return res.status(200).json(await findBooking(bookingID))
 }
 
 export async function cancelBooking(req, res) {
