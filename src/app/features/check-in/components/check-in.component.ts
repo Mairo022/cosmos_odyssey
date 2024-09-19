@@ -37,8 +37,8 @@ export class CheckInComponent {
 
   constructor(private fb: FormBuilder) {
     this.checkInForm = this.fb.group({
-      ticket: ["aa@mail.ee", Validators.required, [noWhitespaceValidator, ticketValidator]],
-      email: ["aa@mail.ee", Validators.required, [noWhitespaceValidator, emailValidator]],
+      ticket: ["", Validators.required, [noWhitespaceValidator, ticketValidator]],
+      email: ["", Validators.required, [noWhitespaceValidator, emailValidator]],
     }, { updateOn: 'blur' })
   }
 
