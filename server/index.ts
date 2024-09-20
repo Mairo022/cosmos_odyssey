@@ -27,10 +27,10 @@ app.get("/api/routes", routesValidator, asyncHandler(getRoutes))
 app.get("/api/routes/planets", asyncHandler(getPlanets))
 app.get("/api/routes/companies", asyncHandler(getCompanies))
 
-app.post("/api/bookings/:bookingID", userBookingAccessValidator, asyncHandler(getBooking))
-app.put("/api/bookings/:bookingID/cancel", userBookingAccessValidator, asyncHandler(cancelBooking))
-app.put("/api/bookings/:bookingID/check-in", checkInBookingValidator, asyncHandler(checkInBooking))
-app.post("/api/bookings", createBookingValidator, asyncHandler(addBooking))
+app.post("/api/bookings/:bookingID", asyncHandler(userBookingAccessValidator), asyncHandler(getBooking))
+app.put("/api/bookings/:bookingID/cancel", asyncHandler(userBookingAccessValidator), asyncHandler(cancelBooking))
+app.put("/api/bookings/:bookingID/check-in", asyncHandler(checkInBookingValidator), asyncHandler(checkInBooking))
+app.post("/api/bookings", asyncHandler(createBookingValidator), asyncHandler(addBooking))
 
 app.listen(process.env.SERVER_PORT, schedulePricelistUpdate)
 
