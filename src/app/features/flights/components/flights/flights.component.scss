@@ -167,12 +167,13 @@
     display: flex;
     align-items: start;
     flex-wrap: wrap;
-    gap: 5px 25px;
+    gap: 0 25px;
     padding: 24px 25px;
     background: white;
     border-radius: 10px;
     box-shadow: hsl(0, 0%, 85%) 0 0 2px;
     margin-bottom: 1rem;
+    transition-duration: .2s;
 
     &:last-child {
       border: none;
@@ -229,9 +230,11 @@
 
     .booking_row {
       width: 100%;
-      margin-top: 8px;
-      margin-bottom: 12px;
       overflow: hidden;
+
+      .placeholder {
+        height: 1rem;
+      }
 
       &__book {
         display: block;

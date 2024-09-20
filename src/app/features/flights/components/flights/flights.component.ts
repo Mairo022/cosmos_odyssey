@@ -13,7 +13,7 @@ import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {AppState} from '../../../../store/app.state';
 import {getRenderableOffers, getSortedRouteOffers} from './flights.component.utils';
 import {formatTime} from '../../../../utils/time-utils';
-import {animate, style, transition, trigger} from '@angular/animations';
+import {animate, group, style, transition, trigger} from '@angular/animations';
 import {ComponentsModule} from "../../../../components/components.module";
 import {FiltersComponent} from "../filters/filters.component";
 import {Subject, take} from "rxjs";
@@ -27,8 +27,16 @@ import {FiltersForm} from "../../types/filters.model";
   styleUrl: './flights.component.scss',
   animations: [
     trigger('openClose', [
-      transition(':enter', [style({maxHeight: '0'}), animate('800ms', style({maxHeight: '1000px'}))]),
-      transition(':leave', [animate('400ms ease-out', style({maxHeight: '0'}))]),
+      transition(':enter', [
+        style({height: '0', transform: "scaleY(0)", transformOrigin: "top", opacity: "0.2"}),
+        group([
+          animate('200ms ease', style({height: "auto"})),
+          animate('180ms ease', style({transform: "scaleY(1)", opacity: "1"})),
+        ])
+      ]),
+      transition(':leave', [
+        animate('200ms ease', style({height: '0', transform: "scaleY(0)", transformOrigin: "top"}))
+      ]),
     ]),
   ],
 })

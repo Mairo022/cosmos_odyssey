@@ -108,6 +108,7 @@
                 }
                 @if (offer.open) {
                   <div class="booking_row" @openClose>
+                    <div class="placeholder"></div>
                     @for (_ of [].constructor(offer.stops+1); track j; let j = $index) {
                       @if (getRouteInfo(offer.arrayIndex, j); as route) {
                         <div class="flight">
