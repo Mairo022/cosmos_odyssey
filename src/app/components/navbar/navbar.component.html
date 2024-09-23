@@ -9,7 +9,7 @@
       <input type="number" class="options__passengers" placeholder="Passengers" value=""/>
     </div>
     <div class="pages">
-      <a class="pages__page" routerLink="/"  routerLinkActive="activelink" [routerLinkActiveOptions]="{exact: true}">Flights</a>
+      <a class="pages__page" routerLink="/" [class.activelink]="isHomepage()">Flights</a>
       <a class="pages__page" routerLink="/manage" routerLinkActive="activelink">Manage</a>
       <a class="pages__page" routerLink="/check-in" routerLinkActive="activelink">Check-in</a>
     </div>
