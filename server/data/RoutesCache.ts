@@ -30,7 +30,7 @@ export class RoutesCache {
 
     static async updateCompanies(): Promise<void> {
         this.#companies = (await prisma.flights.groupBy({by: 'company'})).map(company => company.company)
-        
+
         if (this.#companies.isEmpty()) {
             throw new Error("Database returned no companies")
         }
@@ -38,33 +38,33 @@ export class RoutesCache {
 
     static async updateRoutes(): Promise<void> {
         const query = Prisma.sql`
-            SELECT 
-                r.id, 
-                r.from, 
-                r.to, 
+            SELECT
+                r.id,
+                r.from,
+                r.to,
                 r.distance,
                 r.pricelist_id,
                 (SELECT
                     json_agg(json_build_object(
                         'pricelist_id', f.pricelist_id,
                         'id', f.id,
-                        'company', f.company, 
+                        'company', f.company,
                         'price', f.price,
                         'start', f.start,
                         'end', f.end
                     ))
                 FROM flights f
-                WHERE r.id = f.route_id
+                WHERE r.id = f.route_id AND f.start > now()
                 ) AS providers
             FROM
                 routes r
             INNER JOIN
                 pricelists p ON r.pricelist_id = p.id
-            WHERE 
+            WHERE
                 p.valid_until >= now()
                 AND EXISTS (
-                    SELECT 1 
-                    FROM flights f 
+                    SELECT 1
+                    FROM flights f
                     WHERE r.id = f.route_id
                 )
         `
