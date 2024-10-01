@@ -2,12 +2,13 @@ import { HttpClient, HttpResponse } from "@angular/common/http"
 import { Observable } from "rxjs"
 import { Booking } from "../types/booking.model"
 import { Injectable } from "@angular/core"
+import {environment} from "../../../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
 })
 export class BookingService {
-    private readonly API_URL = "http://localhost:4400/api/bookings"
+    private readonly API_URL = environment.apiUrl + "bookings"
 
     constructor(private httpClient: HttpClient) {}
 

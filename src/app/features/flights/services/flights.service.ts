@@ -2,12 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, map } from 'rxjs';
 import { RouteProvider } from '../types/flights.model';
+import {environment} from "../../../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
 })
 export class FlightsService {
-  private readonly API_URL = "http://localhost:4400/api/routes"
+  private readonly API_URL = environment.apiUrl + "routes"
 
   constructor(private httpClient: HttpClient) {}
 
