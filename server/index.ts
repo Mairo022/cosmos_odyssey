@@ -10,6 +10,7 @@ import { routesValidator } from "./validators/routes/routesValidator";
 import {userBookingAccessValidator} from "./validators/booking/userBookingAccessValidator";
 import {createBookingValidator} from "./validators/booking/createBookingValidator";
 import {checkInBookingValidator} from "./validators/booking/checkInBookingValidator";
+import {RoutesCache} from "./data/RoutesCache";
 
 dotenv.config()
 
@@ -32,7 +33,10 @@ app.put("/api/bookings/:bookingID/cancel", asyncHandler(userBookingAccessValidat
 app.put("/api/bookings/:bookingID/check-in", asyncHandler(checkInBookingValidator), asyncHandler(checkInBooking))
 app.post("/api/bookings", asyncHandler(createBookingValidator), asyncHandler(addBooking))
 
-app.listen(process.env.SERVER_PORT, schedulePricelistUpdate)
+app.listen(process.env.SERVER_PORT, () => {
+    schedulePricelistUpdate()
+    RoutesCache.scheduleRoutesCleanup()
+})
 
 app.use(errorHandler)
 

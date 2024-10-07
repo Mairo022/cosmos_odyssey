@@ -1,11 +1,50 @@
 import { Prisma } from "@prisma/client"
 import prisma from "../db/prisma"
-import { RoutesProviders } from "../types/routes"
+import {RoutesProvider, RoutesProviders} from "../types/routes"
+import {FLIGHT} from "../constants/flightConstants";
+import {isOutdated} from "../utils/timeUtils";
+import {TIME} from "../constants/timeConstants";
+import {PRICELIST} from "../constants/pricelistConstants";
 
 export class RoutesCache {
     static #planets = new Array<string>
     static #companies = new Array<string>
-    static #routes: RoutesProviders = new Array
+    static #routes: RoutesProviders = new Array<RoutesProvider>
+
+    static get companies(): Array<string> {
+        return this.#companies
+    }
+
+    static get planets(): Array<string> {
+        return this.#planets
+    }
+
+    static get routes(): Array<RoutesProvider> {
+        return this.#routes
+    }
+
+    static scheduleRoutesCleanup(): void {
+        const cleanInterval = 6 * TIME.HOUR
+        const cycleLength = PRICELIST.UPDATE_INTERVAL / cleanInterval
+        let cyclePos = 1
+
+        if (cycleLength % 1 !== 0) {
+            console.error("Route cleanup cycle length is a float")
+        }
+
+        if (PRICELIST.UPDATE_INTERVAL % cleanInterval !== 0) {
+            console.error("Route cleanup cycle interval is not divisor of pricelist update interval")
+        }
+
+        setInterval(() => {
+            if (cyclePos === cycleLength) {
+                cyclePos = 1
+            } else {
+                cyclePos++
+                this.#removeOutdatedRoutes()
+            }
+        }, cleanInterval)
+    }
 
     static async updateAll(): Promise<void> {
         Promise
@@ -76,15 +115,12 @@ export class RoutesCache {
         }
     }
 
-    static get companies(): Array<string> {
-        return this.#companies
-    }
+    static #removeOutdatedRoutes(): void {
+        const filteredRoutes = this.routes.map(route => {
+            const providers = route.providers.filter(provider => !isOutdated(provider.start, FLIGHT.CLIENT_BOOKING_GAP))
+            return {...route, providers}
+        })
 
-    static get planets(): Array<string> {
-        return this.#planets
-    }
-
-    static get routes(): Array<any> {
-        return this.#routes
+        this.#routes = filteredRoutes
     }
 }

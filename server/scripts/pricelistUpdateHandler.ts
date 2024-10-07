@@ -2,13 +2,12 @@ import { Routes } from "../types/routes"
 import prisma from "../db/prisma"
 import { addPricelistToDB } from "./pricelistToDB"
 import { RoutesCache } from "../data/RoutesCache"
+import {PRICELIST} from "../constants/pricelistConstants";
 
 export default async function schedulePricelistUpdate(): Promise<void> {
     if (process.env.ENV == "LIVE") {
         await updateActions()
-
-        const dayDelay = 24 * 60 * 60 * 1000
-        setInterval(updateActions, dayDelay)
+        setInterval(updateActions, PRICELIST.UPDATE_INTERVAL)
     }
     if (process.env.ENV == "DEV") {
         RoutesCache.developmentSetCompaniesPlanets()
@@ -25,7 +24,7 @@ async function updatePricelist(): Promise<void> {
         .then(async (pricelist) => {
             try {
                 if (!isPricelistIDValid(pricelist.id)) {
-                    throw new Error(`Invalid pricelist id: ${pricelist.id}`)                    
+                    throw new Error(`Invalid pricelist id: ${pricelist.id}`)
                 }
                 if (await isNewPricelist(pricelist.id)) {
                     addPricelistToDB(pricelist)
