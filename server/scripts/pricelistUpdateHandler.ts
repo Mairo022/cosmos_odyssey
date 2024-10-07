@@ -3,6 +3,7 @@ import prisma from "../db/prisma"
 import { addPricelistToDB } from "./pricelistToDB"
 import { RoutesCache } from "../data/RoutesCache"
 import {PRICELIST} from "../constants/pricelistConstants";
+import {cleanUpPricelists} from "./pricelistDBCleanup";
 
 export default async function schedulePricelistUpdate(): Promise<void> {
     if (process.env.ENV == "LIVE") {
@@ -16,6 +17,7 @@ export default async function schedulePricelistUpdate(): Promise<void> {
 
 async function updateActions(): Promise<void> {
     await updatePricelist()
+    await cleanUpPricelists()
     await RoutesCache.updateAll()
 }
 

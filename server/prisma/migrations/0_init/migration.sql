@@ -9,6 +9,8 @@ CREATE TABLE "bookings" (
     "updated_at" TIMESTAMPTZ(6) DEFAULT CURRENT_TIMESTAMP,
     "cancelled" BOOLEAN DEFAULT false,
     "pricelist_id" UUID NOT NULL,
+    "checked_in" BOOLEAN DEFAULT false,
+    "client_key" VARCHAR(6),
 
     CONSTRAINT "bookings_pkey" PRIMARY KEY ("id")
 );
@@ -58,11 +60,11 @@ CREATE TABLE "users" (
 );
 
 -- AddForeignKey
-ALTER TABLE "flights" ADD CONSTRAINT "pricelist" FOREIGN KEY ("pricelist_id") REFERENCES "pricelists"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE "flights" ADD CONSTRAINT "pricelist" FOREIGN KEY ("pricelist_id") REFERENCES "pricelists"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
 
 -- AddForeignKey
-ALTER TABLE "flights" ADD CONSTRAINT "route" FOREIGN KEY ("route_id") REFERENCES "routes"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE "flights" ADD CONSTRAINT "route" FOREIGN KEY ("route_id") REFERENCES "routes"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
 
 -- AddForeignKey
-ALTER TABLE "routes" ADD CONSTRAINT "pricelist" FOREIGN KEY ("pricelist_id") REFERENCES "pricelists"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE "routes" ADD CONSTRAINT "pricelist" FOREIGN KEY ("pricelist_id") REFERENCES "pricelists"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
 
