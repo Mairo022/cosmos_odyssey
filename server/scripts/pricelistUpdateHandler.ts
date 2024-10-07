@@ -27,7 +27,7 @@ async function updatePricelist(): Promise<void> {
                     throw new Error(`Invalid pricelist id: ${pricelist.id}`)
                 }
                 if (await isNewPricelist(pricelist.id)) {
-                    addPricelistToDB(pricelist)
+                    await addPricelistToDB(pricelist)
                     console.log("Latest pricelist added to database")
                 } else {
                     console.log("Pricelist is already up to date")
@@ -54,7 +54,7 @@ async function getUpdatedPricelist(): Promise<Routes> {
 
 async function isNewPricelist(pricelistID: string): Promise<boolean> {
     const pricelist = await prisma.pricelists.findFirst({where: { id: pricelistID }})
-    return pricelist == null ? true : false
+    return pricelist == null
 }
 
 function isPricelistIDValid(pricelistID: string): boolean {

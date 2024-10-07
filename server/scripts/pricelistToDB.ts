@@ -1,6 +1,6 @@
 import { Prisma } from "@prisma/client";
 import prisma from "../db/prisma";
-import { AvailableRoutes, Flights, Pricelist, Routes } from "../types/routes";
+import {AvailableRoute, AvailableRoutes, Flight, Flights, Pricelist, Routes} from "../types/routes";
 
 export async function addPricelistToDB(routes: Routes): Promise<void> {
     const pricelist: Pricelist = {
@@ -22,19 +22,19 @@ export async function addPricelistToDB(routes: Routes): Promise<void> {
 }
 
 async function insertToFlights(tx: Prisma.TransactionClient, data: Flights): Promise<{count: number}> {
-    return await tx.flights.createMany({data})
+    return tx.flights.createMany({data})
 }
 
 async function insertToPricelists(tx: Prisma.TransactionClient, data: Pricelist): Promise<{id: string}> {
-    return await tx.pricelists.create({data, select: {id: true}})
+    return tx.pricelists.create({data, select: {id: true}})
 }
 
 async function insertToRoutes(tx: Prisma.TransactionClient, data: AvailableRoutes): Promise<{count: number}> {
-    return await tx.routes.createMany({data})
+    return tx.routes.createMany({data})
 }
 
 function getAvailableRoutes(routes: Routes['legs'], pricelistID: string): AvailableRoutes {
-    const availableRoutes: AvailableRoutes = new Array
+    const availableRoutes = new Array<AvailableRoute>
 
     for (const route of routes) {
         availableRoutes.push({
@@ -50,7 +50,7 @@ function getAvailableRoutes(routes: Routes['legs'], pricelistID: string): Availa
 }
 
 function getFlights(routes: Routes['legs'], pricelistID: string): Flights {
-    const flights: Flights = new Array
+    const flights = new Array<Flight>
 
     for (const route of routes) {
         for (const provider of route.providers) {
