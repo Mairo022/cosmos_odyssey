@@ -1,11 +1,15 @@
 import { Prisma } from "@prisma/client";
 import prisma from "../db/prisma";
 import {AvailableRoute, AvailableRoutes, Flight, Flights, Pricelist, Routes} from "../types/routes";
+import {PRICELIST} from "../constants/pricelistConstants";
 
 export async function addPricelistToDB(routes: Routes): Promise<void> {
     const pricelist: Pricelist = {
-        id: routes.id,
-        valid_until: routes.validUntil
+        // Using manually generated valid time. As it is a demo project, updating pricelist every 10 minutes
+        // due to its original expiration time does not provide any practical value.
+        // Original valid time is accessible via: routes.validUntil
+        valid_until: generateValidUntil(),
+        id: routes.id
     }
     const availableRoutes = getAvailableRoutes(routes.legs, routes.id)
     const flights = getFlights(routes.legs, routes.id)
@@ -67,4 +71,8 @@ function getFlights(routes: Routes['legs'], pricelistID: string): Flights {
     }
 
     return flights
+}
+
+function generateValidUntil(): string {
+    return new Date((new Date().getTime() + PRICELIST.MAX_AGE)).toISOString()
 }
