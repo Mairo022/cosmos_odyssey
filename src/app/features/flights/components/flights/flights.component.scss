@@ -122,15 +122,15 @@
 
   .time,
   .duration_route {
-    flex: 1 0 15%
+    flex: 1 0 7%
   }
 
   .stops {
-    flex: 1 0 15%;
+    flex: 1 0 7%;
   }
 
   .price {
-    flex: 1 0 10%;
+    flex: 1 0 8%;
   }
 
   .gap {
@@ -320,7 +320,7 @@
 }
 
 // Styling for mobile view flights
-@media (max-width: 1100px) {
+@media (max-width: 1080px) {
   .flights {
     gap: 2rem 1rem;
   }

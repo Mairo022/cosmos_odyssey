@@ -42,7 +42,7 @@ import {FiltersForm} from "../../types/filters.model";
 })
 export class FlightsComponent {
   protected readonly FetchStatus = FetchStatus
-  private readonly _SMALL_SCREEN_SIZE = 1100
+  private readonly _SMALL_SCREEN_SIZE = 1080
   private readonly _routesService = inject(FlightsService)
 
   planets = new Fetch<string[]>(this._routesService.getPlanets())
