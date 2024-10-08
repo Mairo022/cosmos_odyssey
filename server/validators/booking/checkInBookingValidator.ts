@@ -3,11 +3,11 @@ import {userBookingAccessValidator} from "./userBookingAccessValidator";
 
 export async function checkInBookingValidator(req, res, next) {
   await userBookingAccessValidator(req, res, async () => {
-    const bookingID = req.params.bookingID
+    const bookingKey = req.params.bookingID
 
     const isBookingCancelled = (await prisma.bookings.findUnique({
       select: { cancelled: true },
-      where: { id: bookingID }
+      where: { client_key: bookingKey }
     })).cancelled
 
     if (isBookingCancelled) {

@@ -97,9 +97,10 @@
     <p>
       Booking Confirmed! Your flight has been booked successfully. Please check your email for your ticket and further instructions.
     </p>
+    <div>Your ticket number is: <b>{{bookingFetch.dataBS$.getValue().body["client_key"]}}</b></div>
     <a routerLink="/" class="link">Return to homepage</a>
-  </div>
-}
+  </div>}
+
     }}
   </div>
 </div>

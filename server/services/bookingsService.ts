@@ -1,8 +1,9 @@
 import {BookingClient, FindBooking} from "../types/booking";
 import prisma from "../db/prisma";
 import { Prisma } from "@prisma/client";
+import {generateBookingKey} from "../utils/bookingUtils";
 
-export async function findBooking(bookingID: string): Promise<FindBooking> {
+export async function findBookingByKey(bookingKey: string): Promise<FindBooking> {
   const query = Prisma.sql`
     SELECT
       id,
@@ -24,27 +25,27 @@ export async function findBooking(bookingID: string): Promise<FindBooking> {
         WHERE f.id = ANY(bookings.flight_ids)
       ) as flights
     FROM bookings
-    WHERE id = ${bookingID}::uuid
+    WHERE client_key = ${bookingKey}
     LIMIT 1`
 
   return (await prisma.$queryRaw<FindBooking>(query))[0]
 }
 
-export async function cancelBookingService(bookingID: string): Promise<void> {
+export async function cancelBookingService(clientKey: string): Promise<void> {
   await prisma.bookings.update({
-    where: {id: bookingID},
+    where: {client_key: clientKey},
     data: {cancelled: true}
   })
 }
 
-export async function checkInBookingService(bookingID: string): Promise<void> {
+export async function checkInBookingService(clientKey: string): Promise<void> {
   await prisma.bookings.update({
-    where: {id: bookingID},
+    where: {client_key: clientKey},
     data: {checked_in: true}
   })
 }
 
-export async function createBooking(booking: BookingClient): Promise<void> {
+export async function createBooking(booking: BookingClient): Promise<{client_key: string}> {
     const routeIDs = await prisma.flights.findMany({
         select: {
             id: true,
@@ -77,12 +78,16 @@ export async function createBooking(booking: BookingClient): Promise<void> {
             email: booking.email
           }})).id
 
+    const bookingKey = await generateBookingKey()
 
     await prisma.bookings.create({data: {
         user_id: userID,
         flight_ids: booking.flight_ids,
         route_ids: sortedRouteIDs,
         pricelist_id: pricelistID,
-        price: booking.price
+        price: booking.price,
+        client_key: bookingKey,
     }})
+
+    return {client_key: bookingKey}
 }

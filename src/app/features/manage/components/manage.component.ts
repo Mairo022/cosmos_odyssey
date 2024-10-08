@@ -176,10 +176,14 @@ export class ManageComponent {
     return formatTime(duration)
   }
 
-  getStatus(cancelled: boolean, checkedIn: boolean): string {
-    if (cancelled) return "Cancelled"
-    if (checkedIn) return "Checked in"
+  getStatus(cancelled: boolean, checkedIn: boolean, firstFlightTime: string): string {
+    const isPastFirstFlightTime = new Date() > new Date(firstFlightTime)
 
-    return "Unknown"
+    if (isPastFirstFlightTime && checkedIn) return "Used"
+    if (isPastFirstFlightTime) return "Passed"
+    if (cancelled) return "Cancelled"
+    if (checkedIn) return "Checked In"
+
+    return "Upcoming"
   }
 }

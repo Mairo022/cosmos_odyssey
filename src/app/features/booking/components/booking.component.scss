@@ -13,7 +13,7 @@
     padding: 1rem 0;
   }
 
-// View = Overview
+// View = Overview -----------------------------------------------------
 .overview {
     &__header {
         font-size: 20px;
@@ -235,6 +235,11 @@
     text-align: center;
     max-width: 500px;
     margin: 2rem auto;
+
+    .link {
+      display: block;
+      margin-top: 0.5rem;
+    }
 }
 
 @media (max-width: 400px) {

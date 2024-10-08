@@ -14,6 +14,7 @@ export class Fetch<TData> {
   private _status$ = new BehaviorSubject(FetchStatus.None)
   private _error$ = new BehaviorSubject<any>(null)
   private _data$ = new Subject<TData>
+  private _dataBS$ = new BehaviorSubject<any>(null)
   private _action$: Observable<TData> = EMPTY
   private _actionSubscription: Subscription | null = null
 
@@ -35,6 +36,7 @@ export class Fetch<TData> {
     this._action$ = action$.pipe(
       tap((data) => {
         this._data$.next(data)
+        this._dataBS$.next(data)
         this._error$.next(null)
 
         if (this.isDataNotEmpty(data)) {
@@ -61,6 +63,7 @@ export class Fetch<TData> {
   reset(): void {
     this._status$.next(FetchStatus.None)
     this._data$ = new Subject<TData>
+    this._dataBS$.next(null)
     this._error$.next(null)
     this._action$ = EMPTY
 
@@ -114,6 +117,10 @@ export class Fetch<TData> {
 
   get data$(): Subject<TData> {
     return this._data$
+  }
+
+  get dataBS$(): BehaviorSubject<TData> {
+    return this._dataBS$
   }
 
   get error(): BehaviorSubject<any> {

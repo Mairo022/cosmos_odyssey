@@ -32,7 +32,7 @@
         <span class="slash">—</span>
         <span>{{booking.flights[booking.flights.length-1].to}}</span>
       </div>
-      <div class="booking__status">Status: {{getStatus(booking.cancelled, booking.checked_in)}}</div>
+      <div class="booking__status">Status: {{getStatus(booking.cancelled, booking.checked_in, booking.flights[0].start)}}</div>
       <div class="booking__time">Booked: {{formatDatetimeToDate(booking.created_at, "long")}}</div>
       @if (!isSmallScreen) {
         <div class="booking__overview" [class.details-open]="open">

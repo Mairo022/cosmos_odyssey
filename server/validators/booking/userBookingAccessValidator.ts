@@ -3,9 +3,9 @@ import {isValidEmail} from "./shared";
 
 export async function userBookingAccessValidator(req, res, next) {
   const body: unknown = req.body
-  const bookingID = req.params.bookingID
+  const bookingKey = req.params.bookingID
 
-  if (!isValidBookingIdentityObject(body) || !isValidBookingIdFormat(bookingID)) {
+  if (!isValidBookingIdentityObject(body) || !isValidBookingIdFormat(bookingKey)) {
     return res.status(400).json("Invalid request data")
   }
 
@@ -13,7 +13,7 @@ export async function userBookingAccessValidator(req, res, next) {
     return res.status(400).json("Invalid e-mail address")
   }
 
-  if (!await ticketEmailExists(bookingID, body.email)) {
+  if (!await ticketEmailExists(bookingKey, body.email)) {
     return res.status(400).json("Could not find the ticket")
   }
 
@@ -24,11 +24,11 @@ function isValidBookingIdentityObject(booking: any): booking is { email: string 
   return typeof booking === "object" && booking.email
 }
 
-async function ticketEmailExists(ticketID: string, email: string): Promise<boolean> {
+async function ticketEmailExists(bookingKey: string, email: string): Promise<boolean> {
   try {
     return await prisma.bookings.count({
       where: {
-        id: ticketID,
+        client_key: bookingKey,
         user: {
           email: email,
         },
@@ -39,6 +39,6 @@ async function ticketEmailExists(ticketID: string, email: string): Promise<boole
   }
 }
 
-function isValidBookingIdFormat(ticketID: string): boolean {
-  return ticketID.length === 36
+function isValidBookingIdFormat(bookingKey: string): boolean {
+  return bookingKey.length === 6
 }
